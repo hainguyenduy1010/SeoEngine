@@ -1,18 +1,24 @@
-package com.engine.seo.dto;
+package com.engine.seo.model;
 
-import java.io.Serializable;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
- * Created by HaiND on 2/11/2020 11:19 PM.
+ * Created by HaiND on 2/11/2020 10:35 PM.
  */
-public class KeywordSearchDTO implements Serializable {
+@Entity
+@Table(name = "search_data")
+public class SearchData {
 
-    private static final long serialVersionUID = -2100165345239717454L;
-
+    @Id
     private int id;
 
+    @Column
     private String keyword;
 
+    @Column
     private String url;
 
     public int getId() {
@@ -43,7 +49,7 @@ public class KeywordSearchDTO implements Serializable {
     public String toString() {
         StringBuilder sb = new StringBuilder();
 
-        sb.append("KeywordSearchDTO = [")
+        sb.append("SearchData = [")
                 .append("id = ").append(id).append("; ")
                 .append("keyword = ").append(keyword).append("; ")
                 .append("url = ").append(url).append("]");
