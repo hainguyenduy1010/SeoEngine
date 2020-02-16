@@ -21,7 +21,9 @@ const routes = [
     meta: {
       title: 'Search Results'
     }
-  }
+  },
+
+  { path: '*', redirect: '/' }
 ]
 
 const router = new VueRouter({

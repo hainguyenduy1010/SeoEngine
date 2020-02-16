@@ -1,3 +1,6 @@
+body {
+  margin-top: 0;
+}
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -13,25 +16,16 @@
   color: #003dbf;
 }
 
-#nav {
-  padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
-
 .container {
-    position: relative;
+  position: relative;
   top: 50%;
   -webkit-transform: translateY(-50%);
   -ms-transform: translateY(-50%);
   transform: translateY(-50%);
+}
+
+.home-logo img {
+    width: 300px;
 }
 
 #search-box {
@@ -56,11 +50,12 @@
   background-color: transparent;
   border: none;
   box-shadow: none;
+  color: #555;
 }
 
 #search-box button {
   outline: 0;
-  height: 40px;
+  height: 39px;
   padding: 0 10px;
   display: flex;
   justify-content: center;
@@ -73,7 +68,7 @@
   border: 0;
   user-select: none;
   background-color: #fff;
-    cursor: pointer;
+  cursor: pointer;
 }
 
 #search-box svg {

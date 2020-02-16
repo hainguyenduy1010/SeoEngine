@@ -1,0 +1,10 @@
+.page-result {
+    height: 100vh;
+}
+
+.body {
+    display: block;
+    height: 100%;
+    width: 100%;
+    position: relative;
+}
