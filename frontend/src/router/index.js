@@ -8,15 +8,15 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
-    name: 'Home',
+    name: 'home',
     component: Home,
     meta: {
-      title: 'Search Engine'
+      title: 'Search Homepage'
     }
   },
   {
-    path: '/search',
-    name: 'Search',
+    path: '/search?k=:keyword',
+    name: 'search',
     component: Search,
     meta: {
       title: 'Search Results'

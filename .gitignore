@@ -31,3 +31,5 @@ build/
 .vscode/
 
 /frontend/node_modules/
+/backend/logs/
+/logs/

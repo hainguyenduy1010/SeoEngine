@@ -5,7 +5,6 @@ body {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
   font-size: 14px;
   height: 90vh;
@@ -22,6 +21,10 @@ body {
   -webkit-transform: translateY(-50%);
   -ms-transform: translateY(-50%);
   transform: translateY(-50%);
+}
+
+.home-logo {
+  text-align: center;
 }
 
 .home-logo img {

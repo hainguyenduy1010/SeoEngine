@@ -8,8 +8,8 @@
       </div>
 
       <div id="search-box">
-        <input id="search-input" placeholder="Search thousands of coupons and stores">
-        <router-link to="/search">
+        <input id="search-input" placeholder="Search thousands of coupons and stores" v-model="keyword">
+        <router-link :to="{name: 'search', params: {keyword}}">
           <button class="btn-search" type="submit">
             <svg x="0px" y="0px" viewBox="0 0 32 32" style="enable-background:new 0 0 32 32;" xml:space="preserve">
               <g id="Page-1">
@@ -108,7 +108,8 @@ export default {
 
   data() {
     return {
-      logo: require('../assets/search-logo.png')
+      logo: require('../assets/search-logo.png'),
+      keyword: ''
     }
   }
 }
