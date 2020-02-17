@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-	<property name="log_directory" value="./logs" />
+	<property name="log_directory" value="./backend/logs" />
 
 	<appender name="console" class="ch.qos.logback.core.ConsoleAppender">
 		<!-- Log message format -->

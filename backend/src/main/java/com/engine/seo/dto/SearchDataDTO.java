@@ -15,6 +15,10 @@ public class SearchDataDTO implements Serializable {
 
     private String url;
 
+    private String title;
+
+    private String description;
+
     public int getId() {
         return id;
     }
@@ -39,6 +43,22 @@ public class SearchDataDTO implements Serializable {
         this.url = url;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -46,7 +66,9 @@ public class SearchDataDTO implements Serializable {
         sb.append("SearchDataDTO = [")
                 .append("id = ").append(id).append("; ")
                 .append("keyword = ").append(keyword).append("; ")
-                .append("url = ").append(url).append("]");
+                .append("url = ").append(keyword).append("; ")
+                .append("title = ").append(title).append("; ")
+                .append("summary = ").append(description).append("]");
 
         return sb.toString();
     }

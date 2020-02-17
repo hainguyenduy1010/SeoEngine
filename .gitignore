@@ -33,3 +33,4 @@ build/
 /frontend/node_modules/
 /backend/logs/
 /logs/
+/backend/backend/
