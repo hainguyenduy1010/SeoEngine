@@ -9,7 +9,7 @@
         </div>
 
         <div id="search-box">
-          <input type="text" id="search-input" class="form-control" autocomplete="off" placeholder="Search thousands of coupons and stores" v-model="keyword">
+          <input type="text" id="search-input" class="form-control" placeholder="Search thousands of coupons and stores" v-model="keyword">
           <!-- <router-link :to="{name: 'search', params: {keyword}}"> -->
             <button class="btn-search" type="submit" title="Searching..." @click="search()">
               <svg x="0px" y="0px" viewBox="0 0 32 32" style="enable-background:new 0 0 32 32;" xml:space="preserve">
@@ -33,9 +33,9 @@
 			<div class="filter-wrapper">
 				<div class="search-counter-about">
 					<span>About </span>
-					<span><b>count</b></span>
+					<span><b>{{resultCount}}</b></span>
 					<span> results </span>
-					<span> (searchTotalTime) </span>
+					<span class="total-time"> ({{searchResult.totalTime}} milliseconds) </span>
 				</div>
 				<div class="filter-content">
 
@@ -45,16 +45,16 @@
 			<div class="search-result-wrapper">
 				<div class="search-result-list">
 					<!-- loop through result list -->
-					<div class="search-result" v-for="result in results" v-bind:key="result.id">
+					<div class="search-result" v-for="searchData in searchResult.searchDataList" v-bind:key="searchData.id">
 						<h3>
-							<a target="_blank" v-bind:href="result.url">
-								{{result.title}}
+							<a target="_blank" v-bind:href="searchData.url">
+								{{searchData.title}}
 							</a>
 						</h3>
-						<a target="_blank" v-bind:href="result.url">
-							{{result.url}}
+						<a target="_blank" v-bind:href="searchData.url">
+							{{searchData.url}}
 						</a>
-						<p>{{result.summary}}</p>
+						<p>{{searchData.description}}</p>
 					</div>
 					<!-- end loop -->
 				</div>

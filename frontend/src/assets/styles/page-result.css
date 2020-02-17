@@ -83,3 +83,8 @@
 .filter-wrapper {
     padding: 0 15px 10px 15px;
 }
+
+.filter-wrapper .total-time {
+    color: #666;
+    font-size: 95%;
+}

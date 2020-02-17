@@ -8,14 +8,16 @@ export default {
 		return {
 			logo: require('@/assets/search-logo.png'),
 			keyword: this.$route.params.keyword,
-			results: []
+			searchResult: [],
+			resultCount: ''
 		}
 	},
 	methods: {
 		search() {
 			api.search(this.keyword).then(response => {
-				this.results = response.data;
+				this.searchResult = response.data;
 				// console.log(JSON.stringify(response))
+				this.resultCount = this.searchResult.count.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 			}, error => console.log(error));
 		}
 	}
