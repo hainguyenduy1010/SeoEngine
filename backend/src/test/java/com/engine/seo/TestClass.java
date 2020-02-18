@@ -27,7 +27,7 @@ public class TestClass {
 //        String responseBody = scanner.useDelimiter("\\A").next();
 //        System.out.println(responseBody.substring(responseBody.indexOf("<title>") + 7, responseBody.indexOf("</title>")));
 
-        Document doc = Jsoup.connect("https://www.couponsspirit.com/store/merrell-coupon-codes/")
+        Document doc = Jsoup.connect("https://www.nextag.com/shopping/products")
                 .userAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.152 Safari/537.36")
 //                .userAgent("Mozilla/5.0")
 //                .header("Accept", "text/html")

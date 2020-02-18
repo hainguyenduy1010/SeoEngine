@@ -13,6 +13,6 @@ import java.util.List;
 @Repository
 public interface SearchDataRepository extends JpaRepository<SearchData, Integer> {
 
-    @Query(value = "SELECT data FROM SearchData data WHERE data.keyword = ?1")
-    List<SearchData> findByKeyword(String keyword);
+    @Query(value = "SELECT data FROM SearchData data WHERE data.keyword = ?1 ORDER BY data.sortkey ASC")
+    List<SearchData> findByKeywordOrderBySortkeyAsc(String keyword);
 }

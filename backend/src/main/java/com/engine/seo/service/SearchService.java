@@ -53,7 +53,7 @@ public class SearchService {
 
         long startTime = System.nanoTime();
         // get SearchData list from DB by keyword
-        List<SearchData> searchDataList = searchDataRepository.findByKeyword(keyword);
+        List<SearchData> searchDataList = searchDataRepository.findByKeywordOrderBySortkeyAsc(keyword);
         // generate SearchDataDTO list
         List<SearchDataDTO> searchDataDTOList = generateSearchDataDTOList(searchDataList);
         long endTime = System.nanoTime();
@@ -91,6 +91,7 @@ public class SearchService {
     }
 
     private void handleUrlInformation(SearchDataDTO searchDataDTO) {
+        System.out.println("================START================");
         String url = searchDataDTO.getUrl();
 
         String title = StringUtils.EMPTY;
@@ -118,8 +119,9 @@ public class SearchService {
 
                 // get url description
                 description = getPageDescription(document);
-            } else if (response.statusCode() == 403) {
-                System.out.println("403");
+            } else {
+                LOGGER.error("ERROR: Cannot get URL information, HTTP status = {}, URL = {}", response.statusCode(), url);
+
             }
         } catch (IOException e) {
             LOGGER.error("ERROR: Get URL information", e);
@@ -127,6 +129,7 @@ public class SearchService {
 
         searchDataDTO.setTitle(title);
         searchDataDTO.setDescription(description);
+        System.out.println("================END================");
     }
 
     private String getPageDescription(Document document) {
