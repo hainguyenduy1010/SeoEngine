@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Created by HaiND on 2/16/2020 4:11 PM.
@@ -26,7 +27,7 @@ public class SearchController {
     private SearchService searchService;
 
     @PostMapping("/search")
-    public ResponseEntity<SearchResultDataDTO> search(@Valid @RequestBody String keyword) {
+    public ResponseEntity<SearchResultDataDTO> search(@Valid @RequestBody String keyword) throws ExecutionException, InterruptedException {
         LOGGER.info("POST api/search");
         LOGGER.info("POST with body = {}", keyword);
 

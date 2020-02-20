@@ -21,6 +21,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 
 /**
  * Created by HaiND on 2/16/2020 4:11 PM.
@@ -29,6 +32,8 @@ import java.util.Random;
 public class SearchService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SearchService.class);
+
+    private static final String CONNECT = "content";
 
     @Autowired
     SearchDataRepository searchDataRepository;
@@ -45,7 +50,7 @@ public class SearchService {
     @Value("${search.result.count.random.max}")
     private int countRandomMax;
 
-    public SearchResultDataDTO search(String keyword) {
+    public SearchResultDataDTO search(String keyword) throws ExecutionException, InterruptedException {
         LOGGER.debug("search:in(keyword = {})", keyword);
 
         // init
@@ -76,21 +81,35 @@ public class SearchService {
         return searchResultDataDTO;
     }
 
-    private List<SearchDataDTO> generateSearchDataDTOList(List<SearchData> searchDataList) {
-        List<SearchDataDTO> searchDataDTOList = new ArrayList<>();
+    private List<SearchDataDTO> generateSearchDataDTOList(List<SearchData> searchDataList) throws ExecutionException, InterruptedException {
 
-        SearchDataDTO searchDataDTO;
+        // init
+        List<SearchDataDTO> searchDataDTOList = new ArrayList<>();
+        List<CompletableFuture<SearchDataDTO>> completableFutureList = new ArrayList<>();
+
         // loop through searchDataDTO then generate search data detail
-        for (SearchData searchData : searchDataList) {
-            searchDataDTO = modelMapper.map(searchData, SearchDataDTO.class);
-            handleUrlInformation(searchDataDTO);
-            searchDataDTOList.add(searchDataDTO);
+        searchDataList.forEach(data -> searchDataDTOList.add(modelMapper.map(data, SearchDataDTO.class)));
+
+        // loop through searchDataDTOList
+        for (SearchDataDTO dto : searchDataDTOList) {
+            // async get url information
+            CompletableFuture<SearchDataDTO> completableFuture = CompletableFuture.supplyAsync(() -> getUrlInformation(dto));
+            completableFutureList.add(completableFuture);
         }
 
-        return searchDataDTOList;
+        // return a new CompletableFuture that is completed when all of the given CompletableFutures complete
+        CompletableFuture<Void> allFuture = CompletableFuture.allOf(completableFutureList.toArray(new CompletableFuture[0]));
+
+        // callback to get value when all future completed
+        CompletableFuture<List<SearchDataDTO>> allCompletableFuture = allFuture.thenApply(f ->
+                completableFutureList.stream().map(CompletableFuture::join).collect(Collectors.toList())
+        );
+
+        // convert from allCompletableFuture to searchDataDTOList and return
+        return allCompletableFuture.get();
     }
 
-    private void handleUrlInformation(SearchDataDTO searchDataDTO) {
+    private SearchDataDTO getUrlInformation(SearchDataDTO searchDataDTO) {
         System.out.println("================START================");
         String url = searchDataDTO.getUrl();
 
@@ -102,7 +121,7 @@ public class SearchService {
                     .userAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.21 (KHTML, like Gecko) Chrome/19.0.1042.0 Safari/535.21")
                     .ignoreHttpErrors(true)
                     .followRedirects(true)
-                    .timeout(10000);
+                    .timeout(20000);
 
             Connection.Response response = connection.execute();
 
@@ -111,8 +130,8 @@ public class SearchService {
 
                 // get url title
                 Elements titleElements = document.select("meta[property=og:title]");
-                if (titleElements != null && titleElements.size() != 0) {
-                    title = titleElements.attr("content");
+                if (titleElements != null && !titleElements.isEmpty()) {
+                    title = titleElements.attr(CONNECT);
                 } else {
                     title = document.title();
                 }
@@ -120,16 +139,18 @@ public class SearchService {
                 // get url description
                 description = getPageDescription(document);
             } else {
-                LOGGER.error("ERROR: Cannot get URL information, HTTP status = {}, URL = {}", response.statusCode(), url);
+                LOGGER.error("ERROR: Cannot get URL information with HTTP status = {}, URL = {}", response.statusCode(), url);
 
             }
         } catch (IOException e) {
-            LOGGER.error("ERROR: Get URL information", e);
+            LOGGER.error("ERROR: Get URL information with  HTTP URL = {}", url, e);
         }
 
         searchDataDTO.setTitle(title);
         searchDataDTO.setDescription(description);
         System.out.println("================END================");
+
+        return searchDataDTO;
     }
 
     private String getPageDescription(Document document) {
@@ -138,14 +159,14 @@ public class SearchService {
         // get description by name
         Elements elements = document.select("meta[name=description]");
         for (Element element : elements) {
-            description = element.attr("content");
+            description = element.attr(CONNECT);
             if (description != null) return description;
         }
 
         // get description by property
         elements = document.select("meta[property=description]");
         for (Element element : elements) {
-            description = element.attr("content");
+            description = element.attr(CONNECT);
             if (description != null) return description;
         }
 
