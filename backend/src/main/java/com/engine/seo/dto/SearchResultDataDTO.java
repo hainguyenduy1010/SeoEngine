@@ -16,6 +16,8 @@ public class SearchResultDataDTO implements Serializable {
 
     private List<SearchDataDTO> searchDataList;
 
+    private List<SuggestionDTO> suggestionList;
+
     public int getCount() {
         return count;
     }
@@ -40,6 +42,14 @@ public class SearchResultDataDTO implements Serializable {
         this.searchDataList = searchDataList;
     }
 
+    public List<SuggestionDTO> getSuggestionList() {
+        return suggestionList;
+    }
+
+    public void setSuggestionList(List<SuggestionDTO> suggestionList) {
+        this.suggestionList = suggestionList;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -47,7 +57,8 @@ public class SearchResultDataDTO implements Serializable {
         sb.append("SearchResultDataDTO = [")
                 .append("count = ").append(count).append("; ")
                 .append("totalTime = ").append(totalTime).append("; ")
-                .append("searchDataDTOList.size = ").append(searchDataList.size()).append("]");
+                .append("searchDataDTOList.size = ").append(searchDataList.size()).append("; ")
+                .append("suggestionDTOList").append(suggestionList).append("]");
 
         return sb.toString();
     }

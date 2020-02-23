@@ -2,6 +2,7 @@ package com.engine.seo.service;
 
 import com.engine.seo.dto.SearchDataDTO;
 import com.engine.seo.dto.SearchResultDataDTO;
+import com.engine.seo.dto.SuggestionDTO;
 import com.engine.seo.model.SearchData;
 import com.engine.seo.repository.SearchDataRepository;
 import org.apache.commons.lang3.StringUtils;
@@ -71,10 +72,14 @@ public class SearchService {
             count = searchDataDTOList.size();
         }
 
+        // generate suggestion list
+        List<SuggestionDTO> suggestionDTOList = generateSuggestionList(keyword);
+
         // set result output data
         searchResultDataDTO.setCount(count);
         searchResultDataDTO.setTotalTime((endTime - startTime) / 1000000);
         searchResultDataDTO.setSearchDataList(searchDataDTOList);
+        searchResultDataDTO.setSuggestionList(suggestionDTOList);
 
         LOGGER.debug("search:out(searchResultDataDTO.size = {})", searchResultDataDTO);
 
@@ -176,5 +181,19 @@ public class SearchService {
     private int randomCount() {
         Random random = new Random();
         return random.nextInt(countRandomMax - countRandomMin) + countRandomMin;
+    }
+
+    private List<SuggestionDTO> generateSuggestionList(String keywordSearch) {
+        List<SuggestionDTO> suggestionDTOList = new ArrayList<>();
+        SuggestionDTO suggestionDTO;
+
+        List<String> relateKeywordList = searchDataRepository.findRelateByKeyword(keywordSearch);
+        for (String relateKeyword : relateKeywordList) {
+            suggestionDTO = new SuggestionDTO();
+            suggestionDTO.setKeyword(relateKeyword);
+            suggestionDTOList.add(suggestionDTO);
+        }
+
+        return suggestionDTOList;
     }
 }
