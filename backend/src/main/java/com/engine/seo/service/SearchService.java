@@ -5,6 +5,7 @@ import com.engine.seo.dto.SearchResultDataDTO;
 import com.engine.seo.dto.SuggestionDTO;
 import com.engine.seo.model.SearchData;
 import com.engine.seo.repository.SearchDataRepository;
+import com.engine.seo.utils.Utils;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -66,7 +67,7 @@ public class SearchService {
 
         // get count of results
         int count;
-        if (isCountRandom) {
+        if (isCountRandom && !searchDataDTOList.isEmpty()) {
             count = randomCount();
         } else {
             count = searchDataDTOList.size();
@@ -115,7 +116,8 @@ public class SearchService {
     }
 
     private SearchDataDTO getUrlInformation(SearchDataDTO searchDataDTO) {
-        System.out.println("================START================");
+        LOGGER.debug("getUrlInformation:in(url = {})", searchDataDTO.getUrl());
+
         String url = searchDataDTO.getUrl();
 
         String title = StringUtils.EMPTY;
@@ -151,9 +153,11 @@ public class SearchService {
             LOGGER.error("ERROR: Get URL information with  HTTP URL = {}", url, e);
         }
 
+        title = Utils.boldTextByKeyword(searchDataDTO.getKeyword(), title);
         searchDataDTO.setTitle(title);
         searchDataDTO.setDescription(description);
-        System.out.println("================END================");
+
+        LOGGER.debug("getUrlInformation:out(url = {})", searchDataDTO.getUrl());
 
         return searchDataDTO;
     }
@@ -190,7 +194,10 @@ public class SearchService {
         List<String> relateKeywordList = searchDataRepository.findRelateByKeyword(keywordSearch);
         for (String relateKeyword : relateKeywordList) {
             suggestionDTO = new SuggestionDTO();
+
+            relateKeyword = Utils.boldTextByKeyword(keywordSearch, relateKeyword);
             suggestionDTO.setKeyword(relateKeyword);
+
             suggestionDTOList.add(suggestionDTO);
         }
 
