@@ -18,29 +18,30 @@ USE `seo_engine`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `keyword_seo`
+-- Table structure for table `search_data`
 --
 
-DROP TABLE IF EXISTS `keyword_seo`;
+DROP TABLE IF EXISTS `search_data`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `keyword_seo` (
-  `id` int NOT NULL AUTO_INCREMENT,
+CREATE TABLE `search_data` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
   `keyword` text NOT NULL,
   `url` text NOT NULL,
+  `sortkey` bigint DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `keyword_seo`
+-- Dumping data for table `search_data`
 --
 
-LOCK TABLES `keyword_seo` WRITE;
-/*!40000 ALTER TABLE `keyword_seo` DISABLE KEYS */;
-INSERT INTO `keyword_seo` VALUES (3,'a','a');
-/*!40000 ALTER TABLE `keyword_seo` ENABLE KEYS */;
+LOCK TABLES `search_data` WRITE;
+/*!40000 ALTER TABLE `search_data` DISABLE KEYS */;
+INSERT INTO `search_data` VALUES (5,'merrell coupons','https://www.offers.com/merrell/',1),(6,'merrell coupons','https://www.couponarea.com/view/merrell.com',NULL),(7,'merrell coupons','https://www.merrell.com/US/en/promotions-coupons/',2),(8,'merrell coupons','http://www.couponalbum.com/coupons/merrell.htm',3),(9,'merrell coupons','https://www.fyvor.com/coupons/merrell.com/',NULL),(10,'merrell coupons','https://www.freehotcoupons.org/hotcoupons/merrell-coupons-discounts',NULL),(11,'merrell coupons','https://givingassistant.org/coupon-codes/merrell.com',NULL),(12,'merrell coupons','https://www.goodsearch.com/coupons/merrell',NULL),(13,'merrell coupons','https://www.dealigg.com/story-Merrell-Coupons-Merrell-Coupon-Code',NULL),(14,'merrell coupons','https://dealhack.com/coupons/merrell',NULL),(15,'merrell coupons','https://www.techbargains.com/stores/merrell',NULL),(16,'merrell coupons','https://www.dealcatcher.com/merrell-coupons',NULL),(17,'merrell coupons','https://www.getcouponcodes.com/coupon-code/Merrell',NULL),(18,'merrell coupons','http://www.dealigg.com/story-Merrell-Coupons-Merrell-Coupon-Code',NULL),(19,'merrell abc xyz','https://www.google.com.vn/?hl=vi',NULL),(20,'abc coupons xyz','https://www.google.com.vn/?hl=vi',NULL),(21,'abc xyz coupons','https://www.google.com.vn/?hl=vi',NULL),(22,'abc merrell xyz coupons','https://www.google.com.vn/?hl=vi',NULL),(23,'abc merrell coupons xyz','https://www.google.com.vn/?hl=vi',NULL),(24,'abc merrell coupons xyz','https://www.google.com.vn/?hl=vi2',NULL);
+/*!40000 ALTER TABLE `search_data` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -52,4 +53,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-02-12  7:20:01
+-- Dump completed on 2020-02-24  0:52:54
