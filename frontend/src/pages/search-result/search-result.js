@@ -27,22 +27,27 @@ export default {
 		}
 	},
 	methods: {
+		searchSubmit() {
+			window.location.href = '/search?k=' + this.keyword;
+		},
 		search() {
 			api.search2(this.keyword).then(response => {
-				// console.log(JSON.stringify(response));
+				console.log(JSON.stringify(response));
 				this.setData(response);
 			}, error => console.log(error));
 		},
 		setData(response) {
 			this.searchResult = response;
 			this.resultCount = this.searchResult.count.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+			this.setSuggestionUrl(this.searchResult.suggestionList);
+		},
+		setSuggestionUrl(suggestionList) {
+			for (var suggestion of suggestionList) {
+				var keyword = suggestion.keyword;
+				var url = '/search?k=' + keyword;
+				suggestion.url = url;
+			}
 		}
-		// setSuggestionUrl(suggestionList) {
-		// 	for (suggestion of suggestionList) {
-		// 		var keyword = suggestion.keyword;
-		// 		// var url =
-		// 	}
-		// }
 	},
 
 	components: {

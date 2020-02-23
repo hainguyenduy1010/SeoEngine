@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Home from './Home.vue'
 import router from '@/router'
 import Footer from '@/components/Footer.vue'
+import $ from 'jquery'
 
 Vue.config.productionTip = false
 
@@ -9,18 +10,23 @@ window.onload = function () {
 	new Vue({
 		router,
 		render: h => h(Home)
-	}).$mount('#app')
+	}).$mount('#app');
 }
 
 export default {
 	name: 'Home',
+	components: {
+		Footer
+	},
 	data() {
 		return {
 			logo: require('@/assets/search-logo.png'),
 			keyword: ''
 		}
 	},
-	components: {
-		Footer
+	methods: {
+		searchSubmit() {
+			window.location.href = '/search?k=' + this.keyword;
+		}
 	}
 }
