@@ -74,6 +74,11 @@
     position: relative;
 }
 
+.search-result-list {
+    width: 66%;
+    float: left;
+}
+
 .result-container {
     width: 1170px;
     margin-right: auto;
@@ -87,4 +92,13 @@
 .filter-wrapper .total-time {
     color: #666;
     font-size: 95%;
+}
+
+.suggestion-search {
+    width: 34%;
+    float: right;
+}
+
+.suggestion-content {
+    margin-left: 45px;
 }

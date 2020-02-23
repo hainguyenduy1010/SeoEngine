@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
-import Search from '../views/SearchResult.vue'
+import Home from '../pages/home/Home.vue'
+import Search from '../pages/search-result/SearchResult.vue'
 
 Vue.use(VueRouter)
 
@@ -23,10 +23,11 @@ const routes = [
     }
   },
 
-  { path: '*', redirect: '/' }
+  // { path: '*', redirect: '/' }
 ]
 
 const router = new VueRouter({
+  mode: 'history',
   routes
 })
 
