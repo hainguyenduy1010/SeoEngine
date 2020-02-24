@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -122,13 +123,14 @@ public class SearchService {
 
         String title = StringUtils.EMPTY;
         String description = StringUtils.EMPTY;
+        boolean isSuccess = true;
 
         try {
             Connection connection = Jsoup.connect(url)
                     .userAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.21 (KHTML, like Gecko) Chrome/19.0.1042.0 Safari/535.21")
                     .ignoreHttpErrors(true)
                     .followRedirects(true)
-                    .timeout(20000);
+                    .timeout(10000);
 
             Connection.Response response = connection.execute();
 
@@ -147,17 +149,23 @@ public class SearchService {
                 description = getPageDescription(document);
             } else {
                 LOGGER.error("ERROR: Cannot get URL information with HTTP status = {}, URL = {}", response.statusCode(), url);
-
+                isSuccess = false;
             }
         } catch (IOException e) {
             LOGGER.error("ERROR: Get URL information with  HTTP URL = {}", url, e);
+            isSuccess = false;
         }
 
-        title = Utils.boldTextByKeyword(searchDataDTO.getKeyword(), title);
-        searchDataDTO.setTitle(title);
-        searchDataDTO.setDescription(description);
+        if (isSuccess) {
+            title = Utils.boldTextByKeyword(searchDataDTO.getKeyword(), title);
+            description = Utils.boldTextByKeyword(searchDataDTO.getKeyword(), description);
+            searchDataDTO.setTitle(title);
+            searchDataDTO.setDescription(description);
 
-        LOGGER.debug("getUrlInformation:out(url = {})", searchDataDTO.getUrl());
+            LOGGER.debug("getUrlInformation:out(url = {})", searchDataDTO.getUrl());
+        } else {
+            searchDataDTO = null;
+        }
 
         return searchDataDTO;
     }
