@@ -86,7 +86,7 @@
 }
 
 .filter-wrapper {
-    padding: 0 15px 10px 15px;
+    margin: 10px 0;
 }
 
 .filter-wrapper .total-time {
@@ -94,12 +94,16 @@
     font-size: 95%;
 }
 
+.search-result {
+    margin-bottom: 25px;
+}
+
 .search-result h3 {
-    color: #1e0fbe;
+    color: #003dbf;
     font-size: 18px;
     font-weight: 400;
     line-height: 1.4;
-    margin-bottom: 0;
+    margin-bottom: 4px;
     margin-top: 7px;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -109,6 +113,16 @@
     word-break: break-all;
 }
 
+.search-result .search-link {
+    color: #006621;
+    word-break: break-all;
+}
+
+.search-result p {
+    margin: 0;
+    color: #515151;
+}
+
 .suggestion-search {
     width: 34%;
     float: right;
@@ -116,4 +130,17 @@
 
 .suggestion-content {
     margin-left: 45px;
+}
+
+.suggestion-key {
+    padding-left: 0px;
+}
+
+.suggestion-content li {
+    list-style: none;
+    line-height: 30px;
+}
+
+.page-navbar {
+    clear: both;
 }

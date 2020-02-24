@@ -2,7 +2,6 @@ import Vue from 'vue'
 import Home from './Home.vue'
 import router from '@/router'
 import Footer from '@/components/Footer.vue'
-import $ from 'jquery'
 
 Vue.config.productionTip = false
 

@@ -3,6 +3,14 @@ import SearchResult from './SearchResult.vue'
 import router from '@/router'
 import api from "../backend-api.js"
 import Footer from '@/components/Footer.vue'
+import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
+
+Vue.use(Footer)
+Vue.use(BootstrapVue)
+// Optionally install the BootstrapVue icon components plugin
+Vue.use(IconsPlugin)
 
 Vue.config.productionTip = false
 
@@ -32,7 +40,7 @@ export default {
 		},
 		search() {
 			api.search2(this.keyword).then(response => {
-				console.log(JSON.stringify(response));
+				// console.log(JSON.stringify(response));
 				this.setData(response);
 			}, error => console.log(error));
 		},
@@ -48,9 +56,5 @@ export default {
 				suggestion.url = url;
 			}
 		}
-	},
-
-	components: {
-		Footer
 	}
 }

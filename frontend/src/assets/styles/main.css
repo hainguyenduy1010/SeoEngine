@@ -30,7 +30,7 @@ input:-internal-autofill-selected {
 
 #app a {
   text-decoration: none;
-  color: #003dbf;
+  /*color: #003dbf;*/
 }
 
 .container {

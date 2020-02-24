@@ -10,7 +10,7 @@
 					</div>
 
 					<div id="search-box">
-          				<form @submit.prevent="searchSubmit">
+						<form @submit.prevent="searchSubmit">
 							<input type="text" id="search-input" class="form-control" placeholder="Search thousands of coupons and stores" v-model="keyword">
 							<!-- <router-link :to="{name: 'search', params: {keyword}}"> -->
 								<!-- <a v-bind:href="'/search?k=' + keyword"> -->
@@ -51,41 +51,49 @@
 						<div class="search-result-list">
 							<!-- loop through result list -->
 							<div class="search-result" v-for="searchData in searchResult.searchDataList" v-bind:key="searchData.id">
-								<h3>
+								<h3 v-if="searchData !== null">
 									<a target="_blank" v-bind:href="searchData.url">
-										{{searchData.title}}
+										<span v-html="searchData.title"></span>
 									</a>
 								</h3>
-								<a target="_blank" v-bind:href="searchData.url">
+								<a class="search-link" target="_blank" v-if="searchData !== null" v-bind:href="searchData.url">
 									{{searchData.url}}
 								</a>
-								<p>{{searchData.description}}</p>
+								<p v-if="searchData !== null" v-html="searchData.description"></p>
 							</div>
 							<!-- end loop -->
 						</div>
 						<div class="suggestion-search">
 							<div class="suggestion-content">
-								<h4>Related Search</h4>
+								<h4 v-if="searchResult.suggestionList">Related searches</h4>
 								<ul class="suggestion-key">
 									<li v-for="(suggestion, index) in searchResult.suggestionList" v-bind:key="index">
 										<a v-bind:href="suggestion.url">
-											{{suggestion.keyword}}
+											<span v-html="suggestion.keyword"></span>
 										</a>
 									</li>
 								</ul>
 							</div>
 						</div>
 					</div>
+
+					<div class="page-navbar">
+						<b-pagination
+							v-model="currentPage"
+							:total-rows="100"
+							align="fill">
+						</b-pagination>
+					</div>
 				</div>
 			</div>
 		</div>
 
-		<Footer></Footer>
+		<Footer style="position: unset;"></Footer>
 	</div>
 </template>
 
 <style>
-  @import '../../assets/styles/page-result.css';
+	@import '../../assets/styles/page-result.css';
 </style>
 
 <script src="./search-result.js"></script>
