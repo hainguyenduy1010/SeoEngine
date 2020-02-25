@@ -48,6 +48,9 @@ export default {
 			this.search_result = response;
 			this.current_page = response.current_page;
 			this.result_count_fake = response.count_fake.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+		},
+		goToPage(pageNumber) {
+			alert(pageNumber)
 		}
 	},
 

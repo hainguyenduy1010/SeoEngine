@@ -50,19 +50,34 @@
 					<div class="search-result-wrapper">
 						<div class="search-result-list">
 							<!-- loop through result list -->
-							<div class="search-result" v-for="search_data in search_result.search_data_list" v-if="search_data" v-bind:key="search_data.id">
-								<h3>
-									<a target="_blank" v-bind:href="search_data.url">
-										<span v-html="search_data.title"></span>
+							<div class="search-result" v-for="(search_data, index) in search_result.search_data_list" v-bind:key="index">
+								<div v-if="search_data !== null">
+									<h3>
+										<a target="_blank" v-bind:href="search_data.url">
+											<span v-html="search_data.title"></span>
+										</a>
+									</h3>
+									<a class="search-link" target="_blank" v-bind:href="search_data.url">
+										{{search_data.url}}
 									</a>
-								</h3>
-								<a class="search-link" target="_blank" v-bind:href="search_data.url">
-									{{search_data.url}}
-								</a>
-								<p v-html="search_data.description"></p>
+									<p v-html="search_data.description"></p>
+								</div>
 							</div>
 							<!-- end loop -->
+
+							<div class="page-navbar">
+								<b-pagination
+									v-model="current_page"
+									:total-rows="500"
+									:per-page="20"
+									limit="10"
+									align="center"
+									v-on:input="goToPage"
+								>
+								</b-pagination>
+							</div>
 						</div>
+
 						<div class="suggestion-search">
 							<div class="suggestion-content">
 								<h4 v-if="search_result.suggestion_list">Related searches</h4>
@@ -76,18 +91,9 @@
 							</div>
 						</div>
 					</div>
-
-					<div class="page-navbar">
-						<b-pagination
-							v-model="current_page"
-							:total-rows="search_result.result_count"
-							align="fill">
-						</b-pagination>
-					</div>
 				</div>
 			</div>
 		</div>
-
 		<Footer style="position: unset;"></Footer>
 	</div>
 </template>
