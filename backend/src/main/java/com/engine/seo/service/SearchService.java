@@ -1,6 +1,7 @@
 package com.engine.seo.service;
 
 import com.engine.seo.dto.SearchDataDTO;
+import com.engine.seo.dto.SearchRequestDTO;
 import com.engine.seo.dto.SearchResultDataDTO;
 import com.engine.seo.dto.SuggestionDTO;
 import com.engine.seo.model.SearchData;
@@ -22,7 +23,6 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -39,10 +39,10 @@ public class SearchService {
     private static final String CONNECT = "content";
 
     @Autowired
-    SearchDataRepository searchDataRepository;
+    private SearchDataRepository searchDataRepository;
 
     @Autowired
-    ModelMapper modelMapper;
+    private ModelMapper modelMapper;
 
     @Value("${search.result.count.random.enable}")
     private boolean isCountRandom;
@@ -53,11 +53,15 @@ public class SearchService {
     @Value("${search.result.count.random.max}")
     private int countRandomMax;
 
-    public SearchResultDataDTO search(String keyword) throws ExecutionException, InterruptedException {
-        LOGGER.debug("search:in(keyword = {})", keyword);
+    public SearchResultDataDTO search(SearchRequestDTO searchRequestDTO) throws ExecutionException, InterruptedException {
+        LOGGER.debug("search:in(searchRequestDTO = {})", searchRequestDTO);
 
         // init
         SearchResultDataDTO searchResultDataDTO = new SearchResultDataDTO();
+
+        // get request
+        String keyword = searchRequestDTO.getKeyword();
+        Integer currentPage = searchRequestDTO.getCurrentPage();
 
         long startTime = System.nanoTime();
         // get SearchData list from DB by keyword
@@ -66,22 +70,24 @@ public class SearchService {
         List<SearchDataDTO> searchDataDTOList = generateSearchDataDTOList(searchDataList);
         long endTime = System.nanoTime();
 
-        // get count of results
-        int count;
+        // get count fake of results
+        int countFake;
         if (isCountRandom && !searchDataDTOList.isEmpty()) {
-            count = randomCount();
+            countFake = randomCount();
         } else {
-            count = searchDataDTOList.size();
+            countFake = searchDataDTOList.size();
         }
 
         // generate suggestion list
         List<SuggestionDTO> suggestionDTOList = generateSuggestionList(keyword);
 
         // set result output data
-        searchResultDataDTO.setCount(count);
+        searchResultDataDTO.setCount(searchDataDTOList.size());
+        searchResultDataDTO.setCountFake(countFake);
         searchResultDataDTO.setTotalTime((endTime - startTime) / 1000000);
         searchResultDataDTO.setSearchDataList(searchDataDTOList);
         searchResultDataDTO.setSuggestionList(suggestionDTOList);
+        searchResultDataDTO.setCurrentPage(currentPage);
 
         LOGGER.debug("search:out(searchResultDataDTO.size = {})", searchResultDataDTO);
 
@@ -198,13 +204,15 @@ public class SearchService {
     private List<SuggestionDTO> generateSuggestionList(String keywordSearch) {
         List<SuggestionDTO> suggestionDTOList = new ArrayList<>();
         SuggestionDTO suggestionDTO;
+        String relateKeywordBold;
 
         List<String> relateKeywordList = searchDataRepository.findRelateByKeyword(keywordSearch);
         for (String relateKeyword : relateKeywordList) {
             suggestionDTO = new SuggestionDTO();
 
-            relateKeyword = Utils.boldTextByKeyword(keywordSearch, relateKeyword);
-            suggestionDTO.setKeyword(relateKeyword);
+            relateKeywordBold = Utils.boldTextByKeyword(keywordSearch, relateKeyword);
+            suggestionDTO.setSuggestionKeyword(relateKeywordBold);
+            suggestionDTO.setPath("/search?k=" + relateKeyword);
 
             suggestionDTOList.add(suggestionDTO);
         }

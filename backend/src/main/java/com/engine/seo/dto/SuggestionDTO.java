@@ -1,5 +1,7 @@
 package com.engine.seo.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.io.Serializable;
 
 /**
@@ -9,23 +11,36 @@ public class SuggestionDTO implements Serializable {
 
     private static final long serialVersionUID = -8094245237167357240L;
 
-    private String keyword;
+    @JsonProperty("suggestion_keyword")
+    private String suggestionKeyword;
 
-    private String url;
+    @JsonProperty("path")
+    private String path;
 
-    public String getKeyword() {
-        return keyword;
+    public String getSuggestionKeyword() {
+        return suggestionKeyword;
     }
 
-    public void setKeyword(String keyword) {
-        this.keyword = keyword;
+    public void setSuggestionKeyword(String suggestionKeyword) {
+        this.suggestionKeyword = suggestionKeyword;
     }
 
-    public String getUrl() {
-        return url;
+    public String getPath() {
+        return path;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("SuggestionDTO = [")
+                .append("suggestionKeyword = ").append(suggestionKeyword).append("; ")
+                .append("path = ").append(path).append("]");
+
+        return sb.toString();
     }
 }

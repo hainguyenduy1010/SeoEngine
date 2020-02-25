@@ -1,5 +1,7 @@
 package com.engine.seo.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.io.Serializable;
 
 /**
@@ -9,14 +11,19 @@ public class SearchDataDTO implements Serializable {
 
     private static final long serialVersionUID = -2100165345239717454L;
 
+    @JsonProperty("id")
     private int id;
 
+    @JsonProperty("keyword")
     private String keyword;
 
+    @JsonProperty("url")
     private String url;
 
+    @JsonProperty("title")
     private String title;
 
+    @JsonProperty("description")
     private String description;
 
     public int getId() {

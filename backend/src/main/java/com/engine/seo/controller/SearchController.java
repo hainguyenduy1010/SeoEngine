@@ -1,5 +1,6 @@
 package com.engine.seo.controller;
 
+import com.engine.seo.dto.SearchRequestDTO;
 import com.engine.seo.dto.SearchResultDataDTO;
 import com.engine.seo.service.SearchService;
 import org.slf4j.Logger;
@@ -27,12 +28,12 @@ public class SearchController {
     private SearchService searchService;
 
     @PostMapping("/search")
-    public ResponseEntity<SearchResultDataDTO> search(@Valid @RequestBody String keyword) throws ExecutionException, InterruptedException {
+    public ResponseEntity<SearchResultDataDTO> search(@Valid @RequestBody SearchRequestDTO searchRequestDTO) throws ExecutionException, InterruptedException {
         LOGGER.info("POST api/search");
-        LOGGER.info("POST with body = {}", keyword);
+        LOGGER.info("POST with body = {}", searchRequestDTO);
 
         try {
-            SearchResultDataDTO searchResultDataDTO = searchService.search(keyword);
+            SearchResultDataDTO searchResultDataDTO = searchService.search(searchRequestDTO);
 
             return ResponseEntity.ok(searchResultDataDTO);
         } catch (Exception e) {
