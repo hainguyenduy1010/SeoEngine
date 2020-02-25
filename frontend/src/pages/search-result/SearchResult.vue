@@ -38,9 +38,9 @@
 					<div class="filter-wrapper">
 						<div class="search-counter-about">
 							<span>About </span>
-							<span><b>{{resultCount}}</b></span>
+							<span><b>{{result_count_fake}}</b></span>
 							<span> results </span>
-							<span class="total-time"> ({{searchResult.totalTime}} milliseconds) </span>
+							<span class="total-time"> ({{search_result.total_time}} milliseconds) </span>
 						</div>
 						<div class="filter-content">
 
@@ -50,26 +50,26 @@
 					<div class="search-result-wrapper">
 						<div class="search-result-list">
 							<!-- loop through result list -->
-							<div class="search-result" v-for="searchData in searchResult.searchDataList" v-bind:key="searchData.id">
-								<h3 v-if="searchData !== null">
-									<a target="_blank" v-bind:href="searchData.url">
-										<span v-html="searchData.title"></span>
+							<div class="search-result" v-for="search_data in search_result.search_data_list" v-if="search_data" v-bind:key="search_data.id">
+								<h3>
+									<a target="_blank" v-bind:href="search_data.url">
+										<span v-html="search_data.title"></span>
 									</a>
 								</h3>
-								<a class="search-link" target="_blank" v-if="searchData !== null" v-bind:href="searchData.url">
-									{{searchData.url}}
+								<a class="search-link" target="_blank" v-bind:href="search_data.url">
+									{{search_data.url}}
 								</a>
-								<p v-if="searchData !== null" v-html="searchData.description"></p>
+								<p v-html="search_data.description"></p>
 							</div>
 							<!-- end loop -->
 						</div>
 						<div class="suggestion-search">
 							<div class="suggestion-content">
-								<h4 v-if="searchResult.suggestionList">Related searches</h4>
+								<h4 v-if="search_result.suggestion_list">Related searches</h4>
 								<ul class="suggestion-key">
-									<li v-for="(suggestion, index) in searchResult.suggestionList" v-bind:key="index">
-										<a v-bind:href="suggestion.url">
-											<span v-html="suggestion.keyword"></span>
+									<li v-for="(suggestion, index) in search_result.suggestion_list" v-bind:key="index">
+										<a v-bind:href="suggestion.path">
+											<span v-html="suggestion.suggestion_keyword"></span>
 										</a>
 									</li>
 								</ul>
@@ -79,8 +79,8 @@
 
 					<div class="page-navbar">
 						<b-pagination
-							v-model="currentPage"
-							:total-rows="100"
+							v-model="current_page"
+							:total-rows="search_result.result_count"
 							align="fill">
 						</b-pagination>
 					</div>

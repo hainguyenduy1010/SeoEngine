@@ -12,15 +12,18 @@ export default {
 		return AXIOS.post(`/api/search`, keyword);
 	},
 
-	search2(keyword) {
+	search2(keyword, current_page) {
 		return $.ajax({
 			method: "POST",
 			url: "/api/search",
 			async: false,
 			headers: {
-				'Content-Type': 'text/plain'
+				'Content-Type': 'application/json; charset=utf-8',
 			},
-			data: keyword
+			data: JSON.stringify({
+				keyword: keyword,
+				current_page: current_page
+			})
 		});
 	}
 }
