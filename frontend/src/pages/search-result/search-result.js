@@ -23,34 +23,33 @@ window.onload = function () {
 export default {
 	name: 'Search',
 	beforeMount() {
-		this.search(this.$route.query.k, this.current_page);
+		api.search2(this.$route.query.k, this.$route.query.p).then(response => {
+			// console.log(JSON.stringify(response));
+			this.setData(response);
+		}, error => console.log(error));
 	},
 	data() {
 		return {
 			logo: require('@/assets/search-logo.png'),
-			keyword: this.$route.query.k,
 			search_result: {},
-			current_page: null,
-			result_count_fake: null
+			keyword: this.$route.query.k,
+			current_page: parseInt(this.$route.query.p),
+			result_count_fake: null,
+			number_of_pages: null
 		}
 	},
 	methods: {
 		searchSubmit() {
 			window.location.href = '/search?k=' + this.keyword;
 		},
-		search() {
-			api.search2(this.keyword, this.current_page).then(response => {
-				// console.log(JSON.stringify(response));
-				this.setData(response);
-			}, error => console.log(error));
-		},
 		setData(response) {
 			this.search_result = response;
-			this.current_page = response.current_page;
+			this.current_page = parseInt(response.current_page);
+			this.number_of_pages = Math.ceil(parseInt(response.count) / 20);
 			this.result_count_fake = response.count_fake.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 		},
-		goToPage(pageNumber) {
-			alert(pageNumber)
+		linkGen(pageNumber) {
+			return `/search?k=` + this.keyword + `&p=${pageNumber}`
 		}
 	},
 

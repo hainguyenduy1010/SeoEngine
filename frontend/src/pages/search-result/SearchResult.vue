@@ -66,15 +66,13 @@
 							<!-- end loop -->
 
 							<div class="page-navbar">
-								<b-pagination
-									v-model="current_page"
-									:total-rows="500"
-									:per-page="20"
+								<b-pagination-nav
+									:v-model="current_page"
+									:number-of-pages="number_of_pages"
 									limit="10"
 									align="center"
-									v-on:input="goToPage"
-								>
-								</b-pagination>
+									:link-gen="linkGen">
+								</b-pagination-nav>
 							</div>
 						</div>
 

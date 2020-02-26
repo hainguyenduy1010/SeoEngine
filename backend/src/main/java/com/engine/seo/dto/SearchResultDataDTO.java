@@ -89,8 +89,8 @@ public class SearchResultDataDTO implements Serializable {
                 .append("countFake = ").append(countFake).append("; ")
                 .append("totalTime = ").append(totalTime).append("; ")
                 .append("searchDataDTOList.size = ").append(searchDataList.size()).append("; ")
-                .append("suggestionDTOList").append(suggestionList).append("; ")
-                .append("currentPage").append(currentPage).append("]");
+                .append("suggestionDTOList = ").append(suggestionList).append("; ")
+                .append("currentPage = ").append(currentPage).append("]");
 
         return sb.toString();
     }
