@@ -14,3 +14,5 @@ search:
         enable: true
         min: 1000000
         max: 2000000
+    result_per_page: 20
+    number_of_suggestion: 12

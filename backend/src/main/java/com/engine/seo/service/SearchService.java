@@ -18,6 +18,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -44,6 +47,9 @@ public class SearchService {
     @Autowired
     private ModelMapper modelMapper;
 
+    @Value("${search.result.result_per_page}")
+    private int numberResultsPerPage;
+
     @Value("${search.result.count.random.enable}")
     private boolean isCountRandom;
 
@@ -63,35 +69,79 @@ public class SearchService {
         String keyword = searchRequestDTO.getKeyword();
         Integer currentPage = searchRequestDTO.getCurrentPage();
 
+        // get count of results
+        long byKeywordCount = searchDataRepository.countByKeyword(keyword);
+        long relateCount = searchDataRepository.countRelateData(keyword);
+
         long startTime = System.nanoTime();
         // get SearchData list from DB by keyword
-        List<SearchData> searchDataList = searchDataRepository.findByKeywordOrderBySortkeyAsc(keyword);
+        List<SearchData> searchDataList = findSearchData(keyword, currentPage);
         // generate SearchDataDTO list
         List<SearchDataDTO> searchDataDTOList = generateSearchDataDTOList(searchDataList);
-        long endTime = System.nanoTime();
 
-        // get count fake of results
-        int countFake;
-        if (isCountRandom && !searchDataDTOList.isEmpty()) {
-            countFake = randomCount();
-        } else {
-            countFake = searchDataDTOList.size();
-        }
+        // get SearchData list from DB by keyword
+        List<SearchData> relateSearchDataList = findRelateSearchData(keyword, currentPage, (int) byKeywordCount);
+        // generate SearchDataDTO list
+        List<SearchDataDTO> relateSearchDataDTOList = generateSearchDataDTOList(relateSearchDataList);
+        searchDataDTOList.addAll(relateSearchDataDTOList);
+        long endTime = System.nanoTime();
 
         // generate suggestion list
         List<SuggestionDTO> suggestionDTOList = generateSuggestionList(keyword);
 
         // set result output data
-        searchResultDataDTO.setCount(searchDataDTOList.size());
-        searchResultDataDTO.setCountFake(countFake);
+        searchResultDataDTO.setCount(byKeywordCount + relateCount);
+        searchResultDataDTO.setCountFake(getCountFake(byKeywordCount + relateCount));
         searchResultDataDTO.setTotalTime((endTime - startTime) / 1000000);
         searchResultDataDTO.setSearchDataList(searchDataDTOList);
         searchResultDataDTO.setSuggestionList(suggestionDTOList);
         searchResultDataDTO.setCurrentPage(currentPage);
+        searchResultDataDTO.setNumberResultsPerPage(numberResultsPerPage);
 
         LOGGER.debug("search:out(searchResultDataDTO.size = {})", searchResultDataDTO);
 
         return searchResultDataDTO;
+    }
+
+    private List<SearchData> findSearchData(String keyword, Integer currentPage) {
+        int page = currentPage == null ? 0 : currentPage - 1;
+        Pageable pageable = PageRequest.of(page, numberResultsPerPage, Sort.by("sortkey").ascending());
+
+        return searchDataRepository.findByKeyword(keyword, pageable);
+    }
+
+    private List<SearchData> findRelateSearchData(String keywordSearch, Integer currentPage, int byKeywordCount) {
+
+        List <SearchData> relateSearchDataList = new ArrayList<>();
+        currentPage = currentPage == null ? 1: currentPage;
+
+        int firstResult, maxResults;
+        int countInLastPage = byKeywordCount % numberResultsPerPage;
+        int maxPage = byKeywordCount / numberResultsPerPage;
+        maxPage = countInLastPage != 0 ? maxPage + 1 : maxPage;
+
+        if (countInLastPage != 0) {
+            firstResult = 0;
+            maxResults = numberResultsPerPage - countInLastPage;
+        } else {
+            firstResult = numberResultsPerPage * (currentPage - maxPage - 1);
+            maxResults = numberResultsPerPage + firstResult;
+        }
+
+        if (currentPage > maxPage || (currentPage == maxPage && countInLastPage != 0)) {
+            relateSearchDataList = searchDataRepository.findRelateData(keywordSearch, firstResult, maxResults);
+        }
+
+        return relateSearchDataList;
+    }
+
+    private long getCountFake(long count) {
+
+        if (isCountRandom) {
+            return randomCount();
+        }
+
+        return count;
     }
 
     private List<SearchDataDTO> generateSearchDataDTOList(List<SearchData> searchDataList) throws ExecutionException, InterruptedException {
@@ -206,7 +256,7 @@ public class SearchService {
         SuggestionDTO suggestionDTO;
         String relateKeywordBold;
 
-        List<String> relateKeywordList = searchDataRepository.findRelateByKeyword(keywordSearch);
+        List<String> relateKeywordList = searchDataRepository.findRelateKeyword(keywordSearch);
         for (String relateKeyword : relateKeywordList) {
             suggestionDTO = new SuggestionDTO();
 

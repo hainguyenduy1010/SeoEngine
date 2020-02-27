@@ -65,7 +65,7 @@ public class SearchData {
                 .append("id = ").append(id).append("; ")
                 .append("keyword = ").append(keyword).append("; ")
                 .append("url = ").append(url).append("; ")
-                .append("sortkey = ").append(url).append("]");
+                .append("sortkey = ").append(sortkey).append("]");
 
         return sb.toString();
     }

@@ -9,5 +9,9 @@ import java.util.List;
  */
 public interface SearchDataRepositoryCustom {
 
-    List<String> findRelateByKeyword(String keyword);
+    long countRelateData(String keyword);
+
+    List<SearchData> findRelateData(String keyword, int firstResult, int maxResults);
+
+    List<String> findRelateKeyword(String keyword);
 }

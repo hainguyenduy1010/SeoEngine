@@ -15,10 +15,10 @@ public class SearchResultDataDTO implements Serializable {
     private static final long serialVersionUID = 2588869100925735203L;
 
     @JsonProperty("count")
-    private int count;
+    private long count;
 
     @JsonProperty("count_fake")
-    private int countFake;
+    private long countFake;
 
     @JsonProperty("total_time")
     private long totalTime;
@@ -32,19 +32,22 @@ public class SearchResultDataDTO implements Serializable {
     @JsonProperty("current_page")
     private Integer currentPage;
 
-    public int getCount() {
+    @JsonProperty("number_results_per_page")
+    private int numberResultsPerPage;
+
+    public long getCount() {
         return count;
     }
 
-    public void setCount(int count) {
+    public void setCount(long count) {
         this.count = count;
     }
 
-    public int getCountFake() {
+    public long getCountFake() {
         return countFake;
     }
 
-    public void setCountFake(int countFake) {
+    public void setCountFake(long countFake) {
         this.countFake = countFake;
     }
 
@@ -80,6 +83,14 @@ public class SearchResultDataDTO implements Serializable {
         this.currentPage = currentPage;
     }
 
+    public int getNumberResultsPerPage() {
+        return numberResultsPerPage;
+    }
+
+    public void setNumberResultsPerPage(int numberResultsPerPage) {
+        this.numberResultsPerPage = numberResultsPerPage;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -88,9 +99,10 @@ public class SearchResultDataDTO implements Serializable {
                 .append("count = ").append(count).append("; ")
                 .append("countFake = ").append(countFake).append("; ")
                 .append("totalTime = ").append(totalTime).append("; ")
-                .append("searchDataDTOList.size = ").append(searchDataList.size()).append("; ")
+                .append("searchDataDTOList = ").append(searchDataList).append("; ")
                 .append("suggestionDTOList = ").append(suggestionList).append("; ")
-                .append("currentPage = ").append(currentPage).append("]");
+                .append("currentPage = ").append(currentPage).append("; ")
+                .append("numberResultsPerPage = ").append(numberResultsPerPage).append("]");
 
         return sb.toString();
     }

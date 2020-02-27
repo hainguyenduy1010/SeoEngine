@@ -2,6 +2,7 @@ package com.engine.seo.repository;
 
 import com.engine.seo.model.SearchData;
 import com.engine.seo.repository.custom.SearchDataRepositoryCustom;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -14,6 +15,7 @@ import java.util.List;
 @Repository
 public interface SearchDataRepository extends JpaRepository<SearchData, Integer>, SearchDataRepositoryCustom {
 
-    @Query(value = "SELECT data FROM SearchData data WHERE data.keyword = ?1 ORDER BY data.sortkey ASC")
-    List<SearchData> findByKeywordOrderBySortkeyAsc(String keyword);
+    long countByKeyword(String keyword);
+
+    List<SearchData> findByKeyword(String keyword, Pageable pageable);
 }

@@ -3,6 +3,7 @@ package com.engine.seo.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
+import java.math.BigInteger;
 
 /**
  * Created by HaiND on 2/11/2020 11:19 PM.
@@ -12,7 +13,7 @@ public class SearchDataDTO implements Serializable {
     private static final long serialVersionUID = -2100165345239717454L;
 
     @JsonProperty("id")
-    private int id;
+    private BigInteger id;
 
     @JsonProperty("keyword")
     private String keyword;
@@ -26,11 +27,14 @@ public class SearchDataDTO implements Serializable {
     @JsonProperty("description")
     private String description;
 
-    public int getId() {
+    @JsonProperty("sortkey")
+    private BigInteger sortkey;
+
+    public BigInteger getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(BigInteger id) {
         this.id = id;
     }
 
@@ -66,6 +70,14 @@ public class SearchDataDTO implements Serializable {
         this.description = description;
     }
 
+    public BigInteger getSortkey() {
+        return sortkey;
+    }
+
+    public void setSortkey(BigInteger sortkey) {
+        this.sortkey = sortkey;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -75,7 +87,8 @@ public class SearchDataDTO implements Serializable {
                 .append("keyword = ").append(keyword).append("; ")
                 .append("url = ").append(keyword).append("; ")
                 .append("title = ").append(title).append("; ")
-                .append("summary = ").append(description).append("]");
+                .append("description = ").append(description).append("; ")
+                .append("sortkey = ").append(sortkey).append("]");
 
         return sb.toString();
     }

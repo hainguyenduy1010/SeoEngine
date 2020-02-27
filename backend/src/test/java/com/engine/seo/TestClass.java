@@ -13,10 +13,14 @@ import java.io.IOException;
  */
 public class TestClass {
 
-
+    @Test
+    void test_1() {
+        long countLastPage = 40 % 20;
+        System.out.println(countLastPage);
+    }
 
     @Test
-    void test() throws IOException {
+    void test_2() throws IOException {
 //        InputStream response = null;
 //
 //        String url = "https://www.couponsherpa.com/merrell/";
