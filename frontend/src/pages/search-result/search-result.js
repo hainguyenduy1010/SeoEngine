@@ -33,7 +33,6 @@ export default {
 			logo: require('@/assets/search-logo.png'),
 			search_result: {},
 			keyword: this.$route.query.k,
-			current_page: parseInt(this.$route.query.p),
 			result_count_fake: null,
 			number_of_pages: null
 		}
@@ -45,7 +44,6 @@ export default {
 		setData(response) {
 			this.search_result = response;
 			this.result_count_fake = response.count_fake.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-			this.current_page = parseInt(response.current_page);
 			this.number_of_pages = Math.ceil(parseInt(response.count) / parseInt(response.number_results_per_page));
 		},
 		linkGen(pageNumber) {
