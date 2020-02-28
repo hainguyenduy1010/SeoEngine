@@ -67,7 +67,7 @@ public class SearchService {
 
         // get request
         String keyword = searchRequestDTO.getKeyword();
-        Integer currentPage = searchRequestDTO.getCurrentPage();
+        Integer currentPage = searchRequestDTO.getCurrentPage() == null ? 1 : searchRequestDTO.getCurrentPage();
 
         // get count of results
         long byKeywordCount = searchDataRepository.countByKeyword(keyword);
@@ -104,8 +104,8 @@ public class SearchService {
     }
 
     private List<SearchData> findSearchData(String keyword, Integer currentPage) {
-        int page = currentPage == null ? 0 : currentPage - 1;
-        Pageable pageable = PageRequest.of(page, numberResultsPerPage, Sort.by("sortkey").ascending());
+
+        Pageable pageable = PageRequest.of(currentPage - 1, numberResultsPerPage, Sort.by("sortkey").ascending());
 
         return searchDataRepository.findByKeyword(keyword, pageable);
     }
@@ -113,19 +113,22 @@ public class SearchService {
     private List<SearchData> findRelateSearchData(String keywordSearch, Integer currentPage, int byKeywordCount) {
 
         List <SearchData> relateSearchDataList = new ArrayList<>();
-        currentPage = currentPage == null ? 1: currentPage;
 
-        int firstResult, maxResults;
+        int firstResult;
+        int maxResults;
         int countInLastPage = byKeywordCount % numberResultsPerPage;
         int maxPage = byKeywordCount / numberResultsPerPage;
         maxPage = countInLastPage != 0 ? maxPage + 1 : maxPage;
 
-        if (countInLastPage != 0) {
+        if (countInLastPage != 0 && currentPage == maxPage) {
             firstResult = 0;
             maxResults = numberResultsPerPage - countInLastPage;
+        } else if (countInLastPage != 0 && currentPage > maxPage) {
+            firstResult = (numberResultsPerPage - countInLastPage) + (numberResultsPerPage * (currentPage - maxPage - 1));
+            maxResults = numberResultsPerPage;
         } else {
             firstResult = numberResultsPerPage * (currentPage - maxPage - 1);
-            maxResults = numberResultsPerPage + firstResult;
+            maxResults = numberResultsPerPage;
         }
 
         if (currentPage > maxPage || (currentPage == maxPage && countInLastPage != 0)) {
