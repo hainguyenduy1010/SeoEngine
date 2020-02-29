@@ -6,8 +6,14 @@ input:focus {
   outline: 0;
 }
 
-input:-internal-autofill-selected {
-  background-color: fff;
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0px 1000px #ffffff inset !important;
 }
 
 .h4, h4 {
@@ -30,7 +36,7 @@ input:-internal-autofill-selected {
 
 #app a {
   text-decoration: none;
-  /*color: #003dbf;*/
+  color: #003dbf;
 }
 
 .container {
@@ -76,7 +82,7 @@ input:-internal-autofill-selected {
 
 #search-box button {
   outline: 0;
-  height: 39px;
+  height: 40px;
   padding: 0 10px;
   display: flex;
   justify-content: center;
@@ -88,7 +94,7 @@ input:-internal-autofill-selected {
   background: 0 0;
   border: 0;
   user-select: none;
-  background-color: #fff;
+  /*background-color: #fff;*/
   cursor: pointer;
 }
 

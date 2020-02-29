@@ -13,7 +13,7 @@
             <input id="search-input" placeholder="Search thousands of coupons and stores" v-model="keyword">
             <!-- <router-link :to="{name: 'search', params: {keyword}}"> -->
             <!-- <a v-bind:href="'/search?k=' + keyword"> -->
-              <button class="btn-search" type="submit">
+              <button class="btn-search" type="submit" autocorrect="off" spellcheck="false">
                 <svg x="0px" y="0px" viewBox="0 0 32 32" style="enable-background:new 0 0 32 32;" xml:space="preserve">
                   <g id="Page-1">
                     <g id="icon-111-search">
@@ -105,8 +105,8 @@
   </div>
 </template>
 
-<style>
-  @import '../../assets/styles/main.css';
+<style scoped>
+  @import '../../assets/styles/home.css';
 </style>
 
 <script src="./home.js"></script>

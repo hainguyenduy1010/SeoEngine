@@ -23,6 +23,6 @@
     </footer>
 </template>
 
-<style>
+<style scoped>
   @import '../assets/styles/footer.css';
 </style>

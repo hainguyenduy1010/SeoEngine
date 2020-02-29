@@ -11,7 +11,7 @@
 
 					<div id="search-box">
 						<form @submit.prevent="searchSubmit">
-							<input type="text" id="search-input" class="form-control" placeholder="Search thousands of coupons and stores" v-model="keyword">
+							<input type="text" id="search-input" class="form-control" placeholder="Search thousands of coupons and stores" v-model="keyword" autocorrect="off" spellcheck="false">
 							<!-- <router-link :to="{name: 'search', params: {keyword}}"> -->
 								<!-- <a v-bind:href="'/search?k=' + keyword"> -->
 									<button class="btn-search" type="submit" title="Searching...">
@@ -57,7 +57,7 @@
 											{{search_data.sortkey}} - <span v-html="search_data.title"></span>
 										</a>
 									</h3>
-									<a class="search-link" target="_blank" v-bind:href="search_data.url">
+									<a class="search-link" target="_blank" v-bind:href="search_data.url" style="color: #006621;">
 										{{search_data.url}}
 									</a>
 									<p v-html="search_data.description"></p>
@@ -96,7 +96,7 @@
 	</div>
 </template>
 
-<style>
+<style scoped>
 	@import '../../assets/styles/page-result.css';
 </style>
 
