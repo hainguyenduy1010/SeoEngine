@@ -16,3 +16,8 @@ search:
         max: 2000000
     result_per_page: 20
     number_of_suggestion: 12
+
+admin:
+  login:
+    user: getcodeadmin
+    password: zM6#U%c&gB9d4+Rb

@@ -67,6 +67,7 @@ public class SearchService {
 
         // get request
         String keyword = searchRequestDTO.getKeyword();
+        if (StringUtils.isEmpty(keyword)) return searchResultDataDTO;
         Integer currentPage = searchRequestDTO.getCurrentPage() == null ? 1 : searchRequestDTO.getCurrentPage();
 
         // get count of results
