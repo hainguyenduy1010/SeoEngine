@@ -21,6 +21,12 @@ module.exports = {
       title: 'Search Results',
       template: 'public/index.html',
       chunks: ['chunk-vendors', 'chunk-common', 'search']
+    },
+    'admin': {
+      entry: 'src/pages/admin/admin.js',
+      title: 'Admin',
+      template: 'public/index.html',
+      chunks: ['chunk-vendors', 'chunk-common', 'admin']
     }
   },
 	runtimeCompiler: true,

@@ -3,7 +3,9 @@ import $ from 'jquery'
 
 const AXIOS = axios.create({
 	baseUrl: `/api`,
-	headers: {'Content-Type': 'text/plain'},
+	headers: {
+		'Content-Type': 'application/json; charset=utf-8'
+	}
 	// timeout: 30000
 });
 
@@ -25,5 +27,12 @@ export default {
 				current_page: current_page
 			})
 		});
+	},
+
+	login(username, password) {		
+		return AXIOS.post(`/api/login`, JSON.stringify({
+			username: username,
+			password: password
+		}));
 	}
 }
