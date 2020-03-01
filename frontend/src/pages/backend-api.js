@@ -34,5 +34,21 @@ export default {
 			username: username,
 			password: password
 		}));
+	},
+
+	getCount() {		
+		return AXIOS.get(`/api/count`);
+	},
+
+	getDataList(current_page, per_page, filter) {
+		return AXIOS.post(`/api/data-list`, JSON.stringify({
+			current_page: current_page,
+			per_page: per_page,
+			filter: filter
+		}));
+	},
+
+	delete(ids) {
+		return AXIOS.delete(`/api/delete`, ids);
 	}
 }

@@ -1,7 +1,6 @@
 import Vue from 'vue'
-import router from '@/router'
 import Admin from './Admin.vue'
-
+import router from '@/router'
 import store from '@/pages/admin/store'
 
 Vue.config.productionTip = false
@@ -12,8 +11,4 @@ window.onload = function () {
 		store,
 		render: h => h(Admin)
 	}).$mount('#app');
-}
-
-export default {
-	name: 'admin'
 }

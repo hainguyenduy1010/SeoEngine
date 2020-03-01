@@ -12,7 +12,9 @@ export default {
 	},
 	created () {
 		// reset login status
-		this.$store.dispatch("logout", this.username);
+		if (localStorage.getItem('user')) {
+			this.$store.dispatch("logout", this.username);
+		}
 	},
 	methods: {
 		callLogin() {

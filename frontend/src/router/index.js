@@ -1,9 +1,9 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../pages/home/Home.vue'
-import Search from '../pages/search-result/SearchResult.vue'
-import Admin from '../pages/admin/Admin.vue'
+import SearchResult from '../pages/search-result/SearchResult.vue'
 import Login from '../pages/admin/login/Login.vue'
+import DataList from '../pages/admin/data-list/DataList.vue'
 
 import store from '@/pages/admin/store'
 
@@ -21,7 +21,7 @@ const routes = [
   {
     path: '/search?k=:keyword',
     name: 'search',
-    component: Search,
+    component: SearchResult,
     meta: {
       title: 'Search Results'
     }
@@ -29,7 +29,7 @@ const routes = [
   {
     path: '/admin',
     name: 'admin',
-    component: Admin,
+    component: DataList,
     meta: {
       title: 'Admin',
       requiresAuth: true

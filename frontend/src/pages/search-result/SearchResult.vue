@@ -54,7 +54,7 @@
 								<div v-if="search_data !== null">
 									<h3>
 										<a target="_blank" v-bind:href="search_data.url">
-											{{search_data.sortkey}} - <span v-html="search_data.title"></span>
+											<span v-html="search_data.title"></span>
 										</a>
 									</h3>
 									<a class="search-link" target="_blank" v-bind:href="search_data.url" style="color: #006621;">
