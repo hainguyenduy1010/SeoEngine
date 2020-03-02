@@ -5,6 +5,7 @@ import com.engine.seo.dto.LoginDTO;
 import com.engine.seo.dto.SearchDataDTO;
 import com.engine.seo.model.SearchData;
 import com.engine.seo.repository.SearchDataRepository;
+import com.engine.seo.utils.Utils;
 import org.apache.commons.lang3.StringUtils;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -52,8 +53,14 @@ public class AdminService {
         }
     }
 
-    public Long getCount() {
-        Long count = searchDataRepository.count();
+    public Long getCount(AdminRequestDTO adminRequestDTO) {
+        long count;
+
+        if (StringUtils.isEmpty(adminRequestDTO.getFilter())) {
+            count = searchDataRepository.count();
+        } else {
+            count = searchDataRepository.countLikeKeyword(adminRequestDTO.getFilter());
+        }
 
         LOGGER.debug("Count: {}", count);
 
@@ -65,13 +72,26 @@ public class AdminService {
 
         int currentPage = adminRequestDTO.getCurrentPage();
         int perPage = adminRequestDTO.getPerPage();
+        String sortBy = adminRequestDTO.getSortBy();
+        boolean isSortDesc = adminRequestDTO.isSortDesc();
         String filter = adminRequestDTO.getFilter();
 
-        List<SearchData> searchDataList = findSearchDataList(currentPage, perPage, filter);
+        List<SearchData> searchDataList = findSearchDataList(currentPage, perPage, sortBy, isSortDesc, filter);
         // loop through searchDataDTO then generate search data detail
         searchDataList.forEach(data -> searchDataDTOList.add(modelMapper.map(data, SearchDataDTO.class)));
 
         return searchDataDTOList;
+    }
+
+    public List<String> getKeywordList(AdminRequestDTO adminRequestDTO) {
+        List<String> keywordList = new ArrayList<>();
+
+        String filter = adminRequestDTO.getFilter();
+
+        Pageable pageable = PageRequest.of(0, 10);
+        keywordList = searchDataRepository.findKeywordList(filter, pageable);
+
+        return  keywordList;
     }
 
     public void deleteSearchData(List<Integer> idList) {
@@ -82,9 +102,11 @@ public class AdminService {
         }
     }
 
-    private List<SearchData> findSearchDataList(int currentPage, int perPage, String filter) {
+    private List<SearchData> findSearchDataList(int currentPage, int perPage, String sortBy, boolean isSortDesc, String filter) {
 
-        Pageable pageable = PageRequest.of(currentPage - 1, perPage, Sort.by("keyword", "sortkey").ascending());
+        sortBy = Utils.normalizeColumnName(sortBy);
+
+        Pageable pageable = PageRequest.of(currentPage - 1, perPage, Sort.by(isSortDesc ? Sort.Direction.DESC : Sort.Direction.ASC, sortBy, "sortkey"));
 
         if (StringUtils.isEmpty(filter)) {
             return searchDataRepository.findAll(pageable).getContent();

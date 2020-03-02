@@ -43,12 +43,12 @@ public class AdminController {
         }
     }
 
-    @GetMapping("/count")
-    public ResponseEntity<Long> getDataList() {
+    @PostMapping("/count")
+    public ResponseEntity<Long> getCount(@Valid @RequestBody AdminRequestDTO adminRequestDTO) {
         LOGGER.info("GET api/count");
 
         try {
-            Long count = adminService.getCount();
+            Long count = adminService.getCount(adminRequestDTO);
 
             return ResponseEntity.ok(count);
         } catch (Exception e) {
@@ -66,6 +66,21 @@ public class AdminController {
             List<SearchDataDTO> searchDataDTOList = adminService.getDataList(adminRequestDTO);
 
             return ResponseEntity.ok(searchDataDTOList);
+        } catch (Exception e) {
+            LOGGER.debug("ERROR: Login", e);
+            throw e;
+        }
+    }
+
+    @PostMapping("/keyword-list")
+    public ResponseEntity<List<String>> getKeywordList(@Valid @RequestBody AdminRequestDTO adminRequestDTO) {
+        LOGGER.info("POST api/data-list");
+        LOGGER.info("POST with body = {}", adminRequestDTO);
+
+        try {
+            List<String> keywordList = adminService.getKeywordList(adminRequestDTO);
+
+            return ResponseEntity.ok(keywordList);
         } catch (Exception e) {
             LOGGER.debug("ERROR: Login", e);
             throw e;

@@ -7,6 +7,8 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class Utils {
 
+    private static final String STR_UNDERSCORE = "_";
+
     private Utils() {
     }
 
@@ -20,5 +22,18 @@ public class Utils {
         }
 
         return text;
+    }
+
+    public static String normalizeColumnName(String name) {
+        int index = name.indexOf(STR_UNDERSCORE);
+
+        if (index >= 0) {
+            name = name.replaceFirst(STR_UNDERSCORE, StringUtils.EMPTY);
+            name = name.substring(0, index) + name.substring(index, index + 1).toUpperCase() + name.substring(index + 1);
+            // Recursive call
+            return normalizeColumnName(name);
+        }
+
+        return name;
     }
 }

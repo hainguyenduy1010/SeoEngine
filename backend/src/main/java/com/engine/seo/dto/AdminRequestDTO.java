@@ -17,6 +17,12 @@ public class AdminRequestDTO implements Serializable {
     @JsonProperty("per_page")
     private int perPage;
 
+    @JsonProperty("sort_by")
+    private String sortBy;
+
+    @JsonProperty("is_sort_desc")
+    private boolean isSortDesc;
+
     @JsonProperty("filter")
     private String filter;
 
@@ -36,6 +42,22 @@ public class AdminRequestDTO implements Serializable {
         this.perPage = perPage;
     }
 
+    public String getSortBy() {
+        return sortBy;
+    }
+
+    public void setSortBy(String sortBy) {
+        this.sortBy = sortBy;
+    }
+
+    public boolean isSortDesc() {
+        return isSortDesc;
+    }
+
+    public void setSortDesc(boolean sortDesc) {
+        isSortDesc = sortDesc;
+    }
+
     public String getFilter() {
         return filter;
     }
@@ -51,6 +73,8 @@ public class AdminRequestDTO implements Serializable {
         sb.append("AdminRequestDTO = [")
                 .append("currentPage = ").append(currentPage).append("; ")
                 .append("perPage = ").append(perPage).append("; ")
+                .append("sortBy = ").append(sortBy).append("; ")
+                .append("isSortDesc = ").append(isSortDesc).append("; ")
                 .append("filter = ").append(filter).append("]");
 
         return sb.toString();

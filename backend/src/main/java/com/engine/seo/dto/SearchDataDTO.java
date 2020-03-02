@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
 import java.math.BigInteger;
+import java.util.Date;
 
 /**
  * Created by HaiND on 2/11/2020 11:19 PM.
@@ -29,6 +30,12 @@ public class SearchDataDTO implements Serializable {
 
     @JsonProperty("sortkey")
     private BigInteger sortkey;
+
+    @JsonProperty("create_date")
+    private Date createDate;
+
+    @JsonProperty("update_date")
+    private Date updateDate;
 
     public BigInteger getId() {
         return id;
@@ -78,6 +85,22 @@ public class SearchDataDTO implements Serializable {
         this.sortkey = sortkey;
     }
 
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public Date getUpdateDate() {
+        return updateDate;
+    }
+
+    public void setUpdateDate(Date updateDate) {
+        this.updateDate = updateDate;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -88,7 +111,9 @@ public class SearchDataDTO implements Serializable {
                 .append("url = ").append(keyword).append("; ")
                 .append("title = ").append(title).append("; ")
                 .append("description = ").append(description).append("; ")
-                .append("sortkey = ").append(sortkey).append("]");
+                .append("sortkey = ").append(sortkey).append("; ")
+                .append("createDate = ").append(createDate).append("; ")
+                .append("updateDate = ").append(updateDate).append("]");
 
         return sb.toString();
     }

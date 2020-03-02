@@ -1,5 +1,6 @@
 package com.engine.seo;
 
+import com.engine.seo.utils.Utils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -17,6 +18,8 @@ public class TestClass {
     void test_1() {
         long countLastPage = 40 % 20;
         System.out.println(countLastPage);
+
+        System.out.println(Utils.normalizeColumnName("hai_nd_dh_asd_asf_12_a"));
     }
 
     @Test

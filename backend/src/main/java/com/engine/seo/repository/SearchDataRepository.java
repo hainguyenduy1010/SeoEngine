@@ -17,5 +17,12 @@ public interface SearchDataRepository extends JpaRepository<SearchData, Integer>
 
     long countByKeyword(String keyword);
 
+    @Query("SELECT COUNT(data) FROM SearchData data WHERE data.keyword LIKE %?1%")
+    long countLikeKeyword(String filter);
+
+    @Query("SELECT data FROM SearchData data WHERE data.keyword LIKE %?1%")
     List<SearchData> findByKeyword(String keyword, Pageable pageable);
+
+    @Query("SELECT DISTINCT data.keyword FROM SearchData data WHERE data.keyword LIKE %?1%")
+    List<String> findKeywordList(String filter, Pageable pageable);
 }

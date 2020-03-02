@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.math.BigInteger;
+import java.util.Date;
 
 /**
  * Created by HaiND on 2/11/2020 10:35 PM.
@@ -24,6 +25,12 @@ public class SearchData {
 
     @Column
     private BigInteger sortkey;
+
+    @Column
+    private Date createDate;
+
+    @Column
+    private Date updateDate;
 
     public BigInteger getId() {
         return id;
@@ -57,6 +64,22 @@ public class SearchData {
         this.sortkey = sortkey;
     }
 
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public Date getUpdateDate() {
+        return updateDate;
+    }
+
+    public void setUpdateDate(Date updateDate) {
+        this.updateDate = updateDate;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -65,7 +88,9 @@ public class SearchData {
                 .append("id = ").append(id).append("; ")
                 .append("keyword = ").append(keyword).append("; ")
                 .append("url = ").append(url).append("; ")
-                .append("sortkey = ").append(sortkey).append("]");
+                .append("sortkey = ").append(sortkey).append("; ")
+                .append("createDate = ").append(createDate).append("; ")
+                .append("updateDate = ").append(updateDate).append("]");
 
         return sb.toString();
     }
