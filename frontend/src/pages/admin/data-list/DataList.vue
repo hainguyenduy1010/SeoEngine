@@ -15,10 +15,20 @@
                             v-model="filter"
                             type="search"
                             id="filterInput"
+                            list="keywords"
                             placeholder="Type to Search"
+                            @input="onFilterChanged"
                         ></b-form-input>
+                        <datalist id="keywords">
+                            <option>Keyword list</option>
+                            <option v-for="(keyword, index) in keywords" v-bind:key="index">{{ keyword }}</option>
+                        </datalist>
+
                         <b-input-group-append>
-                            <b-button :disabled="!filter" @click="filter = ''">Clear</b-button>
+                            <b-button size="sm" class="ml-2" :disabled="!filter" variant="primary" @click="filterKeyword">Search</b-button>
+                        </b-input-group-append>
+                        <b-input-group-append>
+                            <b-button size="sm" class="ml-2" :disabled="!filter" @click="clearFilter">Clear</b-button>
                         </b-input-group-append>
                     </b-input-group>
                 </b-form-group>
@@ -43,15 +53,25 @@
             :sort-desc.sync="sortDesc"
             :current-page="1"
             :per-page="perPage"
-            :filter="filter"
-            :filterIncludedFields="filterOn"
-            @filtered="onFiltered"
             @row-selected="onRowSelected"
+            @sort-changed="onSortChanged"
             >
+            <!-- :filter="filter"
+            :filterIncludedFields="filterOn"
+            @filtered="onFiltered" -->
 
             <template v-slot:cell(url)="data">
                 <a :href="`${data.value}`" target="_blank">{{ data.value }}</a>
             </template>
+
+            <template v-slot:cell(create_date)="data">
+                <span>{{data.value | formatDate}}</span>
+            </template>
+
+            <template v-slot:cell(update_date)="data">
+                <span>{{data.value | formatDate}}</span>
+            </template>
+
             <template v-slot:cell(selected)="{ rowSelected }">
                 <template v-if="rowSelected">
                     <span aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20" height="20" viewBox="0 0 48 48" style=" fill:#000000;"><path fill="#c8e6c9" d="M36,42H12c-3.314,0-6-2.686-6-6V12c0-3.314,2.686-6,6-6h24c3.314,0,6,2.686,6,6v24C42,39.314,39.314,42,36,42z"></path><path fill="#4caf50" d="M34.585 14.586L21.014 28.172 15.413 22.584 12.587 25.416 21.019 33.828 37.415 17.414z"></path></svg></span>
@@ -64,7 +84,10 @@
             </template>
         </b-table>
 
-        <div class="row float-right" style="padding: 0 1rem;">
+        <div class="row ">
+            <b-col class="my-auto text-left">
+                Total: {{totalRows}}
+            </b-col>
             <b-col md="1.5" class="my-1">
                 <b-form-group
                     label="Per page"
@@ -79,20 +102,21 @@
                         id="perPageSelect"
                         size="sm"
                         :options="pageOptions"
-                        v-on:change="onChangePerPage"
+                        v-on:change="onPerPageChanged"
                         >
                     </b-form-select>
                 </b-form-group>
             </b-col>
-            <b-col sm="7" md="6" class="my-1">
+            <b-col md="4" class="my-1">
                 <b-pagination
                     v-model="currentPage"
                     :total-rows="totalRows"
                     :per-page="perPage"
                     align="fill"
+                    limit="10"
                     size="sm"
                     class="my-0"
-                    v-on:change="onChangeCurrentPage"
+                    v-on:change="onCurrentPageChanged"
                     >
                 </b-pagination>
             </b-col>

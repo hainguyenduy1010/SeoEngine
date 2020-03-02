@@ -36,14 +36,24 @@ export default {
 		}));
 	},
 
-	getCount() {		
-		return AXIOS.get(`/api/count`);
+	getCount(filter) {		
+		return AXIOS.post(`/api/count`, JSON.stringify({
+			filter: filter
+		}));
 	},
 
-	getDataList(current_page, per_page, filter) {
+	getDataList(current_page, per_page, sort_by, is_sort_desc, filter) {
 		return AXIOS.post(`/api/data-list`, JSON.stringify({
 			current_page: current_page,
 			per_page: per_page,
+			sort_by: sort_by,
+			is_sort_desc: is_sort_desc,
+			filter: filter
+		}));
+	},
+
+	getKeywordList(filter) {
+		return AXIOS.post(`/api/keyword-list`, JSON.stringify({
 			filter: filter
 		}));
 	},

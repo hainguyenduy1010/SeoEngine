@@ -4,8 +4,9 @@ export default {
     data() {
         return {
             fields: [{
-                key: 'selected',
-                class: 'text-center'
+                key: 'id',
+                class: 'text-center',
+                sortable: true
             }, {
                 key: 'keyword',
                 sortable: true
@@ -17,8 +18,20 @@ export default {
                 key: 'sortkey',
                 sortable: true,
                 class: 'text-center'
+            }, {
+                key: 'create_date',
+                sortable: true,
+                class: 'text-center'
+            }, {
+                key: 'update_date',
+                sortable: true,
+                class: 'text-center'
+            },{
+                key: 'selected',
+                class: 'text-center'
             }],
             items: [],
+            keywords: [],
             totalRows: 1,
             currentPage: 1,
             perPage: 20,
@@ -35,7 +48,7 @@ export default {
             this.totalRows = response.data
         }, error => console.log(error));
 
-        api.getDataList(1, 20).then(response => {
+        api.getDataList(this.currentPage, this.perPage, this.sortBy, this.sortDesc).then(response => {
             this.items = response.data
         }, error => console.log(error));
     },
@@ -43,16 +56,50 @@ export default {
         onRowSelected(items) {
             this.selectedIds = items.map(m => m.id);
         },
-        onFiltered() {
+        // onFiltered() {
+        //     this.currentPage = 1;
+        // },
+        onSortChanged(ctx) {
             this.currentPage = 1;
-        },
-        onChangePerPage(perPage) {
-            api.getDataList(1, perPage).then(response => {
+            this.sortBy = ctx.sortBy;
+            this.sortDesc = ctx.sortDesc;
+            api.getDataList(1, this.perPage, ctx.sortBy, ctx.sortDesc, this.filter).then(response => {
                 this.items = response.data
             }, error => console.log(error));
         },
-        onChangeCurrentPage(currentPage) {
-            api.getDataList(currentPage, this.perPage).then(response => {
+        onPerPageChanged(perPage) {
+            api.getDataList(1, perPage, this.sortBy, this.sortDesc, this.filter).then(response => {
+                this.items = response.data
+            }, error => console.log(error));
+        },
+        onCurrentPageChanged(currentPage) {
+            api.getDataList(currentPage, this.perPage, this.sortBy, this.sortDesc, this.filter).then(response => {
+                this.items = response.data
+            }, error => console.log(error));
+        },
+        onFilterChanged(filter) {
+            api.getKeywordList(filter).then(response => {
+                this.keywords = response.data
+            }, error => console.log(error));
+        },
+        filterKeyword() {
+            this.currentPage = 1;
+
+            api.getCount(this.filter).then(response => {
+                this.totalRows = response.data
+            }, error => console.log(error));
+
+            api.getDataList(this.currentPage, this.perPage, this.sortBy, this.sortDesc, this.filter).then(response => {
+                this.items = response.data
+            }, error => console.log(error));
+        },
+        clearFilter() {
+            this.filter = '';
+            api.getCount().then(response => {
+                this.totalRows = response.data
+            }, error => console.log(error));
+
+            api.getDataList(this.currentPage, this.perPage, this.sortBy, this.sortDesc).then(response => {
                 this.items = response.data
             }, error => console.log(error));
         },
