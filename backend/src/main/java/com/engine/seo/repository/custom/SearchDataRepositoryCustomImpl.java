@@ -73,6 +73,6 @@ public class SearchDataRepositoryCustomImpl implements SearchDataRepositoryCusto
         query = querySb.toString();
         query = StringUtils.removeEnd(query, " OR ");
 
-        return query.concat(") ORDER BY data.sortkey");
+        return query.concat(") ORDER BY data.order");
     }
 }

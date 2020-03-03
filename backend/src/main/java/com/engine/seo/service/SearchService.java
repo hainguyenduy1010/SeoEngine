@@ -106,7 +106,7 @@ public class SearchService {
 
     private List<SearchData> findSearchData(String keyword, Integer currentPage) {
 
-        Pageable pageable = PageRequest.of(currentPage - 1, numberResultsPerPage, Sort.by("sortkey").ascending());
+        Pageable pageable = PageRequest.of(currentPage - 1, numberResultsPerPage, Sort.by("order").ascending());
 
         return searchDataRepository.findByKeyword(keyword, pageable);
     }

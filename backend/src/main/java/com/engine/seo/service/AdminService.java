@@ -17,8 +17,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by HaiND on 2/18/2020 12:20 AM.
@@ -84,7 +86,7 @@ public class AdminService {
     }
 
     public List<String> getKeywordList(AdminRequestDTO adminRequestDTO) {
-        List<String> keywordList = new ArrayList<>();
+        List<String> keywordList;
 
         String filter = adminRequestDTO.getFilter();
 
@@ -94,10 +96,10 @@ public class AdminService {
         return  keywordList;
     }
 
-    public void deleteSearchData(List<Integer> idList) {
-
-        for (Integer id : idList) {
-//            searchDataRepository.deleteById(id);
+    public void deleteSearchData(List<BigInteger> idList) {
+        for (BigInteger id : idList) {
+            updateOrder(id, false);
+            searchDataRepository.deleteById(id);
             LOGGER.debug("Delete: {}", id);
         }
     }
@@ -106,12 +108,30 @@ public class AdminService {
 
         sortBy = Utils.normalizeColumnName(sortBy);
 
-        Pageable pageable = PageRequest.of(currentPage - 1, perPage, Sort.by(isSortDesc ? Sort.Direction.DESC : Sort.Direction.ASC, sortBy, "sortkey"));
+        Pageable pageable = PageRequest.of(currentPage - 1, perPage, Sort.by(isSortDesc ? Sort.Direction.DESC : Sort.Direction.ASC, sortBy, "order"));
 
         if (StringUtils.isEmpty(filter)) {
             return searchDataRepository.findAll(pageable).getContent();
         } else {
             return searchDataRepository.findByKeyword(filter, pageable);
+        }
+    }
+
+    private void updateOrder(BigInteger id, boolean isIncrement) {
+
+        Optional<SearchData> optionalSearchData = searchDataRepository.findById(id);
+
+        if (optionalSearchData.isPresent()) {
+
+            SearchData searchData = optionalSearchData.get();
+            String keyword = searchData.getKeyword();
+            BigInteger order = searchData.getOrder();
+
+            if (isIncrement) {
+                searchDataRepository.updateOrderIncrement(keyword, order);
+            } else {
+                searchDataRepository.updateOrderDecrement(keyword, order);
+            }
         }
     }
 }

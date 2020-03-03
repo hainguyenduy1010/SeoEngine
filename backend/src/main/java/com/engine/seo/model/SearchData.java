@@ -17,19 +17,19 @@ public class SearchData {
     @Id
     private BigInteger id;
 
-    @Column
+    @Column(name = "keyword", nullable = false)
     private String keyword;
 
-    @Column
+    @Column(name = "url", nullable = false)
     private String url;
 
-    @Column
-    private BigInteger sortkey;
+    @Column(name = "\"order\"", nullable = false)
+    private BigInteger order;
 
-    @Column
+    @Column(name = "createDate", nullable = false)
     private Date createDate;
 
-    @Column
+    @Column(name = "updateDate", nullable = false)
     private Date updateDate;
 
     public BigInteger getId() {
@@ -56,12 +56,12 @@ public class SearchData {
         this.url = url;
     }
 
-    public BigInteger getSortkey() {
-        return sortkey;
+    public BigInteger getOrder() {
+        return order;
     }
 
-    public void setSortkey(BigInteger sortkey) {
-        this.sortkey = sortkey;
+    public void setOrder(BigInteger order) {
+        this.order = order;
     }
 
     public Date getCreateDate() {
@@ -88,7 +88,7 @@ public class SearchData {
                 .append("id = ").append(id).append("; ")
                 .append("keyword = ").append(keyword).append("; ")
                 .append("url = ").append(url).append("; ")
-                .append("sortkey = ").append(sortkey).append("; ")
+                .append("order = ").append(order).append("; ")
                 .append("createDate = ").append(createDate).append("; ")
                 .append("updateDate = ").append(updateDate).append("]");
 

@@ -28,8 +28,8 @@ public class SearchDataDTO implements Serializable {
     @JsonProperty("description")
     private String description;
 
-    @JsonProperty("sortkey")
-    private BigInteger sortkey;
+    @JsonProperty("order")
+    private BigInteger order;
 
     @JsonProperty("create_date")
     private Date createDate;
@@ -77,12 +77,12 @@ public class SearchDataDTO implements Serializable {
         this.description = description;
     }
 
-    public BigInteger getSortkey() {
-        return sortkey;
+    public BigInteger getOrder() {
+        return order;
     }
 
-    public void setSortkey(BigInteger sortkey) {
-        this.sortkey = sortkey;
+    public void setOrder(BigInteger order) {
+        this.order = order;
     }
 
     public Date getCreateDate() {
@@ -111,7 +111,7 @@ public class SearchDataDTO implements Serializable {
                 .append("url = ").append(keyword).append("; ")
                 .append("title = ").append(title).append("; ")
                 .append("description = ").append(description).append("; ")
-                .append("sortkey = ").append(sortkey).append("; ")
+                .append("order = ").append(order).append("; ")
                 .append("createDate = ").append(createDate).append("; ")
                 .append("updateDate = ").append(updateDate).append("]");
 

@@ -9,9 +9,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.math.BigInteger;
 import java.util.List;
 
 /**
@@ -52,7 +56,7 @@ public class AdminController {
 
             return ResponseEntity.ok(count);
         } catch (Exception e) {
-            LOGGER.debug("ERROR: Login", e);
+            LOGGER.debug("ERROR: Get count", e);
             throw e;
         }
     }
@@ -67,7 +71,7 @@ public class AdminController {
 
             return ResponseEntity.ok(searchDataDTOList);
         } catch (Exception e) {
-            LOGGER.debug("ERROR: Login", e);
+            LOGGER.debug("ERROR: Get data list", e);
             throw e;
         }
     }
@@ -82,13 +86,13 @@ public class AdminController {
 
             return ResponseEntity.ok(keywordList);
         } catch (Exception e) {
-            LOGGER.debug("ERROR: Login", e);
+            LOGGER.debug("ERROR: Get keyword list", e);
             throw e;
         }
     }
 
-    @DeleteMapping("/delete")
-    public ResponseEntity<String> delete(@Valid @RequestBody List<Integer> idList) {
+    @PostMapping("/delete")
+    public ResponseEntity<String> delete(@Valid @RequestBody List<BigInteger> idList) {
         LOGGER.info("POST api/delete");
         LOGGER.info("POST with body = {}", idList);
 
@@ -99,7 +103,7 @@ public class AdminController {
 
             return ResponseEntity.ok("Delete algorithm successfully with idList = " + idList);
         } catch (Exception e) {
-            LOGGER.debug("ERROR: Login", e);
+            LOGGER.debug("ERROR: Delete", e);
             throw e;
         }
     }
