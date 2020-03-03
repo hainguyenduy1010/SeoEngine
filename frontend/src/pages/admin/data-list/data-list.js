@@ -15,7 +15,7 @@ export default {
                 label: "URL",
                 sortable: true
             }, {
-                key: 'sortkey',
+                key: 'order',
                 sortable: true,
                 class: 'text-center'
             }, {
@@ -104,12 +104,18 @@ export default {
             }, error => console.log(error));
         },
         clearSelected() {
-          this.$refs.selectableTable.clearSelected();
+          this.$refs.table.clearSelected();
         },
         deleteRows() {
             api.delete(this.selectedIds).then(response => {
                 console.log(response.data);
-                this.$refs.table.refresh()
+                api.getCount().then(response => {
+                    this.totalRows = response.data
+                }, error => console.log(error));
+    
+                api.getDataList(this.currentPage, this.perPage, this.sortBy, this.sortDesc).then(response => {
+                    this.items = response.data
+                }, error => console.log(error));
             }, error => console.log(error));
         }
     }

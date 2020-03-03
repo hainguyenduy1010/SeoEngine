@@ -59,6 +59,6 @@ export default {
 	},
 
 	delete(ids) {
-		return AXIOS.delete(`/api/delete`, ids);
+		return AXIOS.post(`/api/delete`, ids);
 	}
 }

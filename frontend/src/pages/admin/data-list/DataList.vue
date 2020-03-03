@@ -35,13 +35,19 @@
             </b-col>
 
             <b-col class="my-1 text-right">
-                <b-button size="sm" class="ml-2" @click="clearSelected">Clear selected</b-button>
-                <b-button size="sm" class="ml-2" variant="danger" @click="deleteRows">Delete</b-button>
+                <b-button size="sm" class="ml-2" variant="success">New</b-button>
+                <b-button size="sm" class="ml-2" variant="info" :disabled="selectedIds.length !== 1">Update</b-button>
+                <b-button size="sm" class="ml-2" variant="danger" v-b-modal.del-confirm-modal :disabled="!selectedIds.length">Delete</b-button>
+                <b-button size="sm" class="ml-2" @click="clearSelected" :disabled="!selectedIds.length">Clear selected</b-button>
+                
+                <b-modal id="del-confirm-modal" title="Delete" @ok="deleteRows">
+                    <p class="my-4">Are you sure that you want to delete selected items?</p>
+                </b-modal>
             </b-col>
         </div>
 
         <b-table
-            ref="selectableTable"
+            ref="table"
             sticky-header="100%"
             sort-icon-left
             small hover no-border-collapse
@@ -88,6 +94,7 @@
             <b-col class="my-auto text-left">
                 Total: {{totalRows}}
             </b-col>
+
             <b-col md="1.5" class="my-1">
                 <b-form-group
                     label="Per page"
@@ -107,6 +114,7 @@
                     </b-form-select>
                 </b-form-group>
             </b-col>
+
             <b-col md="4" class="my-1">
                 <b-pagination
                     v-model="currentPage"
