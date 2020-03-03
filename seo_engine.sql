@@ -28,7 +28,7 @@ CREATE TABLE `search_data` (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `keyword` text NOT NULL,
   `url` text NOT NULL,
-  `sortkey` bigint DEFAULT NULL,
+  `order` bigint NOT NULL,
   `create_date` datetime NOT NULL,
   `update_date` datetime NOT NULL,
   PRIMARY KEY (`id`),
@@ -55,4 +55,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-03-02 17:21:22
+-- Dump completed on 2020-03-04  1:21:56
