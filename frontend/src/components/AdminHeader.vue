@@ -1,5 +1,5 @@
 <template>
-    <b-navbar toggleable="lg" type="dark" variant="light" v-if="$route.path !== '/admin/login'">
+    <b-navbar toggleable="lg" type="dark" class="header-bar" v-if="$route.path !== '/admin/login'">
         <a href="/admin">
             <img src="@/assets/search-logo.png">
         </a>
@@ -16,6 +16,11 @@
 </template>
 
 <style scoped>
+.header-bar {
+    height: 57px;
+    background-color: #f2f2f2;
+    border-bottom: 1px solid #e4e4e4;
+}
 img {
     width: 150px;
 }

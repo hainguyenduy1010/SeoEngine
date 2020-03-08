@@ -3,8 +3,10 @@ import Admin from './Admin.vue'
 import router from '@/router'
 import store from '@/pages/admin/store'
 import moment from 'moment'
+import VueNumericInput from 'vue-numeric-input';
 
 Vue.config.productionTip = false
+Vue.use(VueNumericInput)
 
 window.onload = function () {
 	new Vue({

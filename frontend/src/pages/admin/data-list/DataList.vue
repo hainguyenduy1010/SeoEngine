@@ -35,7 +35,9 @@
             </b-col>
 
             <b-col class="my-1 text-right">
-                <b-button size="sm" class="ml-2" variant="success">New</b-button>
+                <router-link to="/admin/create">
+                    <b-button size="sm" class="ml-2" variant="success">New</b-button>
+                </router-link>
                 <b-button size="sm" class="ml-2" variant="info" :disabled="selectedIds.length !== 1">Update</b-button>
                 <b-button size="sm" class="ml-2" variant="danger" v-b-modal.del-confirm-modal :disabled="!selectedIds.length">Delete</b-button>
                 <b-button size="sm" class="ml-2" @click="clearSelected" :disabled="!selectedIds.length">Clear selected</b-button>
@@ -133,7 +135,7 @@
 </template>
 
 <style scoped>
-    @import'./data-list.css'
+    @import'./data-list.css';
 </style>
 
 <script src='./data-list.js'></script>

@@ -1,8 +1,9 @@
 <template>
     <div id="app">
         <AdminHeader></AdminHeader>
-
+    <!-- <keep-alive> -->
         <router-view></router-view>
+    <!-- </keep-alive> -->
 
     </div>
 </template>
