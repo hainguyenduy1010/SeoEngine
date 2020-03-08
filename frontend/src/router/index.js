@@ -5,6 +5,7 @@ import SearchResult from '../pages/search-result/SearchResult.vue'
 import Login from '../pages/admin/login/Login.vue'
 import DataList from '../pages/admin/data-list/DataList.vue'
 import Create from '../pages/admin/create/Create.vue'
+import Update from '../pages/admin/update/Update.vue'
 
 import store from '@/pages/admin/store'
 
@@ -50,6 +51,14 @@ const routes = [
     component: Create,
     meta: {
       title: 'Admin create search data'
+    }
+  },
+  {
+    path: '/admin/update',
+    name: 'update',
+    component: Update,
+    meta: {
+      title: 'Admin update search data'
     }
   }
 
