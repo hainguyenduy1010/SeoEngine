@@ -108,7 +108,7 @@ public class SearchDataDTO implements Serializable {
         sb.append("SearchDataDTO = [")
                 .append("id = ").append(id).append("; ")
                 .append("keyword = ").append(keyword).append("; ")
-                .append("url = ").append(keyword).append("; ")
+                .append("url = ").append(url).append("; ")
                 .append("title = ").append(title).append("; ")
                 .append("description = ").append(description).append("; ")
                 .append("order = ").append(order).append("; ")

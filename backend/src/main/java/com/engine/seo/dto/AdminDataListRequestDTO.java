@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * Created by HaiND on 3/1/2020 5:37 PM.
  */
-public class AdminRequestDTO implements Serializable {
+public class AdminDataListRequestDTO implements Serializable {
 
     private static final long serialVersionUID = 9057945831341126944L;
 
@@ -70,7 +70,7 @@ public class AdminRequestDTO implements Serializable {
     public String toString() {
         StringBuilder sb = new StringBuilder();
 
-        sb.append("AdminRequestDTO = [")
+        sb.append("AdminDataListRequestDTO = [")
                 .append("currentPage = ").append(currentPage).append("; ")
                 .append("perPage = ").append(perPage).append("; ")
                 .append("sortBy = ").append(sortBy).append("; ")

@@ -1,9 +1,8 @@
 package com.engine.seo.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import org.hibernate.annotations.GeneratorType;
+
+import javax.persistence.*;
 import java.math.BigInteger;
 import java.util.Date;
 
@@ -15,6 +14,7 @@ import java.util.Date;
 public class SearchData {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private BigInteger id;
 
     @Column(name = "keyword", nullable = false)

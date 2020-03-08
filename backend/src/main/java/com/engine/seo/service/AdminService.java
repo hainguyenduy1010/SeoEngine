@@ -1,6 +1,7 @@
 package com.engine.seo.service;
 
-import com.engine.seo.dto.AdminRequestDTO;
+import com.engine.seo.dto.AdminCreateRequestDTO;
+import com.engine.seo.dto.AdminDataListRequestDTO;
 import com.engine.seo.dto.LoginDTO;
 import com.engine.seo.dto.SearchDataDTO;
 import com.engine.seo.model.SearchData;
@@ -10,6 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
@@ -19,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -55,13 +58,13 @@ public class AdminService {
         }
     }
 
-    public Long getCount(AdminRequestDTO adminRequestDTO) {
+    public Long getCount(AdminDataListRequestDTO adminDataListRequestDTO) {
         long count;
 
-        if (StringUtils.isEmpty(adminRequestDTO.getFilter())) {
+        if (StringUtils.isEmpty(adminDataListRequestDTO.getFilter())) {
             count = searchDataRepository.count();
         } else {
-            count = searchDataRepository.countLikeKeyword(adminRequestDTO.getFilter());
+            count = searchDataRepository.countLikeKeyword(adminDataListRequestDTO.getFilter());
         }
 
         LOGGER.debug("Count: {}", count);
@@ -69,14 +72,14 @@ public class AdminService {
         return count;
     }
 
-    public List<SearchDataDTO> getDataList(AdminRequestDTO adminRequestDTO) {
+    public List<SearchDataDTO> getDataList(AdminDataListRequestDTO adminDataListRequestDTO) {
         List<SearchDataDTO> searchDataDTOList = new ArrayList<>();
 
-        int currentPage = adminRequestDTO.getCurrentPage();
-        int perPage = adminRequestDTO.getPerPage();
-        String sortBy = adminRequestDTO.getSortBy();
-        boolean isSortDesc = adminRequestDTO.isSortDesc();
-        String filter = adminRequestDTO.getFilter();
+        int currentPage = adminDataListRequestDTO.getCurrentPage();
+        int perPage = adminDataListRequestDTO.getPerPage();
+        String sortBy = adminDataListRequestDTO.getSortBy();
+        boolean isSortDesc = adminDataListRequestDTO.isSortDesc();
+        String filter = adminDataListRequestDTO.getFilter();
 
         List<SearchData> searchDataList = findSearchDataList(currentPage, perPage, sortBy, isSortDesc, filter);
         // loop through searchDataDTO then generate search data detail
@@ -85,15 +88,47 @@ public class AdminService {
         return searchDataDTOList;
     }
 
-    public List<String> getKeywordList(AdminRequestDTO adminRequestDTO) {
+    public List<String> getKeywordList(AdminDataListRequestDTO adminDataListRequestDTO) {
         List<String> keywordList;
 
-        String filter = adminRequestDTO.getFilter();
+        String filter = adminDataListRequestDTO.getFilter();
 
         Pageable pageable = PageRequest.of(0, 10);
         keywordList = searchDataRepository.findKeywordList(filter, pageable);
 
         return  keywordList;
+    }
+
+    public BigInteger getLatestOrder(String keyword) {
+        Pageable pageable = PageRequest.of(0, 1, Sort.by("order").descending());
+        List<SearchData> searchDataList = searchDataRepository.findByKeyword(keyword, pageable);
+
+        if (searchDataList.isEmpty()) {
+            return BigInteger.valueOf(0);
+        }
+
+        return searchDataList.get(0).getOrder();
+    }
+
+    public void createSearchData(AdminCreateRequestDTO adminCreateRequestDTO) {
+        String keyword = adminCreateRequestDTO.getKeyword();
+        List<SearchDataDTO> searchDataDTOList = adminCreateRequestDTO.getSearchDataDTOList();
+
+        SearchData searchData;
+        List<SearchData> searchDataList = new ArrayList<>();
+        for (SearchDataDTO searchDataDTO : searchDataDTOList) {
+            searchDataDTO.setKeyword(keyword);
+            searchDataDTO.setCreateDate(new Date());
+            searchDataDTO.setUpdateDate(new Date());
+
+            searchDataRepository.updateOrderIncrement(keyword, searchDataDTO.getOrder().add(BigInteger.valueOf(-1)));
+
+            searchData = new SearchData();
+            BeanUtils.copyProperties(searchDataDTO, searchData);
+            searchDataList.add(searchData);
+        }
+
+        searchDataRepository.saveAll(searchDataList);
     }
 
     public void deleteSearchData(List<BigInteger> idList) {
@@ -113,7 +148,7 @@ public class AdminService {
         if (StringUtils.isEmpty(filter)) {
             return searchDataRepository.findAll(pageable).getContent();
         } else {
-            return searchDataRepository.findByKeyword(filter, pageable);
+            return searchDataRepository.findByLikeKeyword(filter, pageable);
         }
     }
 

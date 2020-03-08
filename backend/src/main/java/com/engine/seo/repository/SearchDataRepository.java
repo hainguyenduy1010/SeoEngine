@@ -25,6 +25,9 @@ public interface SearchDataRepository extends JpaRepository<SearchData, BigInteg
     long countLikeKeyword(String filter);
 
     @Query("SELECT data FROM SearchData data WHERE data.keyword LIKE %?1%")
+    List<SearchData> findByLikeKeyword(String keyword, Pageable pageable);
+
+    @Query("SELECT data FROM SearchData data WHERE data.keyword = ?1")
     List<SearchData> findByKeyword(String keyword, Pageable pageable);
 
     @Query("SELECT DISTINCT data.keyword FROM SearchData data WHERE data.keyword LIKE %?1%")

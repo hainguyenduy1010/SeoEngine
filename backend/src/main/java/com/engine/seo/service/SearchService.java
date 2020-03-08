@@ -108,7 +108,7 @@ public class SearchService {
 
         Pageable pageable = PageRequest.of(currentPage - 1, numberResultsPerPage, Sort.by("order").ascending());
 
-        return searchDataRepository.findByKeyword(keyword, pageable);
+        return searchDataRepository.findByLikeKeyword(keyword, pageable);
     }
 
     private List<SearchData> findRelateSearchData(String keywordSearch, Integer currentPage, int byKeywordCount) {

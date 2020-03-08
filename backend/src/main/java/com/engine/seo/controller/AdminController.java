@@ -1,6 +1,7 @@
 package com.engine.seo.controller;
 
-import com.engine.seo.dto.AdminRequestDTO;
+import com.engine.seo.dto.AdminCreateRequestDTO;
+import com.engine.seo.dto.AdminDataListRequestDTO;
 import com.engine.seo.dto.LoginDTO;
 import com.engine.seo.dto.SearchDataDTO;
 import com.engine.seo.service.AdminService;
@@ -9,10 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.math.BigInteger;
@@ -48,11 +46,11 @@ public class AdminController {
     }
 
     @PostMapping("/count")
-    public ResponseEntity<Long> getCount(@Valid @RequestBody AdminRequestDTO adminRequestDTO) {
+    public ResponseEntity<Long> getCount(@Valid @RequestBody AdminDataListRequestDTO adminDataListRequestDTO) {
         LOGGER.info("GET api/count");
 
         try {
-            Long count = adminService.getCount(adminRequestDTO);
+            Long count = adminService.getCount(adminDataListRequestDTO);
 
             return ResponseEntity.ok(count);
         } catch (Exception e) {
@@ -62,12 +60,12 @@ public class AdminController {
     }
 
     @PostMapping("/data-list")
-    public ResponseEntity<List<SearchDataDTO>> getDataList(@Valid @RequestBody AdminRequestDTO adminRequestDTO) {
+    public ResponseEntity<List<SearchDataDTO>> getDataList(@Valid @RequestBody AdminDataListRequestDTO adminDataListRequestDTO) {
         LOGGER.info("POST api/data-list");
-        LOGGER.info("POST with body = {}", adminRequestDTO);
+        LOGGER.info("POST with body = {}", adminDataListRequestDTO);
 
         try {
-            List<SearchDataDTO> searchDataDTOList = adminService.getDataList(adminRequestDTO);
+            List<SearchDataDTO> searchDataDTOList = adminService.getDataList(adminDataListRequestDTO);
 
             return ResponseEntity.ok(searchDataDTOList);
         } catch (Exception e) {
@@ -77,16 +75,49 @@ public class AdminController {
     }
 
     @PostMapping("/keyword-list")
-    public ResponseEntity<List<String>> getKeywordList(@Valid @RequestBody AdminRequestDTO adminRequestDTO) {
+    public ResponseEntity<List<String>> getKeywordList(@Valid @RequestBody AdminDataListRequestDTO adminDataListRequestDTO) {
         LOGGER.info("POST api/data-list");
-        LOGGER.info("POST with body = {}", adminRequestDTO);
+        LOGGER.info("POST with body = {}", adminDataListRequestDTO);
 
         try {
-            List<String> keywordList = adminService.getKeywordList(adminRequestDTO);
+            List<String> keywordList = adminService.getKeywordList(adminDataListRequestDTO);
 
             return ResponseEntity.ok(keywordList);
         } catch (Exception e) {
             LOGGER.debug("ERROR: Get keyword list", e);
+            throw e;
+        }
+    }
+
+    @GetMapping("/get-latest-order/{keyword}")
+    public ResponseEntity<BigInteger> getLatestOrder(@PathVariable(value = "keyword") String keyword) {
+        LOGGER.info("GET api/get-latest-order/{}", keyword);
+
+        try {
+            BigInteger latestOrder = adminService.getLatestOrder(keyword);
+
+            LOGGER.info("Get latest order successfully with keyword = {}: {}", keyword, latestOrder);
+
+            return ResponseEntity.ok(latestOrder);
+        } catch (Exception e) {
+            LOGGER.debug("ERROR: Get latest order", e);
+            throw e;
+        }
+    }
+
+    @PostMapping("/create")
+    public ResponseEntity<String> create(@Valid @RequestBody AdminCreateRequestDTO adminCreateRequestDTO) {
+        LOGGER.info("POST api/create");
+        LOGGER.info("POST with body = {}", adminCreateRequestDTO);
+
+        try {
+            adminService.createSearchData(adminCreateRequestDTO);
+
+            LOGGER.info("{} search data have been created", adminCreateRequestDTO.getSearchDataDTOList().size());
+
+            return ResponseEntity.ok(adminCreateRequestDTO.getSearchDataDTOList().size() + " search data have been created");
+        } catch (Exception e) {
+            LOGGER.debug("ERROR: Delete", e);
             throw e;
         }
     }
@@ -99,9 +130,9 @@ public class AdminController {
         try {
             adminService.deleteSearchData(idList);
 
-            LOGGER.info("Delete algorithm successfully with idList = {}", idList);
+            LOGGER.info("Delete search data successfully with idList = {}", idList);
 
-            return ResponseEntity.ok("Delete algorithm successfully with idList = " + idList);
+            return ResponseEntity.ok("Delete search data successfully with idList = " + idList);
         } catch (Exception e) {
             LOGGER.debug("ERROR: Delete", e);
             throw e;
