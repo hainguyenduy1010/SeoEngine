@@ -40,25 +40,36 @@ export default {
             filterOn: [],
             sortBy: 'keyword',
             sortDesc: false,
-            selectedIds: []
+            selectedIds: [],
+            isDisableUpdate: true
         }
     },
     beforeMount() {
-        api.getCount().then(response => {
+        if (this.$route.params.filter) {
+            this.filter = this.$route.params.filter;
+        }
+
+        api.getCount(this.filter).then(response => {
             this.totalRows = response.data
         }, error => console.log(error));
 
-        api.getDataList(this.currentPage, this.perPage, this.sortBy, this.sortDesc).then(response => {
+        api.getDataList(this.currentPage, this.perPage, this.sortBy, this.sortDesc, this.filter).then(response => {
             this.items = response.data
         }, error => console.log(error));
     },
     methods: {
         onRowSelected(items) {
             this.selectedIds = items.map(m => m.id);
+
+            this.isDisableUpdate = false;
+            var keywords = items.map(m => m.keyword);
+            for (var i = 0; i < keywords.length - 1; i++) {
+                if (keywords[i] !== keywords[i + 1]) {
+                    this.isDisableUpdate = true;
+                    break;
+                }
+            }
         },
-        // onFiltered() {
-        //     this.currentPage = 1;
-        // },
         onSortChanged(ctx) {
             this.currentPage = 1;
             this.sortBy = ctx.sortBy;
@@ -104,7 +115,7 @@ export default {
             }, error => console.log(error));
         },
         clearSelected() {
-          this.$refs.table.clearSelected();
+            this.$refs.table.clearSelected();
         },
         deleteRows() {
             api.delete(this.selectedIds).then(response => {
@@ -113,6 +124,7 @@ export default {
                     this.totalRows = response.data
                 }, error => console.log(error));
     
+                this.filter = '';
                 api.getDataList(this.currentPage, this.perPage, this.sortBy, this.sortDesc).then(response => {
                     this.items = response.data
                 }, error => console.log(error));

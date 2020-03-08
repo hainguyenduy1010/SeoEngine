@@ -58,6 +58,17 @@ export default {
 		}));
 	},
 
+	getLatestOrder(keyword) {
+		return AXIOS.get(`/api/get-latest-order/` + keyword);
+	},
+
+	create(keyword, dataList) {
+		return AXIOS.post(`/api/create`, JSON.stringify({
+			keyword: keyword,
+			data_list: dataList
+		}));
+	},
+
 	delete(ids) {
 		return AXIOS.post(`/api/delete`, ids);
 	}

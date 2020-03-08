@@ -1,21 +1,62 @@
 import $ from 'jquery'
+import api from '@/pages/backend-api.js'
 
 export default {
     data() {
         return {
             keyword: '',
-            order_init: 46,
-            order_latest: 46,
+            isShowForm: false,
+            order_init: 0,
+            order_latest: 0,
             rows: [{
                 url: '',
-                order: 46
+                order: 0
             }]
         }
     },
 
     methods: {
         onSubmit() {
-            alert("Form submitted!");
+            if (this.validateKeyword($('.keyword-input').val())) {
+                
+                var isInvalid = false;
+                this.rows.forEach((row, index) => {
+                    var indexObj = {index: index};
+                    if (!this.validateURL(row.url, indexObj)) {
+                        isInvalid = true;
+                        return false;
+                    }
+                });
+
+                if (!isInvalid) {
+                    api.create(this.keyword, this.rows).then(response => {
+                        console.log(response.data);
+                        this.showModal();
+                    }, error => console.log(error));
+                }
+            }
+        },
+        onKeywordOk() {
+            if (this.validateKeyword($('.keyword-input').val())) {
+                $('.keyword-input').prop('disabled', !this.isShowForm);
+                $('.keyword-ok-btn').html(!this.isShowForm ? 'Edit' : 'OK');
+                this.rows = [{
+                    url: '',
+                    order: this.order_init
+                }];
+                $('#url-input-0').removeClass('is-invalid');
+                $('#invalid-feedback-0').css('display', 'none');
+
+                this.isShowForm = !this.isShowForm;
+                
+                if (this.isShowForm) {
+                    api.getLatestOrder(this.keyword).then(response => {
+                        this.order_init = response.data + 1;
+                        this.order_latest = this.order_init;
+                        this.rows[0].order = this.order_init;
+                    }, error => console.log(error));
+                }
+            }
         },
         onAdd() {
             var index = $('.url-input').length - 1;
@@ -42,13 +83,13 @@ export default {
         },
         validateKeyword(keyword) {
             if (!keyword) {
-                console.log(keyword)
                 $('.keyword-input').addClass('is-invalid');
                 $('.keyword-invalid-feedback').css('display', 'block');
+                return false;
             } else {
-                console.log(keyword)
                 $('.keyword-input').removeClass('is-invalid');
                 $('.keyword-invalid-feedback').css('display', 'none');
+                return true;
             }
         },
         validateURL(url, indexObj) {
@@ -67,13 +108,19 @@ export default {
                 $('#url-input-'+index).removeClass('is-invalid');
                 $('#invalid-feedback-'+index).css('display', 'none');
             }
-            return !!pattern.test(url);
+            return pattern.test(url);
         },
         validateOrder(order, indexObj) {
             var index = indexObj.index;
             if (!order) {
                 this.rows[index].order = this.order_init + index;
             }
+        },
+        showModal() {
+            this.$refs['create-modal'].show()
+        },
+        hideModal() {
+            this.$refs['create-modal'].hide()
         }
     }
 }
