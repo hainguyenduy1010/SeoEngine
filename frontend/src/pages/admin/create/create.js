@@ -11,7 +11,21 @@ export default {
             rows: [{
                 url: '',
                 order: 0
-            }]
+            }],
+            isUpdate: false,
+            order_max: null,
+            successMsg: ''
+        }
+    },
+    beforeMount() {
+        if (this.$route.name === 'update') {
+            this.keyword = this.$route.params.data[0].keyword;
+            this.isUpdate = true;
+
+            api.getLatestOrder(this.keyword).then(response => {
+                this.order_max = response.data;
+                this.rows = this.$route.params.data;
+            }, error => console.log(error));
         }
     },
 
@@ -29,10 +43,20 @@ export default {
                 });
 
                 if (!isInvalid) {
-                    api.create(this.keyword, this.rows).then(response => {
-                        console.log(response.data);
-                        this.showModal();
-                    }, error => console.log(error));
+                    if (!this.isUpdate) {
+                        api.create(this.keyword, this.rows).then(response => {
+                            console.log(response.data);
+                            this.successMsg = response.data;
+                            this.showModal();
+                        }, error => console.log(error));
+                    } else {
+                        this.rows[0].keyword = this.keyword;
+                        api.update(this.rows).then(response => {
+                            console.log(response.data);
+                            this.successMsg = response.data;
+                            this.showModal();
+                        }, error => console.log(error));
+                    }
                 }
             }
         },

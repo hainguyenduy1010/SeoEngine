@@ -40,6 +40,7 @@ export default {
             filterOn: [],
             sortBy: 'keyword',
             sortDesc: false,
+            selectedData: [],
             selectedIds: [],
             isDisableUpdate: true
         }
@@ -59,16 +60,17 @@ export default {
     },
     methods: {
         onRowSelected(items) {
+            this.selectedData = items;
             this.selectedIds = items.map(m => m.id);
 
-            this.isDisableUpdate = false;
-            var keywords = items.map(m => m.keyword);
-            for (var i = 0; i < keywords.length - 1; i++) {
-                if (keywords[i] !== keywords[i + 1]) {
-                    this.isDisableUpdate = true;
-                    break;
-                }
-            }
+            // this.isDisableUpdate = false;
+            // var keywords = items.map(m => m.keyword);
+            // for (var i = 0; i < keywords.length - 1; i++) {
+            //     if (keywords[i] !== keywords[i + 1]) {
+            //         this.isDisableUpdate = true;
+            //         break;
+            //     }
+            // }
         },
         onSortChanged(ctx) {
             this.currentPage = 1;

@@ -18,7 +18,7 @@
         <li><a target="_blank" href="https://getcouponhere.com/submit-url">Submit your site</a></li>
       </ul>
       <ul class="footer-nav">
-          <li>© 2020 GetCouponHere.Com</li>
+          <li>© 2020 GetCode.Com</li>
       </ul>
     </footer>
 </template>

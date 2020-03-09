@@ -38,8 +38,8 @@
                 <router-link to="/admin/create">
                     <b-button size="sm" class="ml-2" variant="success">New</b-button>
                 </router-link>
-                <router-link :to="{name: 'update', params: {keywordids: selectedIds}}">
-                    <b-button size="sm" class="ml-2" variant="info" :disabled="isDisableUpdate">Update</b-button>
+                <router-link :to="{name: 'update', params: {data: selectedData}}">
+                    <b-button size="sm" class="ml-2" variant="info" :disabled="selectedIds.length !== 1">Update</b-button>
                 </router-link>
                 <b-button size="sm" class="ml-2" variant="danger" v-b-modal.del-confirm-modal :disabled="!selectedIds.length">Delete</b-button>
                 <b-button size="sm" class="ml-2" @click="clearSelected" :disabled="!selectedIds.length">Clear selected</b-button>

@@ -69,6 +69,10 @@ export default {
 		}));
 	},
 
+	update(dataList) {
+		return AXIOS.put(`/api/update`, dataList);
+	},
+
 	delete(ids) {
 		return AXIOS.post(`/api/delete`, ids);
 	}
