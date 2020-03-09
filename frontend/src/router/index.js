@@ -6,6 +6,7 @@ import Login from '../pages/admin/login/Login.vue'
 import DataList from '../pages/admin/data-list/DataList.vue'
 import Create from '../pages/admin/create/Create.vue'
 import Update from '../pages/admin/update/Update.vue'
+import Infor from '../pages/infor/Infor.vue'
 
 import store from '@/pages/admin/store'
 
@@ -50,7 +51,8 @@ const routes = [
     name: 'create',
     component: Create,
     meta: {
-      title: 'Admin create search data'
+      title: 'Admin create search data',
+      requiresAuth: true
     }
   },
   {
@@ -58,7 +60,16 @@ const routes = [
     name: 'update',
     component: Update,
     meta: {
-      title: 'Admin update search data'
+      title: 'Admin update search data',
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/information',
+    name: 'infor',
+    component: Infor,
+    meta: {
+      title: 'Information'
     }
   }
 

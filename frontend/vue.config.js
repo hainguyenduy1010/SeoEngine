@@ -27,6 +27,12 @@ module.exports = {
       title: 'Admin',
       template: 'public/index.html',
       chunks: ['chunk-vendors', 'chunk-common', 'admin']
+    },
+    'information': {
+      entry: 'src/pages/infor/infor.js',
+      title: 'Information',
+      template: 'public/index.html',
+      chunks: ['chunk-vendors', 'chunk-common', 'information']
     }
   },
 	runtimeCompiler: true,
