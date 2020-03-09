@@ -35,6 +35,16 @@ public interface SearchDataRepository extends JpaRepository<SearchData, BigInteg
 
     @Modifying
     @Transactional
+    @Query("UPDATE SearchData data SET data.order = data.order + 1 WHERE data.keyword = ?1 AND data.order < ?2 AND data.order >= ?3")
+    void updateOrderIncrementRange(String keyword, BigInteger oldOrder, BigInteger newOrder);
+
+    @Modifying
+    @Transactional
+    @Query("UPDATE SearchData data SET data.order = data.order - 1 WHERE data.keyword = ?1 AND data.order > ?2 AND data.order <= ?3")
+    void updateOrderDecrementRange(String keyword, BigInteger oldOrder, BigInteger newOrder);
+
+    @Modifying
+    @Transactional
     @Query("UPDATE SearchData data SET data.order = data.order + 1 WHERE data.keyword = ?1 AND data.order > ?2")
     void updateOrderIncrement(String keyword, BigInteger order);
 

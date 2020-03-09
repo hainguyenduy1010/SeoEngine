@@ -117,7 +117,24 @@ public class AdminController {
 
             return ResponseEntity.ok(adminCreateRequestDTO.getSearchDataDTOList().size() + " search data have been created");
         } catch (Exception e) {
-            LOGGER.debug("ERROR: Delete", e);
+            LOGGER.debug("ERROR: Create", e);
+            throw e;
+        }
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<String> update(@Valid @RequestBody List<SearchDataDTO> searchDataDTOList) {
+        LOGGER.info("PUT /update");
+        LOGGER.info("PUT with body = {}", searchDataDTOList);
+
+        try {
+            adminService.updateSearchData(searchDataDTOList);
+
+            LOGGER.info("{} search data have been updated", searchDataDTOList.size());
+
+            return ResponseEntity.ok(searchDataDTOList.size() + " search data have been updated");
+        } catch (Exception e) {
+            LOGGER.debug("ERROR: Update", e);
             throw e;
         }
     }

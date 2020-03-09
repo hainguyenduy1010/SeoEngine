@@ -211,7 +211,7 @@ public class SearchService {
                 LOGGER.error("ERROR: Cannot get URL information with HTTP status = {}, URL = {}", response.statusCode(), url);
                 isSuccess = false;
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             LOGGER.error("ERROR: Get URL information with  HTTP URL = {}", url, e);
             isSuccess = false;
         }

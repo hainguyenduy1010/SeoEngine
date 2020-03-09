@@ -121,14 +121,41 @@ public class AdminService {
             searchDataDTO.setCreateDate(new Date());
             searchDataDTO.setUpdateDate(new Date());
 
-            searchDataRepository.updateOrderIncrement(keyword, searchDataDTO.getOrder().add(BigInteger.valueOf(-1)));
-
             searchData = new SearchData();
             BeanUtils.copyProperties(searchDataDTO, searchData);
             searchDataList.add(searchData);
+
+            searchDataRepository.updateOrderIncrement(keyword, searchDataDTO.getOrder().add(BigInteger.valueOf(-1)));
         }
 
         searchDataRepository.saveAll(searchDataList);
+    }
+
+    public void updateSearchData(List<SearchDataDTO> searchDataDTOList) {
+        SearchData searchData = new SearchData();
+        List<SearchData> searchDataList = new ArrayList<>();
+        for (SearchDataDTO searchDataDTO : searchDataDTOList) { //TODO
+            SearchData oldSearchData = searchDataRepository.findById(searchDataDTO.getId()).get();
+            if (searchDataDTO.getKeyword().equals(oldSearchData.getKeyword())) {
+                if (searchDataDTO.getOrder().compareTo(oldSearchData.getOrder()) > 0) {
+                    searchDataRepository.updateOrderDecrementRange(searchDataDTO.getKeyword(), oldSearchData.getOrder(), searchDataDTO.getOrder());
+                } else if (searchDataDTO.getOrder().compareTo(oldSearchData.getOrder()) < 0) {
+                    searchDataRepository.updateOrderIncrementRange(searchDataDTO.getKeyword(), oldSearchData.getOrder(), searchDataDTO.getOrder());
+                }
+
+                BeanUtils.copyProperties(searchDataDTO, searchData);
+                searchData.setUpdateDate(new Date());
+                searchDataList.add(searchData);
+                searchDataRepository.saveAll(searchDataList);
+            } else {
+                searchDataRepository.updateOrderDecrement(oldSearchData.getKeyword(), searchDataDTO.getOrder());
+                searchDataRepository.updateOrderIncrement(searchDataDTO.getKeyword(), searchDataDTO.getOrder().add(BigInteger.valueOf(-1)));
+
+                BeanUtils.copyProperties(searchDataDTO, searchData);
+                searchDataRepository.save(searchData);
+            }
+        }
+
     }
 
     public void deleteSearchData(List<BigInteger> idList) {
