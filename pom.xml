@@ -5,7 +5,6 @@
 	<packaging>pom</packaging>
 	<modules>
 		<module>backend</module>
-		<module>frontend</module>
 	</modules>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -13,11 +12,11 @@
 		<version>2.2.4.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.engine.seo</groupId>
-	<artifactId>SeoEngine</artifactId>
+	<groupId>com.engine.getcode</groupId>
+	<artifactId>GetCode</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>SeoEngine</name>
-	<description>Seo engine</description>
+	<name>GetCode</name>
+	<description>GetCode</description>
 
 	<properties>
 		<java.version>1.8</java.version>
