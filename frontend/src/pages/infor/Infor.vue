@@ -36,7 +36,7 @@
 <style scoped>
 .infor-logo {
     text-align: center;
-    margin-bottom: 20px
+    margin: 30px
 }
 .infor-logo img {
     width: 300px;

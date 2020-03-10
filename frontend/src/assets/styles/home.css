@@ -57,7 +57,7 @@ select:-webkit-autofill:focus {
 
 #search-box {
   min-height: 40px;
-  margin: 10px auto;
+  margin: 30px auto;
   width: 640px;
   top: 0;
   left: 0;
@@ -109,7 +109,6 @@ select:-webkit-autofill:focus {
 }
 
 .toolbars ul {
-    padding-top: 10px;
     text-align: center;
     padding-left: 0;
 }

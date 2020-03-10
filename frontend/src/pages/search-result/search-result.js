@@ -38,7 +38,9 @@ export default {
 	},
 	methods: {
 		searchSubmit() {
-			window.location.href = '/search?k=' + this.keyword;
+			if (this.keyword) {
+				window.location.href = '/search?k=' + this.keyword;
+			}
 		},
 		setData(response) {
 			this.search_result = response;
