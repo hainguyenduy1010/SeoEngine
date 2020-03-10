@@ -1,8 +1,8 @@
-package com.engine.seo.controller;
+package com.engine.getcode.controller;
 
-import com.engine.seo.dto.SearchRequestDTO;
-import com.engine.seo.dto.SearchResultDataDTO;
-import com.engine.seo.service.SearchService;
+import com.engine.getcode.dto.SearchRequestDTO;
+import com.engine.getcode.dto.SearchResultDataDTO;
+import com.engine.getcode.service.SearchService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

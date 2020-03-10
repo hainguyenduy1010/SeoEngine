@@ -1,9 +1,8 @@
-package com.engine.seo.dto;
+package com.engine.getcode.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import javax.validation.constraints.Null;
 import java.io.Serializable;
 
 /**

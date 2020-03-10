@@ -1,35 +1,40 @@
-package com.engine.seo.model;
+package com.engine.getcode.dto;
 
-import org.hibernate.annotations.GeneratorType;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-import javax.persistence.*;
+import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Date;
 
 /**
- * Created by HaiND on 2/11/2020 10:35 PM.
+ * Created by HaiND on 2/11/2020 11:19 PM.
  */
-@Entity
-@Table(name = "search_data")
-public class SearchData {
+public class SearchDataDTO implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private static final long serialVersionUID = -2100165345239717454L;
+
+    @JsonProperty("id")
     private BigInteger id;
 
-    @Column(name = "keyword", nullable = false)
+    @JsonProperty("keyword")
     private String keyword;
 
-    @Column(name = "url", nullable = false)
+    @JsonProperty("url")
     private String url;
 
-    @Column(name = "\"order\"", nullable = false)
+    @JsonProperty("title")
+    private String title;
+
+    @JsonProperty("description")
+    private String description;
+
+    @JsonProperty("order")
     private BigInteger order;
 
-    @Column(name = "createDate", nullable = false)
+    @JsonProperty("create_date")
     private Date createDate;
 
-    @Column(name = "updateDate", nullable = false)
+    @JsonProperty("update_date")
     private Date updateDate;
 
     public BigInteger getId() {
@@ -54,6 +59,22 @@ public class SearchData {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public BigInteger getOrder() {
@@ -84,10 +105,12 @@ public class SearchData {
     public String toString() {
         StringBuilder sb = new StringBuilder();
 
-        sb.append("SearchData = [")
+        sb.append("SearchDataDTO = [")
                 .append("id = ").append(id).append("; ")
                 .append("keyword = ").append(keyword).append("; ")
                 .append("url = ").append(url).append("; ")
+                .append("title = ").append(title).append("; ")
+                .append("description = ").append(description).append("; ")
                 .append("order = ").append(order).append("; ")
                 .append("createDate = ").append(createDate).append("; ")
                 .append("updateDate = ").append(updateDate).append("]");

@@ -1,4 +1,4 @@
-package com.engine.seo.config;
+package com.engine.getcode.config;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  */
 @Configuration
 @EnableTransactionManagement
-public class SeoEngineConfig {
+public class GetCodeConfig {
 
     @Bean
     public ModelMapper modelMapper() {

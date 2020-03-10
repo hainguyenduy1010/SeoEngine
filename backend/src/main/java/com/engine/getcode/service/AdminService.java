@@ -1,12 +1,12 @@
-package com.engine.seo.service;
+package com.engine.getcode.service;
 
-import com.engine.seo.dto.AdminCreateRequestDTO;
-import com.engine.seo.dto.AdminDataListRequestDTO;
-import com.engine.seo.dto.LoginDTO;
-import com.engine.seo.dto.SearchDataDTO;
-import com.engine.seo.model.SearchData;
-import com.engine.seo.repository.SearchDataRepository;
-import com.engine.seo.utils.Utils;
+import com.engine.getcode.dto.AdminCreateRequestDTO;
+import com.engine.getcode.dto.AdminDataListRequestDTO;
+import com.engine.getcode.dto.LoginDTO;
+import com.engine.getcode.dto.SearchDataDTO;
+import com.engine.getcode.model.SearchData;
+import com.engine.getcode.repository.SearchDataRepository;
+import com.engine.getcode.utils.Utils;
 import org.apache.commons.lang3.StringUtils;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;

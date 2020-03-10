@@ -1,10 +1,9 @@
-package com.engine.seo.repository;
+package com.engine.getcode.repository;
 
-import com.engine.seo.model.SearchData;
-import com.engine.seo.repository.custom.SearchDataRepositoryCustom;
+import com.engine.getcode.model.SearchData;
+import com.engine.getcode.repository.custom.SearchDataRepositoryCustom;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

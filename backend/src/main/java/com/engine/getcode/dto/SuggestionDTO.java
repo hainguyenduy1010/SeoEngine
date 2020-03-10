@@ -1,4 +1,4 @@
-package com.engine.seo.dto;
+package com.engine.getcode.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

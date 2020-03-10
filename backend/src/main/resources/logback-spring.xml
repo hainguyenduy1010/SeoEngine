@@ -10,10 +10,10 @@
 	</appender>
 
 	<appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<file>${log_directory}/seo-engine.log</file>
+		<file>${log_directory}/get-code.log</file>
 		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
 			<!-- daily rollover -->
-			<fileNamePattern>${log_directory}/seo-engine.%d{yyyy-MM-dd}.%i.gz</fileNamePattern>
+			<fileNamePattern>${log_directory}/get-code.%d{yyyy-MM-dd}.%i.gz</fileNamePattern>
 			<maxHistory>10</maxHistory>
 			<MaxFileSize>10MB</MaxFileSize>
 		</rollingPolicy>

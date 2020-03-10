@@ -1,10 +1,10 @@
-package com.engine.seo;
+package com.engine.getcode;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class SeoEngineApplicationTests {
+class GetCodeApplicationTests {
 
 	@Test
 	void contextLoads() {

@@ -1,10 +1,10 @@
-package com.engine.seo.controller;
+package com.engine.getcode.controller;
 
-import com.engine.seo.dto.AdminCreateRequestDTO;
-import com.engine.seo.dto.AdminDataListRequestDTO;
-import com.engine.seo.dto.LoginDTO;
-import com.engine.seo.dto.SearchDataDTO;
-import com.engine.seo.service.AdminService;
+import com.engine.getcode.dto.AdminCreateRequestDTO;
+import com.engine.getcode.dto.AdminDataListRequestDTO;
+import com.engine.getcode.dto.LoginDTO;
+import com.engine.getcode.dto.SearchDataDTO;
+import com.engine.getcode.service.AdminService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

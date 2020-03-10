@@ -1,4 +1,4 @@
-package com.engine.seo.utils;
+package com.engine.getcode.utils;
 
 import org.apache.commons.lang3.StringUtils;
 

@@ -1,6 +1,6 @@
-package com.engine.seo.repository.custom;
+package com.engine.getcode.repository.custom;
 
-import com.engine.seo.model.SearchData;
+import com.engine.getcode.model.SearchData;
 
 import java.util.List;
 

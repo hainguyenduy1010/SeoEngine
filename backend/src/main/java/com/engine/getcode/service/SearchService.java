@@ -1,12 +1,12 @@
-package com.engine.seo.service;
+package com.engine.getcode.service;
 
-import com.engine.seo.dto.SearchDataDTO;
-import com.engine.seo.dto.SearchRequestDTO;
-import com.engine.seo.dto.SearchResultDataDTO;
-import com.engine.seo.dto.SuggestionDTO;
-import com.engine.seo.model.SearchData;
-import com.engine.seo.repository.SearchDataRepository;
-import com.engine.seo.utils.Utils;
+import com.engine.getcode.dto.SearchDataDTO;
+import com.engine.getcode.dto.SearchRequestDTO;
+import com.engine.getcode.dto.SearchResultDataDTO;
+import com.engine.getcode.dto.SuggestionDTO;
+import com.engine.getcode.model.SearchData;
+import com.engine.getcode.repository.SearchDataRepository;
+import com.engine.getcode.utils.Utils;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -23,7 +23,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;

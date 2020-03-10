@@ -1,13 +1,13 @@
-package com.engine.seo;
+package com.engine.getcode;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class SeoEngineApplication {
+public class GetCodeApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(SeoEngineApplication.class, args);
+		SpringApplication.run(GetCodeApplication.class, args);
 	}
 
 }
