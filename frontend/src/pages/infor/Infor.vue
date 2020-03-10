@@ -1,36 +1,42 @@
 <template>
-    <b-container fluid="md">
-        <div class="infor-logo">
-            <a href="/">
-                <img :src="require('@/assets/search-logo.png')">
-            </a>
-        </div>
-        <div>
-        <b-card no-body>
-            <b-tabs pills card vertical>
-                <b-tab title="Tab 1" active>
-                    <b-card-text>Tab contents 1</b-card-text>
-                </b-tab>
-                <b-tab title="Tab 2">
-                    <b-card-text>Tab contents 2</b-card-text>
-                </b-tab>
-                <b-tab title="Tab 3">
-                    <b-card-text>Tab contents 3</b-card-text>
-                </b-tab>
-            </b-tabs>
-        </b-card>
-        <b-tabs content-class="mt-3" align="center"    vertical>
-    <b-tab title="First" active><p>I'm the first tab</p></b-tab>
-    <b-tab title="Second"><p>I'm the second tab</p></b-tab>
-    <b-tab title="Disabled" disabled><p>I'm a disabled tab!</p></b-tab>
-  </b-tabs>
-        </div>
-    </b-container>
+    <div>
+        <b-container fluid="md" class="mb-5">
+            <div class="infor-logo">
+                <a href="/">
+                    <img :src="require('@/assets/search-logo.png')">
+                </a>
+            </div>
+            <div class="text-justify">
+                <b-tabs content-class="mt-3" fill v-model="tabIndex">
+                    <b-tab title="About us">
+                        <div v-html="content" :title-link-class="onTitleClick()"></div>
+                    </b-tab>
+                    <b-tab title="Copyright">
+                        <div v-html="content" :title-link-class="onTitleClick()"></div>
+                    </b-tab>
+                    <b-tab title="Disclaimer">
+                        <div v-html="content" :title-link-class="onTitleClick()"></div>
+                    </b-tab>
+                    <b-tab title="Privacy policy">
+                        <div v-html="content" :title-link-class="onTitleClick()"></div>
+                    </b-tab>
+                    <b-tab title="End user license agreement">
+                        <div v-html="content" :title-link-class="onTitleClick()"></div>
+                    </b-tab>
+                    <!-- <b-tab title="Contact us">
+                        <div v-html="content" :title-link-class="onTitleClick()"></div>
+                    </b-tab> -->
+                </b-tabs>
+            </div>
+        </b-container>
+    <Footer style="position: unset;"></Footer>
+    </div>
 </template>
 
 <style scoped>
 .infor-logo {
-    text-align: center
+    text-align: center;
+    margin-bottom: 20px
 }
 .infor-logo img {
     width: 300px;
@@ -38,10 +44,51 @@
 </style>
 
 <script>
+import Footer from '@/components/Footer.vue'
 export default {
 	name: 'infor',
-	mounted() {
-        console.log("asdsad")
+	components: {
+		Footer
+	},
+	data() {
+        return {
+            tabIndex: 0,
+            content: ''
+        }
+    },
+	beforeMount() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const indexQuery = urlParams.get('i');
+        if (indexQuery) {
+            this.tabIndex = parseInt(indexQuery);
+            this.onTitleClick();
+        }
+	},
+    methods: {
+        onTitleClick() {
+            switch (this.tabIndex) {
+                case 0:
+                    this.content = require('@/assets/content/about-us.txt').default
+                    break;
+                case 1:
+                    this.content = require('@/assets/content/copyright.txt').default
+                    break;
+                case 2:
+                    this.content = require('@/assets/content/disclaimer.txt').default
+                    break;
+                case 3:
+                    this.content = require('@/assets/content/privacy-policy.txt').default
+                    break;
+                case 4:
+                    this.content = require('@/assets/content/end-user-license-agreement.txt').default
+                    break;
+                // case 5:
+                //     this.content = require('@/assets/content/contact-us.txt').default
+                //     break;
+                default:
+                    break;
+            }
+        }
     }
 }
 </script>

@@ -18,7 +18,7 @@ const routes = [
     name: 'home',
     component: Home,
     meta: {
-      title: 'Search Homepage'
+      title: 'GetCode - search homepage'
     }
   },
   {
@@ -26,7 +26,7 @@ const routes = [
     name: 'search',
     component: SearchResult,
     meta: {
-      title: 'Search Results'
+      title: 'GetCode - search results'
     }
   },
   {
@@ -34,7 +34,7 @@ const routes = [
     name: 'admin',
     component: DataList,
     meta: {
-      title: 'Admin',
+      title: 'GetCode - admin',
       requiresAuth: true
     }
   },
@@ -43,7 +43,7 @@ const routes = [
     name: 'login',
     component: Login,
     meta: {
-      title: 'Admin login'
+      title: 'GetCode - admin login'
     }
   },
   {
@@ -51,7 +51,7 @@ const routes = [
     name: 'create',
     component: Create,
     meta: {
-      title: 'Admin create search data',
+      title: 'GetCode - admin create search data',
       requiresAuth: true
     }
   },
@@ -60,7 +60,7 @@ const routes = [
     name: 'update',
     component: Update,
     meta: {
-      title: 'Admin update search data',
+      title: 'GetCode - admin update search data',
       requiresAuth: true
     }
   },
@@ -69,7 +69,7 @@ const routes = [
     name: 'infor',
     component: Infor,
     meta: {
-      title: 'Information'
+      title: 'GetCode - information'
     }
   }
 
