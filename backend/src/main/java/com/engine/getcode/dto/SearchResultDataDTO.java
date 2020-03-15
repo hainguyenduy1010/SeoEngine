@@ -14,6 +14,12 @@ public class SearchResultDataDTO implements Serializable {
 
     private static final long serialVersionUID = 2588869100925735203L;
 
+    @JsonProperty("title")
+    private String title;
+
+    @JsonProperty("description")
+    private String description;
+
     @JsonProperty("count")
     private long count;
 
@@ -34,6 +40,22 @@ public class SearchResultDataDTO implements Serializable {
 
     @JsonProperty("number_results_per_page")
     private int numberResultsPerPage;
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
     public long getCount() {
         return count;
@@ -96,6 +118,8 @@ public class SearchResultDataDTO implements Serializable {
         StringBuilder sb = new StringBuilder();
 
         sb.append("SearchResultDataDTO = [")
+                .append("title = ").append(title).append("; ")
+                .append("description = ").append(description).append("; ")
                 .append("count = ").append(count).append("; ")
                 .append("countFake = ").append(countFake).append("; ")
                 .append("totalTime = ").append(totalTime).append("; ")

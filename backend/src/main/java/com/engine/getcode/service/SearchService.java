@@ -4,7 +4,9 @@ import com.engine.getcode.dto.SearchDataDTO;
 import com.engine.getcode.dto.SearchRequestDTO;
 import com.engine.getcode.dto.SearchResultDataDTO;
 import com.engine.getcode.dto.SuggestionDTO;
+import com.engine.getcode.model.KeywordData;
 import com.engine.getcode.model.SearchData;
+import com.engine.getcode.repository.KeywordDataRepository;
 import com.engine.getcode.repository.SearchDataRepository;
 import com.engine.getcode.utils.Utils;
 import org.apache.commons.lang3.StringUtils;
@@ -43,6 +45,9 @@ public class SearchService {
     private static final String LIMIT = "limit";
 
     private static final String PAGE = "page";
+
+    @Autowired
+    KeywordDataRepository keywordDataRepository;
 
     @Autowired
     private SearchDataRepository searchDataRepository;
@@ -85,6 +90,9 @@ public class SearchService {
         long count = byKeywordCount + relateCount;
 
         long startTime = System.nanoTime();
+
+        KeywordData keywordData = keywordDataRepository.findByKeyword(keyword);
+
         // get SearchData list from DB by keyword
         List<SearchData> searchDataList = findSearchData(keyword, currentPage);
         // generate SearchDataDTO list
@@ -107,6 +115,10 @@ public class SearchService {
         List<SuggestionDTO> suggestionDTOList = generateSuggestionList(keyword);
 
         // set result output data
+        if (keywordData != null) {
+            searchResultDataDTO.setTitle(keywordData.getTitle());
+            searchResultDataDTO.setDescription(keywordData.getDescription());
+        }
         searchResultDataDTO.setCount(maxPage * numberResultsPerPage);
         searchResultDataDTO.setCountFake(getCountFake(count));
         searchResultDataDTO.setTotalTime((endTime - startTime) / 1000000);
