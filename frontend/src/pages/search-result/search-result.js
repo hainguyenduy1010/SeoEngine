@@ -25,6 +25,22 @@ export default {
 		api.search2(this.$route.query.k, this.$route.query.p).then(response => {
 			// console.log(JSON.stringify(response));
 			this.setData(response);
+			if (response.title) {
+				window.document.title = response.title;
+			} else {
+				window.document.title = this.$route.query.k + " - GetCode Search Results";
+			}
+			if (response.description) {
+				var metaDes = document.querySelector('meta[name="description"]');
+				if (metaDes) {
+					metaDes.setAttribute("content", response.description);
+				} else {
+					var meta = document.createElement('meta');
+					meta.setAttribute('name', 'description');
+					meta.setAttribute('content', response.description);
+					document.getElementsByTagName('title')[0].after(meta);
+				}
+			}
 		}, error => console.log(error));
 	},
 	data() {

@@ -27,7 +27,7 @@ const routes = [
     name: 'search',
     component: SearchResult,
     meta: {
-      title: 'GetCode - search results'
+      title: 'GetCode Search Results'
     }
   },
   {

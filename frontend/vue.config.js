@@ -27,7 +27,7 @@ module.exports = {
     },
     'search': {
       entry: 'src/pages/search-result/search-result.js',
-      title: 'GetCode - search results',
+      title: 'GetCode Search Results',
       template: 'public/index.html',
       chunks: ['chunk-vendors', 'chunk-common', 'search']
     },
