@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import Home from '../pages/home/Home.vue'
 import SearchResult from '../pages/search-result/SearchResult.vue'
 import Login from '../pages/admin/login/Login.vue'
+import KeywordList from '../pages/admin/keyword-list/KeywordList.vue'
 import DataList from '../pages/admin/data-list/DataList.vue'
 import Create from '../pages/admin/create/Create.vue'
 import Update from '../pages/admin/update/Update.vue'
@@ -32,7 +33,7 @@ const routes = [
   {
     path: '/admin',
     name: 'admin',
-    component: DataList,
+    component: KeywordList,
     meta: {
       title: 'GetCode - admin',
       requiresAuth: true
@@ -44,6 +45,15 @@ const routes = [
     component: Login,
     meta: {
       title: 'GetCode - admin login'
+    }
+  },
+  {
+    path: '/admin/list/search-data',
+    name: 'search-data-list',
+    component: DataList,
+    meta: {
+      title: 'GetCode - admin search data list',
+      requiresAuth: true
     }
   },
   {

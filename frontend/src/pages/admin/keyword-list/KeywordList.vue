@@ -1,16 +1,5 @@
 <template>
     <div class="data-list-table">
-        <b-row class="keyword-row" align-v="center">
-            <b-col cols="5" class="text-left">
-                <router-link to="/admin">
-                    <b-button class="mt-3 mb-1">Back</b-button>
-                </router-link>
-            </b-col>
-            <b-col cols="1" class="text-right"><b>Keyword</b></b-col>
-            <b-col>
-                <b-input class="keyword-input" v-model="keyword" disabled=""></b-input>
-            </b-col>
-        </b-row>
         <div class="row">
             <b-col lg="4" class="my-1">
                 <b-form-group
@@ -46,7 +35,7 @@
             </b-col>
 
             <b-col class="my-1 text-right">
-                <router-link :to="{name: 'create', params: {keyword: keyword}}">
+                <router-link :to="{name: 'create', params: {isKeywordAction: true}}">
                     <b-button size="sm" class="ml-2" variant="primary">Create</b-button>
                 </router-link>
                 <!-- <router-link :to="{name: 'update', params: {data: selectedData}}">
@@ -77,13 +66,6 @@
             @row-selected="onRowSelected"
             @sort-changed="onSortChanged"
             >
-            <!-- :filter="filter"
-            :filterIncludedFields="filterOn"
-            @filtered="onFiltered" -->
-
-            <template v-slot:cell(url)="data">
-                <a :href="`${data.value}`" target="_blank">{{ data.value }}</a>
-            </template>
 
             <template v-slot:cell(create_date)="data">
                 <span>{{data.value | formatDate}}</span>
@@ -94,21 +76,13 @@
             </template>
 
             <template v-slot:cell(actions)="data">
+                <b-button size="sm" variant="info" @click="onDetails(data.item)" class="m-1">
+                    Details
+                </b-button>
                 <b-button size="sm" variant="info" @click="onUpdate(data.item)" class="m-1">
                     Update
                 </b-button>
             </template>
-
-            <!-- <template v-slot:cell(selected)="{ rowSelected }">
-                <template v-if="rowSelected">
-                    <span aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20" height="20" viewBox="0 0 48 48" style=" fill:#000000;"><path fill="#c8e6c9" d="M36,42H12c-3.314,0-6-2.686-6-6V12c0-3.314,2.686-6,6-6h24c3.314,0,6,2.686,6,6v24C42,39.314,39.314,42,36,42z"></path><path fill="#4caf50" d="M34.585 14.586L21.014 28.172 15.413 22.584 12.587 25.416 21.019 33.828 37.415 17.414z"></path></svg></span>
-                    <span class="sr-only">Selected</span>
-                </template>
-                <template v-else>
-                    <span aria-hidden="true">&nbsp;</span>
-                    <span class="sr-only">Not selected</span>
-                </template>
-            </template> -->
         </b-table>
 
         <div class="row ">
@@ -161,4 +135,4 @@
 }
 </style>
 
-<script src='./data-list.js'></script>
+<script src='./keyword-list.js'></script>

@@ -7,7 +7,16 @@ module.exports = {
         ws: true,
         changeOrigin: true
       }
-    }
+    },
+    // historyApiFallback: true
+    // historyApiFallback: {
+    //   rewrites: [
+    //     { from: /\/search/, to: '/index.html' },
+    //     { from: /\/admin/, to: '/index.html' },
+    //     { from: /\/information/, to: '/index.html' },
+    //     { from: /\/favicon/, to: '/index.ico' }
+    //   ]
+    // }
 	},
   pages: {
     'index': {

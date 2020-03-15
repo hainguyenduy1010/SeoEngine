@@ -25,12 +25,16 @@
 .create-form .keyword-row {
     height: 60px;
     background-color: #ebebeb;
+}
+
+.create-form .description-row {
+    background-color: #ebebeb;
     border-bottom: 1px solid #e4e4e4;
 }
 
-.vue-numeric-input {
+/* .vue-numeric-input {
     margin-top: 5px;
-}
+} */
 
 .create-form .numeric-input {
     height: 34px;
