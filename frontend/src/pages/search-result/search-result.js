@@ -33,7 +33,8 @@ export default {
 			search_result: {},
 			keyword: this.$route.query.k,
 			result_count_fake: null,
-			number_of_pages: null
+			number_of_pages: null,
+			current_page: 0
 		}
 	},
 	methods: {
@@ -44,6 +45,7 @@ export default {
 		},
 		setData(response) {
 			this.search_result = response;
+			this.current_page = response.current_page;
 			this.result_count_fake = response.count_fake.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 			this.number_of_pages = Math.ceil(parseInt(response.count) / parseInt(response.number_results_per_page));
 		},
