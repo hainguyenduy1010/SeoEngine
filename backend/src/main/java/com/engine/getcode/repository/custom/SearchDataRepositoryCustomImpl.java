@@ -67,6 +67,7 @@ public class SearchDataRepositoryCustomImpl implements SearchDataRepositoryCusto
 
         for (String singleKeyword : singleKeywordList) {
             querySb.append("LOCATE('").append(singleKeyword).append("', data.keyword) > 0");
+//            querySb.append("data.keyword = '").append(singleKeyword).append("'");
             querySb.append(" OR ");
         }
 

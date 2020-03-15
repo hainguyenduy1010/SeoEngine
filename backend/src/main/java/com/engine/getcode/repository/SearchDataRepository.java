@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import javax.transaction.Transactional;
 import java.math.BigInteger;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by HaiND on 2/11/2020 11:24 PM.
@@ -20,17 +21,22 @@ public interface SearchDataRepository extends JpaRepository<SearchData, BigInteg
 
     long countByKeyword(String keyword);
 
-    @Query("SELECT COUNT(data) FROM SearchData data WHERE data.keyword LIKE %?1%")
-    long countLikeKeyword(String filter);
+    List<SearchData> findIdByKeyword(String keyword);
+
+    @Query("SELECT COUNT(data) FROM SearchData data WHERE data.keyword = ?1 AND data.url LIKE %?2%")
+    long countLikeUrl(String keyword, String filter);
 
     @Query("SELECT data FROM SearchData data WHERE data.keyword LIKE %?1%")
     List<SearchData> findByLikeKeyword(String keyword, Pageable pageable);
 
+    @Query("SELECT data FROM SearchData data WHERE data.keyword = ?1 AND data.url LIKE %?2%")
+    List<SearchData> findByLikeUrl(String keyword, String urlFilter, Pageable pageable);
+
     @Query("SELECT data FROM SearchData data WHERE data.keyword = ?1")
     List<SearchData> findByKeyword(String keyword, Pageable pageable);
 
-    @Query("SELECT DISTINCT data.keyword FROM SearchData data WHERE data.keyword LIKE %?1%")
-    List<String> findKeywordList(String filter, Pageable pageable);
+    @Query("SELECT DISTINCT data.url FROM SearchData data WHERE data.url LIKE %?1%")
+    List<String> findUrlList(String filter, Pageable pageable);
 
     @Modifying
     @Transactional
@@ -51,4 +57,9 @@ public interface SearchDataRepository extends JpaRepository<SearchData, BigInteg
     @Transactional
     @Query("UPDATE SearchData data SET data.order = data.order - 1 WHERE data.keyword = ?1 AND data.order > ?2")
     void updateOrderDecrement(String keyword, BigInteger order);
+
+    @Modifying
+    @Transactional
+    @Query("DELETE from SearchData data WHERE data.keyword IN ?1")
+    void deleteBatchByKeywordList(Set<String> keywords);
 }

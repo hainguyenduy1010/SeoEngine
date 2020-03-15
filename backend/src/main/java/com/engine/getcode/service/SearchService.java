@@ -107,7 +107,6 @@ public class SearchService {
         List<SuggestionDTO> suggestionDTOList = generateSuggestionList(keyword);
 
         // set result output data
-//        searchResultDataDTO.setCount(count);
         searchResultDataDTO.setCount(maxPage * numberResultsPerPage);
         searchResultDataDTO.setCountFake(getCountFake(count));
         searchResultDataDTO.setTotalTime((endTime - startTime) / 1000000);

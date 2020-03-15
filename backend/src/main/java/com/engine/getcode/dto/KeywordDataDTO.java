@@ -1,19 +1,18 @@
 package com.engine.getcode.dto;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import javax.persistence.Column;
 import java.io.Serializable;
 import java.math.BigInteger;
-import java.util.List;
+import java.util.Date;
 
 /**
- * Created by HaiND on 3/8/2020 6:02 PM.
+ * Created by HaiND on 3/15/2020 2:15 PM.
  */
-@JsonInclude(JsonInclude.Include.NON_NULL)
-public class AdminCreateRequestDTO implements Serializable {
+public class KeywordDataDTO implements Serializable {
 
-    private static final long serialVersionUID = -5967000672979386790L;
+    private static final long serialVersionUID = -7140374118955404622L;
 
     @JsonProperty("id")
     private BigInteger id;
@@ -27,8 +26,11 @@ public class AdminCreateRequestDTO implements Serializable {
     @JsonProperty("description")
     private String description;
 
-    @JsonProperty("data_list")
-    private List<SearchDataDTO> searchDataDTOList;
+    @JsonProperty("create_date")
+    private Date createDate;
+
+    @JsonProperty("update_date")
+    private Date updateDate;
 
     public BigInteger getId() {
         return id;
@@ -62,24 +64,33 @@ public class AdminCreateRequestDTO implements Serializable {
         this.description = description;
     }
 
-    public List<SearchDataDTO> getSearchDataDTOList() {
-        return searchDataDTOList;
+    public Date getCreateDate() {
+        return createDate;
     }
 
-    public void setSearchDataDTOList(List<SearchDataDTO> searchDataDTOList) {
-        this.searchDataDTOList = searchDataDTOList;
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public Date getUpdateDate() {
+        return updateDate;
+    }
+
+    public void setUpdateDate(Date updateDate) {
+        this.updateDate = updateDate;
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
 
-        sb.append("AdminCreateRequestDTO = [")
+        sb.append("KeywordData = [")
                 .append("id = ").append(id).append("; ")
                 .append("keyword = ").append(keyword).append("; ")
                 .append("title = ").append(title).append("; ")
                 .append("description = ").append(description).append("; ")
-                .append("searchDataDTOList = ").append(searchDataDTOList).append("]");
+                .append("createDate = ").append(createDate).append("; ")
+                .append("updateDate = ").append(updateDate).append("]");
 
         return sb.toString();
     }

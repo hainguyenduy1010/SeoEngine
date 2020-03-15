@@ -1,10 +1,9 @@
 package com.engine.getcode.service;
 
-import com.engine.getcode.dto.AdminCreateRequestDTO;
-import com.engine.getcode.dto.AdminDataListRequestDTO;
-import com.engine.getcode.dto.LoginDTO;
-import com.engine.getcode.dto.SearchDataDTO;
+import com.engine.getcode.dto.*;
+import com.engine.getcode.model.KeywordData;
 import com.engine.getcode.model.SearchData;
+import com.engine.getcode.repository.KeywordDataRepository;
 import com.engine.getcode.repository.SearchDataRepository;
 import com.engine.getcode.utils.Utils;
 import org.apache.commons.lang3.StringUtils;
@@ -20,10 +19,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * Created by HaiND on 2/18/2020 12:20 AM.
@@ -33,6 +29,18 @@ public class AdminService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AdminService.class);
 
+    private static final String TYPE_KEYWORD_LIST_KD = "keyword-list-kd";
+
+    private static final String TYPE_KEYWORD_LIST_SD = "keyword-list-sd";
+
+    private static final String TYPE_COUNT_KEYWORD_ALL = "count-keyword-all";
+
+    private static final String TYPE_COUNT_KEYWORD_LIKE_DATA = "count-keyword-like-keyword";
+
+    private static final String TYPE_COUNT_SEARCH_DATA_ALL = "count-search-data-all";
+
+    private static final String TYPE_COUNT_SEARCH_DATA_LIKE_ULR = "count-search-data-like-url";
+
     @Value("${admin.login.user}")
     private String userMaster;
 
@@ -41,6 +49,9 @@ public class AdminService {
 
     @Autowired
     SearchDataRepository searchDataRepository;
+
+    @Autowired
+    KeywordDataRepository keywordDataRepository;
 
     @Autowired
     ModelMapper modelMapper;
@@ -61,10 +72,22 @@ public class AdminService {
     public Long getCount(AdminDataListRequestDTO adminDataListRequestDTO) {
         long count;
 
-        if (StringUtils.isEmpty(adminDataListRequestDTO.getFilter())) {
-            count = searchDataRepository.count();
-        } else {
-            count = searchDataRepository.countLikeKeyword(adminDataListRequestDTO.getFilter());
+        switch (adminDataListRequestDTO.getType()) {
+            case TYPE_COUNT_KEYWORD_ALL:
+                count = keywordDataRepository.count();
+                break;
+            case TYPE_COUNT_KEYWORD_LIKE_DATA:
+                count = keywordDataRepository.countLikeKeyword(adminDataListRequestDTO.getFilter());
+                break;
+            case TYPE_COUNT_SEARCH_DATA_ALL:
+                count = searchDataRepository.countByKeyword(adminDataListRequestDTO.getKeyword());
+                break;
+            case TYPE_COUNT_SEARCH_DATA_LIKE_ULR:
+                count = searchDataRepository.countLikeUrl(adminDataListRequestDTO.getKeyword(), adminDataListRequestDTO.getFilter());
+                break;
+            default:
+                count = 0;
+                break;
         }
 
         LOGGER.debug("Count: {}", count);
@@ -72,8 +95,8 @@ public class AdminService {
         return count;
     }
 
-    public List<SearchDataDTO> getDataList(AdminDataListRequestDTO adminDataListRequestDTO) {
-        List<SearchDataDTO> searchDataDTOList = new ArrayList<>();
+    public List<KeywordDataDTO> getKeywordDataList(AdminDataListRequestDTO adminDataListRequestDTO) {
+        List<KeywordDataDTO> keywordDataDTOList = new ArrayList<>();
 
         int currentPage = adminDataListRequestDTO.getCurrentPage();
         int perPage = adminDataListRequestDTO.getPerPage();
@@ -81,7 +104,24 @@ public class AdminService {
         boolean isSortDesc = adminDataListRequestDTO.isSortDesc();
         String filter = adminDataListRequestDTO.getFilter();
 
-        List<SearchData> searchDataList = findSearchDataList(currentPage, perPage, sortBy, isSortDesc, filter);
+        List<KeywordData> keywordDataList = findKeywordDataList(currentPage, perPage, sortBy, isSortDesc, filter);
+        // loop through searchDataDTO then generate search data detail
+        keywordDataList.forEach(data -> keywordDataDTOList.add(modelMapper.map(data, KeywordDataDTO.class)));
+
+        return keywordDataDTOList;
+    }
+
+    public List<SearchDataDTO> getSearchDataList(AdminDataListRequestDTO adminDataListRequestDTO) {
+        List<SearchDataDTO> searchDataDTOList = new ArrayList<>();
+
+        String keyword = adminDataListRequestDTO.getKeyword();
+        int currentPage = adminDataListRequestDTO.getCurrentPage();
+        int perPage = adminDataListRequestDTO.getPerPage();
+        String sortBy = adminDataListRequestDTO.getSortBy();
+        boolean isSortDesc = adminDataListRequestDTO.isSortDesc();
+        String filter = adminDataListRequestDTO.getFilter();
+
+        List<SearchData> searchDataList = findSearchDataList(keyword, currentPage, perPage, sortBy, isSortDesc, filter);
         // loop through searchDataDTO then generate search data detail
         searchDataList.forEach(data -> searchDataDTOList.add(modelMapper.map(data, SearchDataDTO.class)));
 
@@ -89,12 +129,16 @@ public class AdminService {
     }
 
     public List<String> getKeywordList(AdminDataListRequestDTO adminDataListRequestDTO) {
-        List<String> keywordList;
+        List<String> keywordList = null;
 
         String filter = adminDataListRequestDTO.getFilter();
 
         Pageable pageable = PageRequest.of(0, 10);
-        keywordList = searchDataRepository.findKeywordList(filter, pageable);
+        if (TYPE_KEYWORD_LIST_KD.equals(adminDataListRequestDTO.getType())) {
+            keywordList = keywordDataRepository.findKeywordList(filter, pageable);
+        } else if (TYPE_KEYWORD_LIST_SD.equals(adminDataListRequestDTO.getType())) {
+            keywordList = searchDataRepository.findUrlList(filter, pageable);
+        }
 
         return  keywordList;
     }
@@ -108,6 +152,33 @@ public class AdminService {
         }
 
         return searchDataList.get(0).getOrder();
+    }
+
+    public void createOrUpdateKeyword(AdminCreateRequestDTO adminCreateRequestDTO) {
+
+        KeywordData keywordData = new KeywordData();
+        if (adminCreateRequestDTO.getId() == null) {
+            KeywordData keywordDataExist = keywordDataRepository.findByKeyword(adminCreateRequestDTO.getKeyword());
+            if (keywordDataExist == null) {
+                keywordData.setCreateDate(new Date());
+            } else {
+                keywordData = keywordDataExist;
+            }
+        } else {
+            Optional<KeywordData> optional = keywordDataRepository.findById(adminCreateRequestDTO.getId());
+            if (optional.isPresent()) {
+                keywordData = optional.get();
+            } else {
+                keywordData.setCreateDate(new Date());
+            }
+        }
+
+        keywordData.setKeyword(adminCreateRequestDTO.getKeyword());
+        keywordData.setDescription(adminCreateRequestDTO.getDescription());
+        keywordData.setTitle(adminCreateRequestDTO.getTitle());
+        keywordData.setUpdateDate(new Date());
+
+        keywordDataRepository.save(keywordData);
     }
 
     public void createSearchData(AdminCreateRequestDTO adminCreateRequestDTO) {
@@ -158,6 +229,17 @@ public class AdminService {
 
     }
 
+    public void deleteKeywordData(List<BigInteger> idList) {
+        Set<String> keywordList = keywordDataRepository.findKeywordListByIdList(idList);
+
+        for (BigInteger id : idList) {
+            keywordDataRepository.deleteById(id);
+            LOGGER.debug("Delete: {}", id);
+        }
+
+        searchDataRepository.deleteBatchByKeywordList(keywordList);
+    }
+
     public void deleteSearchData(List<BigInteger> idList) {
         for (BigInteger id : idList) {
             updateOrder(id, false);
@@ -166,16 +248,29 @@ public class AdminService {
         }
     }
 
-    private List<SearchData> findSearchDataList(int currentPage, int perPage, String sortBy, boolean isSortDesc, String filter) {
+    private List<KeywordData> findKeywordDataList(int currentPage, int perPage, String sortBy, boolean isSortDesc, String filter) {
+
+        sortBy = Utils.normalizeColumnName(sortBy);
+
+        Pageable pageable = PageRequest.of(currentPage - 1, perPage, Sort.by(isSortDesc ? Sort.Direction.DESC : Sort.Direction.ASC, sortBy));
+
+        if (StringUtils.isEmpty(filter)) {
+            return keywordDataRepository.findAll(pageable).getContent();
+        } else {
+            return keywordDataRepository.findByLikeKeyword(filter, pageable);
+        }
+    }
+
+    private List<SearchData> findSearchDataList(String keyword, int currentPage, int perPage, String sortBy, boolean isSortDesc, String filter) {
 
         sortBy = Utils.normalizeColumnName(sortBy);
 
         Pageable pageable = PageRequest.of(currentPage - 1, perPage, Sort.by(isSortDesc ? Sort.Direction.DESC : Sort.Direction.ASC, sortBy, "order"));
 
         if (StringUtils.isEmpty(filter)) {
-            return searchDataRepository.findAll(pageable).getContent();
+            return searchDataRepository.findByKeyword(keyword, pageable);
         } else {
-            return searchDataRepository.findByLikeKeyword(filter, pageable);
+            return searchDataRepository.findByLikeUrl(keyword, filter, pageable);
         }
     }
 

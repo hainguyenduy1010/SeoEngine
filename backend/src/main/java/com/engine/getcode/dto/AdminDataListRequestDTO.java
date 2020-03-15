@@ -11,6 +11,9 @@ public class AdminDataListRequestDTO implements Serializable {
 
     private static final long serialVersionUID = 9057945831341126944L;
 
+    @JsonProperty("keyword")
+    private String keyword;
+
     @JsonProperty("current_page")
     private int currentPage;
 
@@ -25,6 +28,17 @@ public class AdminDataListRequestDTO implements Serializable {
 
     @JsonProperty("filter")
     private String filter;
+
+    @JsonProperty("type")
+    private String type;
+
+    public String getKeyword() {
+        return keyword;
+    }
+
+    public void setKeyword(String keyword) {
+        this.keyword = keyword;
+    }
 
     public int getCurrentPage() {
         return currentPage;
@@ -66,16 +80,26 @@ public class AdminDataListRequestDTO implements Serializable {
         this.filter = filter;
     }
 
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
 
         sb.append("AdminDataListRequestDTO = [")
+                .append("keyword = ").append(currentPage).append("; ")
                 .append("currentPage = ").append(currentPage).append("; ")
                 .append("perPage = ").append(perPage).append("; ")
                 .append("sortBy = ").append(sortBy).append("; ")
                 .append("isSortDesc = ").append(isSortDesc).append("; ")
-                .append("filter = ").append(filter).append("]");
+                .append("filter = ").append(filter).append("; ")
+                .append("type = ").append(type).append("]");
 
         return sb.toString();
     }
