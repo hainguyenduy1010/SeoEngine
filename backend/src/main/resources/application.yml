@@ -14,8 +14,10 @@ search:
         enable: true
         min: 1000000
         max: 2000000
+      max-page: 29
     result_per_page: 20
     number_of_suggestion: 12
+    external_source_url: https://getcouponhere.com/search?k=
 
 admin:
   login:

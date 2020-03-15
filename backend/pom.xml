@@ -11,6 +11,12 @@
 
     <artifactId>backend</artifactId>
 
+    <properties>
+        <project.app.mainClass>com.engine.getcode.GetCodeApplication</project.app.mainClass>
+        <project.app.name>getcode</project.app.name>
+
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -40,6 +46,17 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>8.0.19</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.googlecode.json-simple</groupId>
+            <artifactId>json-simple</artifactId>
+            <version>1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.api-client</groupId>
+            <artifactId>google-api-client</artifactId>
+            <version>1.30.9</version>
         </dependency>
 
         <dependency>
@@ -79,6 +96,9 @@
                                     <includes>
                                         <include>static/</include>
                                         <include>index.html</include>
+                                        <include>search.html</include>
+                                        <include>admin.html</include>
+                                        <include>information.html</include>
                                         <include>favicon.ico</include>
                                     </includes>
                                 </resource>
@@ -89,5 +109,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>
