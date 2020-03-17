@@ -144,3 +144,9 @@
 .page-navbar {
     clear: both;
 }
+
+em {
+    color: #52565A;
+    font-weight: bold;
+    font-style: normal;
+}

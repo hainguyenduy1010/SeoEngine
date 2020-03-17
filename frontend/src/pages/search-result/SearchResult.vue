@@ -58,7 +58,7 @@
 										</a>
 									</h3>
 									<a class="search-link" target="_blank" v-bind:href="search_data.url" style="color: #006621;">
-										{{search_data.url}}
+										{{search_data.url.slice(0, 60) + '...'}}
 									</a>
 									<p v-html="search_data.description"></p>
 								</div>
