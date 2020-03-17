@@ -16,6 +16,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.internal.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
@@ -105,8 +108,9 @@ public class SearchService {
         searchDataDTOList.addAll(relateSearchDataDTOList);
 
         // get SearchData from external search engine
-        List<Map<String, Object>> paramList = getExternalRequestParams(currentPage, (int) count);
-        List<SearchDataDTO> externalSearchDataDTOList = getExternalSource(keyword, paramList);
+//        List<Map<String, Object>> paramList = getExternalRequestParams(currentPage, (int) count);
+        Pair<Integer, Integer> paramPair = getExternalRequestParams(currentPage, (int) count);
+        List<SearchDataDTO> externalSearchDataDTOList = getExternalSource(keyword, paramPair);
         searchDataDTOList.addAll(externalSearchDataDTOList);
 
         long endTime = System.nanoTime();
@@ -119,7 +123,7 @@ public class SearchService {
             searchResultDataDTO.setTitle(keywordData.getTitle());
             searchResultDataDTO.setDescription(keywordData.getDescription());
         }
-        searchResultDataDTO.setCount(maxPage * numberResultsPerPage);
+        searchResultDataDTO.setCount(setResponseCount(keyword, count));
         searchResultDataDTO.setCountFake(getCountFake(count));
         searchResultDataDTO.setTotalTime((endTime - startTime) / 1000000);
         searchResultDataDTO.setSearchDataList(searchDataDTOList);
@@ -302,99 +306,208 @@ public class SearchService {
         return suggestionDTOList;
     }
 
-    private List<Map<String, Object>> getExternalRequestParams(int currentPage, int count) {
+//    private List<Map<String, Object>> getExternalRequestParams(int currentPage, int count) {
+//
+//        List<Map<String, Object>> mapList = new LinkedList<>();
+//
+//        int extraPages = currentPage - count / numberResultsPerPage;
+//        int countInLastPage = count % numberResultsPerPage;
+//        int countExtraInLastPage = numberResultsPerPage - countInLastPage;
+//
+//        int page;
+//        int offset;
+//        int limit;
+//        if (countInLastPage != 0 || count == 0) {
+//            if (extraPages == 1) {
+//                page = 1;
+//                offset = 0;
+//                limit = countExtraInLastPage;
+//                mapList.add(setParamMap(page, offset, limit));
+//            } else if (extraPages > 1) {
+//                page = extraPages - 1;
+//                offset = countExtraInLastPage;
+//                limit = offset + countInLastPage;
+//                mapList.add(setParamMap(page, offset, limit));
+//
+//                page = extraPages;
+//                offset = 0;
+//                limit = countExtraInLastPage;
+//                mapList.add(setParamMap(page, offset, limit));
+//            }
+//        }
+//
+//        return mapList;
+//    }
+//
+//    private Map<String, Object> setParamMap(int page, int offset, int limit) {
+//        Map<String, Object> map = new HashMap<>();
+//
+//        map.put(PAGE, page);
+//        map.put(OFFSET, offset);
+//        map.put(LIMIT, limit);
+//
+//        return map;
+//    }
 
-        List<Map<String, Object>> mapList = new LinkedList<>();
-
+    private Pair<Integer, Integer> getExternalRequestParams(int currentPage, int count) {
         int extraPages = currentPage - count / numberResultsPerPage;
         int countInLastPage = count % numberResultsPerPage;
         int countExtraInLastPage = numberResultsPerPage - countInLastPage;
 
-        int page;
-        int offset;
+        int start;
         int limit;
         if (countInLastPage != 0 || count == 0) {
             if (extraPages == 1) {
-                page = 1;
-                offset = 0;
+                start = 0;
                 limit = countExtraInLastPage;
-                mapList.add(setParamMap(page, offset, limit));
+                return Pair.of(start, limit);
             } else if (extraPages > 1) {
-                page = extraPages - 1;
-                offset = countExtraInLastPage;
-                limit = offset + countInLastPage;
-                mapList.add(setParamMap(page, offset, limit));
-
-                page = extraPages;
-                offset = 0;
-                limit = countExtraInLastPage;
-                mapList.add(setParamMap(page, offset, limit));
+                start = (extraPages - 2) * numberResultsPerPage + countExtraInLastPage;
+                limit = numberResultsPerPage;
+                return Pair.of(start, limit);
             }
         }
 
-        return mapList;
+        return null;
     }
 
-    private Map<String, Object> setParamMap(int page, int offset, int limit) {
-        Map<String, Object> map = new HashMap<>();
-
-        map.put(PAGE, page);
-        map.put(OFFSET, offset);
-        map.put(LIMIT, limit);
-
-        return map;
-    }
-
-    private List<SearchDataDTO> getExternalSource(String keyword, List<Map<String, Object>> paramList) {
+    private List<SearchDataDTO> getExternalSource(String keyword, Pair<Integer, Integer> param) {
         List<SearchDataDTO> externalSearchDataList = new ArrayList<>();
 
-        if (!paramList.isEmpty()) {
+        if (param != null) {
 
             SearchDataDTO externalSearchData;
-            for (Map<String, Object> param : paramList) {
 
-                String page = String.valueOf(param.get(PAGE));
-                int offset = (int) param.get(OFFSET);
-                int limit = (int) param.get(LIMIT);
-                String url = externalSourceUrl.concat(keyword).concat("&p=").concat(page);
-                try {
-                    Connection connection = Jsoup.connect(url)
-                            .userAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.21 (KHTML, like Gecko) Chrome/19.0.1042.0 Safari/535.21")
-                            .ignoreHttpErrors(true)
-                            .followRedirects(true)
-                            .timeout(10000);
+            int start = param.getLeft();
+            int limit = param.getRight();
+            String url = externalSourceUrl.concat(keyword).concat("&start=" + start);
+            try {
+                Connection connection = Jsoup.connect(url)
+                        .userAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.21 (KHTML, like Gecko) Chrome/19.0.1042.0 Safari/535.21")
+                        .ignoreHttpErrors(true)
+                        .followRedirects(true)
+                        .timeout(20000);
 
-                    Connection.Response response = connection.execute();
+                Connection.Response response = connection.execute();
 
-                    if (response.statusCode() == 200) {
-                        Document document = connection.get();
+                if (response.statusCode() == 200) {
+                    Document document = connection.get();
 
-                        // get url title
-                        Elements resultList = document.select(".search-result");
+                    // get url title
+                    Elements resultList = document.select(".rc");
 
-                        for (int i = offset; i < limit; i++) {
-                            Element result = resultList.get(i);
-                            externalSearchData = new SearchDataDTO();
+                    for (int i = 0; i < limit && i < resultList.size(); i++) {
+                        Element result = resultList.get(i);
+                        externalSearchData = new SearchDataDTO();
 
-                            String resultTitle = result.getElementsByTag("h3").first().html();
-                            String resultUrl = result.getElementsByTag("a").first().attr("href");
-                            String resultDescription = result.getElementsByTag("p").first().html();
+                        String resultTitle = result.getElementsByTag("h3").first().html();
+                        String resultUrl = result.getElementsByTag("a").first().attr("href");
+                        String resultDescription = result.getElementsByClass("st").first().html();
 
-                            externalSearchData.setTitle(resultTitle);
-                            externalSearchData.setUrl(resultUrl);
-                            externalSearchData.setDescription(resultDescription);
+                        externalSearchData.setTitle(resultTitle);
+                        externalSearchData.setUrl(resultUrl);
+                        externalSearchData.setDescription(resultDescription);
 
-                            externalSearchDataList.add(externalSearchData);
-                        }
-                    } else {
-                        LOGGER.error("ERROR: Cannot get external source with HTTP status = {}, URL = {}", response.statusCode(), url);
+                        externalSearchDataList.add(externalSearchData);
                     }
-                } catch (Exception e) {
-                    LOGGER.error("ERROR: Get external source with  HTTP URL = {}", url, e);
+
+                    if (!resultList.isEmpty()) {
+                        if (limit - 10 > 0) {
+                            Pair<Integer, Integer> pair = Pair.of(start + 10, limit - 10);
+                            externalSearchDataList.addAll(getExternalSource(keyword, pair));
+                        }
+                    }
+                } else {
+                    LOGGER.error("ERROR: Cannot get external source with HTTP status = {}, URL = {}", response.statusCode(), url);
                 }
+            } catch (Exception e) {
+                LOGGER.error("ERROR: Get external source with  HTTP URL = {}", url, e);
             }
         }
 
         return externalSearchDataList;
     }
+
+    private int setResponseCount(String keyword, long count) {
+        String url = externalSourceUrl.concat(keyword).concat("&start=990");
+
+        try {
+            Connection connection = Jsoup.connect(url)
+                    .userAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.21 (KHTML, like Gecko) Chrome/19.0.1042.0 Safari/535.21")
+                    .ignoreHttpErrors(true)
+                    .followRedirects(true)
+                    .timeout(5000);
+
+            Connection.Response response = connection.execute();
+
+            if (response.statusCode() == 200) {
+                Document document = connection.get();
+
+                // get url title
+                Element lastPageElement = document.select(".fl").last();
+                String lastPage = lastPageElement.text();
+
+                return (int) count + (Integer.parseInt(lastPage) * numberResultsPerPage ) / 2;
+            } else {
+                LOGGER.error("ERROR: Cannot get external source with HTTP status = {}, URL = {}", response.statusCode(), url);
+            }
+        } catch (Exception e) {
+            LOGGER.error("ERROR: Get external source with  HTTP URL = {}", url, e);
+        }
+
+        return maxPage * numberResultsPerPage;
+    }
+
+//    private List<SearchDataDTO> getExternalSource(String keyword, List<Map<String, Object>> paramList) {
+//        List<SearchDataDTO> externalSearchDataList = new ArrayList<>();
+//
+//        if (!paramList.isEmpty()) {
+//
+//            SearchDataDTO externalSearchData;
+//            for (Map<String, Object> param : paramList) {
+//
+//                String page = String.valueOf(param.get(PAGE));
+//                int offset = (int) param.get(OFFSET);
+//                int limit = (int) param.get(LIMIT);
+//                String url = externalSourceUrl.concat(keyword).concat("&p=").concat(page);
+//                try {
+//                    Connection connection = Jsoup.connect(url)
+//                            .userAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.21 (KHTML, like Gecko) Chrome/19.0.1042.0 Safari/535.21")
+//                            .ignoreHttpErrors(true)
+//                            .followRedirects(true)
+//                            .timeout(20000);
+//
+//                    Connection.Response response = connection.execute();
+//
+//                    if (response.statusCode() == 200) {
+//                        Document document = connection.get();
+//
+//                        // get url title
+//                        Elements resultList = document.select(".search-result");
+//
+//                        for (int i = offset; i < limit; i++) {
+//                            Element result = resultList.get(i);
+//                            externalSearchData = new SearchDataDTO();
+//
+//                            String resultTitle = result.getElementsByTag("h3").first().html();
+//                            String resultUrl = result.getElementsByTag("a").first().attr("href");
+//                            String resultDescription = result.getElementsByTag("p").first().html();
+//
+//                            externalSearchData.setTitle(resultTitle);
+//                            externalSearchData.setUrl(resultUrl);
+//                            externalSearchData.setDescription(resultDescription);
+//
+//                            externalSearchDataList.add(externalSearchData);
+//                        }
+//                    } else {
+//                        LOGGER.error("ERROR: Cannot get external source with HTTP status = {}, URL = {}", response.statusCode(), url);
+//                    }
+//                } catch (Exception e) {
+//                    LOGGER.error("ERROR: Get external source with  HTTP URL = {}", url, e);
+//                }
+//            }
+//        }
+//
+//        return externalSearchDataList;
+//    }
 }

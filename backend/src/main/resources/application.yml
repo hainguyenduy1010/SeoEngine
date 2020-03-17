@@ -17,7 +17,8 @@ search:
       max-page: 29
     result_per_page: 20
     number_of_suggestion: 12
-    external_source_url: https://getcouponhere.com/search?k=
+    external_source_url: https://www.google.com/search?q=
+
 
 admin:
   login:
