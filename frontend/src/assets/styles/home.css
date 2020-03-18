@@ -39,9 +39,15 @@ select:-webkit-autofill:focus {
   color: #003dbf;
 }
 
+.container-home {
+  height: 100vh !important;
+  background-color: #555;
+  background-image: url('https://source.unsplash.com/1600x900/daily?nature,water');
+}
+
 .container {
   position: relative;
-  top: 50%;
+  top: 40%;
   -webkit-transform: translateY(-50%);
   -ms-transform: translateY(-50%);
   transform: translateY(-50%);
