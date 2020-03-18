@@ -1,0 +1,152 @@
+.page-result {
+    height: 100vh;
+}
+
+.body {
+    display: block;
+    height: 100%;
+    width: 100%;
+    position: relative;
+}
+
+.header-container {
+    width: 1170px;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.navbar-fixed-top {
+    background-color: #f2f2f2;
+    border-bottom: 1px solid #e4e4e4;
+    position: fixed;
+    right: 0;
+    left: 0;
+    z-index: 1030;
+}
+
+.page-result .logo {
+    float: left;
+    width: 150px;
+    height: 56px;
+    text-align: center;
+    position: relative;
+}
+
+.search-header img {
+    width: 100%;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    margin: auto;
+}
+
+.form-control {
+    width: 100%;
+    height: 34px;
+    padding: 6px 12px;
+    background-color: #fff;
+    border-radius: 4px;
+}
+
+.page-result #search-box {
+    min-height: 34px;
+    margin: 10px;
+    width: 933px;
+    float: left;
+}
+
+.page-result #search-box button {
+    height: 34px;
+}
+
+.page-result #search-input {
+    line-height: 34px;
+}
+
+#search-result-wapper {
+    background: #fff;
+    font-size: 14px;
+    padding-top: 70px;
+    position: relative;
+}
+
+.search-result-list {
+    width: 66%;
+    float: left;
+}
+
+.result-container {
+    width: 1170px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.filter-wrapper {
+    margin: 10px 0;
+}
+
+.filter-wrapper .total-time {
+    color: #666;
+    font-size: 95%;
+}
+
+.search-result {
+    margin-bottom: 25px;
+}
+
+.search-result h3 {
+    color: #003dbf;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 1.4;
+    margin-bottom: 4px;
+    margin-top: 7px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    word-break: break-all;
+}
+
+.search-result .search-link {
+    color: #006621;
+    word-break: break-all;
+}
+
+.search-result p {
+    margin: 0;
+    color: #515151;
+}
+
+.suggestion-search {
+    width: 34%;
+    float: right;
+}
+
+.suggestion-content {
+    margin-left: 45px;
+}
+
+.suggestion-key {
+    padding-left: 0px;
+}
+
+.suggestion-content li {
+    list-style: none;
+    line-height: 30px;
+}
+
+.page-navbar {
+    clear: both;
+}
+
+em {
+    color: #52565A;
+    font-weight: bold;
+    font-style: normal;
+}

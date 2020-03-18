@@ -1,0 +1,134 @@
+body {
+  margin-top: 0;
+}
+
+input:focus {
+  outline: 0;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0px 1000px #ffffff inset !important;
+}
+
+.h4, h4 {
+  font-size: 18px;
+  margin-bottom: 10px;
+  font-family: inherit;
+  font-weight: 500;
+  line-height: 1.1;
+  color: inherit;
+}
+
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #2c3e50;
+  font-size: 14px;
+  height: 90vh;
+}
+
+#app a {
+  text-decoration: none;
+  color: #003dbf;
+}
+
+.container-home {
+  height: 100vh !important;
+  background-color: #555;
+  background-image: url('https://source.unsplash.com/1600x900/daily?nature,water');
+}
+
+.container {
+  position: relative;
+  top: 40%;
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
+.home-logo {
+  text-align: center;
+}
+
+.home-logo img {
+    width: 300px;
+}
+
+#search-box {
+  min-height: 40px;
+  margin: 30px auto;
+  width: 640px;
+  top: 0;
+  left: 0;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background:#fff;
+  position: sticky;
+}
+
+#search-input {
+  height: auto;
+  line-height: 40px;
+  padding: 0 12px;
+  font-size: 14px;
+  width: 100%;
+  border-radius: 8px;
+  background-color: transparent;
+  border: none;
+  box-shadow: none;
+  color: #555;
+}
+
+#search-box button {
+  outline: 0;
+  height: 40px;
+  padding: 0 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 0 8px 8px 0;
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: 0 0;
+  border: 0;
+  user-select: none;
+  /*background-color: #fff;*/
+  cursor: pointer;
+}
+
+#search-box svg {
+    width: 20px;
+}
+
+.searchIcon {
+    fill-rule: evenodd;
+    clip-rule: evenodd;
+    fill: #eb1a3a;
+}
+
+.toolbars ul {
+    text-align: center;
+    padding-left: 0;
+}
+
+.toolbars ul li {
+    display: inline;
+    text-align: center;
+    margin: 0 12px 12px;
+}
+
+.toolbars img {
+  vertical-align: middle;
+}
+
+.toolbars ul li:hover img {
+    margin-top: -10px;
+}

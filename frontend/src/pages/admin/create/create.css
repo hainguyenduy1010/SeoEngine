@@ -1,0 +1,43 @@
+.create-form {
+    margin-top: 30px;
+    background-color: #fafafa;
+    border-radius: 0.5ch;
+}
+
+.create-form .remove-btn {
+    width: 35px;
+}
+
+.create-form .add-btn {
+    width: 35px;
+}
+
+.create-form .header-row {
+    background-color: #ebebeb;
+    border-radius: 0.5ch 0.5ch 0 0;
+}
+
+.keyword-invalid-feedback-div {
+    margin-top: -15px;
+    background-color: #ebebeb;
+}
+
+.create-form .keyword-row {
+    height: 60px;
+    background-color: #ebebeb;
+}
+
+.create-form .description-row {
+    background-color: #ebebeb;
+    border-bottom: 1px solid #e4e4e4;
+}
+
+/* .vue-numeric-input {
+    margin-top: 5px;
+} */
+
+.create-form .numeric-input {
+    height: 34px;
+    background-color: #fff;
+    border-radius: 4px !important;
+}

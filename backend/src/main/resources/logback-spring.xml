@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<property name="log_directory" value="./backend/logs" />
+
+	<appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+		<!-- Log message format -->
+		<encoder>
+			<pattern>%date{yyyy-MM-dd} %d{HH:mm:ss.SSS} %level %line [%thread] %logger{36} : %msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${log_directory}/get-code.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<!-- daily rollover -->
+			<fileNamePattern>${log_directory}/get-code.%d{yyyy-MM-dd}.%i.gz</fileNamePattern>
+			<maxHistory>10</maxHistory>
+			<MaxFileSize>10MB</MaxFileSize>
+		</rollingPolicy>
+
+		<encoder>
+			<pattern>%date{yyyy-MM-dd}|%d{HH:mm:ss.SSS}|%level|[%thread]|%logger{36}|%line|%msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<logger name="com.engine" level="debug" additivity="false">
+		<appender-ref ref="console" />
+		<appender-ref ref="file" />
+	</logger>
+
+	<!-- Setting the root level of logging -->
+	<root level="info">
+		<appender-ref ref="console" />
+		<appender-ref ref="file" />
+	</root>
+
+</configuration>
