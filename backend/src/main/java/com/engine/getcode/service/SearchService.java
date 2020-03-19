@@ -26,8 +26,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.text.MessageFormat;
+import java.time.LocalDate;
+import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -70,11 +74,17 @@ public class SearchService {
     @Value("${search.result.count.random.max}")
     private int countRandomMax;
 
-    @Value("${search.result.count.max-page}")
-    private int maxPage;
+    @Value("${search.result.default_title}")
+    private String defaultTitle;
+
+    @Value("${search.result.default_description}")
+    private String defaultDescription;
 
     @Value("${search.result.external_source_url}")
     private String externalSourceUrl;
+
+    @Value("${search.user_agent}")
+    private String userAgent;
 
     public SearchResultDataDTO search(SearchRequestDTO searchRequestDTO) throws ExecutionException, InterruptedException {
         LOGGER.debug("search:in(searchRequestDTO = {})", searchRequestDTO);
@@ -119,10 +129,21 @@ public class SearchService {
         List<SuggestionDTO> suggestionDTOList = generateSuggestionList(keyword);
 
         // set result output data
+        String title = null;
+        String description = null;
         if (keywordData != null) {
-            searchResultDataDTO.setTitle(keywordData.getTitle());
-            searchResultDataDTO.setDescription(keywordData.getDescription());
+            title = keywordData.getTitle();
+            description = keywordData.getDescription();
         }
+        LocalDate localDate = LocalDate.now();
+        String date = localDate.getMonth().getDisplayName(TextStyle.FULL, Locale.ENGLISH) + " " + localDate.getYear();
+        if (StringUtils.isEmpty(title)) {
+            title = MessageFormat.format(defaultTitle, keyword, date);
+        }
+        if (StringUtils.isEmpty(description)) {
+            description = MessageFormat.format(defaultDescription, keyword, date);
+        }
+
         searchResultDataDTO.setCount(setResponseCount(keyword, count));
         searchResultDataDTO.setCountFake(getCountFake(count));
         searchResultDataDTO.setTotalTime((endTime - startTime) / 1000000);
@@ -130,6 +151,8 @@ public class SearchService {
         searchResultDataDTO.setSuggestionList(suggestionDTOList);
         searchResultDataDTO.setCurrentPage(currentPage);
         searchResultDataDTO.setNumberResultsPerPage(numberResultsPerPage);
+        searchResultDataDTO.setTitle(title);
+        searchResultDataDTO.setDescription(description);
 
         LOGGER.debug("search:out(searchResultDataDTO.size = {})", searchResultDataDTO);
 
@@ -219,7 +242,7 @@ public class SearchService {
 
         try {
             Connection connection = Jsoup.connect(url)
-                    .userAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.21 (KHTML, like Gecko) Chrome/19.0.1042.0 Safari/535.21")
+                    .userAgent(userAgent)
                     .ignoreHttpErrors(true)
                     .followRedirects(true)
                     .timeout(10000);
@@ -380,11 +403,10 @@ public class SearchService {
 
             int start = param.getLeft();
             int limit = param.getRight();
-            String url = externalSourceUrl.concat(keyword).concat("&oq=").concat(keyword).concat("&start=" + start)
-                    .concat("&sxsrf=ALeKk00ZbanWifSvoXGt9wR2HlGkP6JA2Q%3A1584631053495&source=hp&ei=DY1zXsyIHIn70gSk56n4BA");
+            String url = externalSourceUrl.concat(keyword).concat("&oq=").concat(keyword).concat("&start=" + start);
             try {
                 Connection connection = Jsoup.connect(url)
-                        .userAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.21 (KHTML, like Gecko) Chrome/19.0.1042.0 Safari/535.21")
+                        .userAgent(userAgent)
                         .ignoreHttpErrors(true)
                         .followRedirects(true)
                         .timeout(20000);
@@ -430,12 +452,11 @@ public class SearchService {
     }
 
     private int setResponseCount(String keyword, long count) {
-        String url = externalSourceUrl.concat(keyword).concat("&oq=").concat(keyword).concat("&start=990")
-                .concat("&sxsrf=ALeKk00ZbanWifSvoXGt9wR2HlGkP6JA2Q%3A1584631053495&source=hp&ei=DY1zXsyIHIn70gSk56n4BA");
+        String url = externalSourceUrl.concat(keyword).concat("&oq=").concat(keyword).concat("&start=990");
 
         try {
             Connection connection = Jsoup.connect(url)
-                    .userAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.21 (KHTML, like Gecko) Chrome/19.0.1042.0 Safari/535.21")
+                    .userAgent(userAgent)
                     .ignoreHttpErrors(true)
                     .followRedirects(true)
                     .timeout(5000);

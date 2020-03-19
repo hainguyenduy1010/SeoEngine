@@ -14,10 +14,12 @@ search:
         enable: true
         min: 1000000
         max: 2000000
-      max-page: 29
     result_per_page: 20
     number_of_suggestion: 12
-    external_source_url: https://www.google.com/search?q=
+    default_title: "{0}: Find the best {1} Coupon Codes and Deals"
+    default_description: "Find the best {0} and promo code from the most popular stores for discounts during {1}"
+    external_source_url: https://www.google.com/search?sxsrf=ALeKk00ZbanWifSvoXGt9wR2HlGkP6JA2Q%3A1584631053495&source=hp&ei=DY1zXsyIHIn70gSk56n4BA&q=
+  user_agent: "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.21 (KHTML, like Gecko) Chrome/19.0.1042.0 Safari/535.21"
 
 
 admin:
