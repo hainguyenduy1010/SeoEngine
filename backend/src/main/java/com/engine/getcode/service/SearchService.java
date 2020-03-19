@@ -380,7 +380,8 @@ public class SearchService {
 
             int start = param.getLeft();
             int limit = param.getRight();
-            String url = externalSourceUrl.concat(keyword).concat("&start=" + start);
+            String url = externalSourceUrl.concat(keyword).concat("&oq=").concat(keyword).concat("&start=" + start)
+                    .concat("&sxsrf=ALeKk00ZbanWifSvoXGt9wR2HlGkP6JA2Q%3A1584631053495&source=hp&ei=DY1zXsyIHIn70gSk56n4BA");
             try {
                 Connection connection = Jsoup.connect(url)
                         .userAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.21 (KHTML, like Gecko) Chrome/19.0.1042.0 Safari/535.21")
@@ -429,7 +430,8 @@ public class SearchService {
     }
 
     private int setResponseCount(String keyword, long count) {
-        String url = externalSourceUrl.concat(keyword).concat("&start=990");
+        String url = externalSourceUrl.concat(keyword).concat("&oq=").concat(keyword).concat("&start=990")
+                .concat("&sxsrf=ALeKk00ZbanWifSvoXGt9wR2HlGkP6JA2Q%3A1584631053495&source=hp&ei=DY1zXsyIHIn70gSk56n4BA");
 
         try {
             Connection connection = Jsoup.connect(url)
@@ -455,7 +457,7 @@ public class SearchService {
             LOGGER.error("ERROR: Get external source with  HTTP URL = {}", url, e);
         }
 
-        return maxPage * numberResultsPerPage;
+        return (int) count;
     }
 
 //    private List<SearchDataDTO> getExternalSource(String keyword, List<Map<String, Object>> paramList) {
