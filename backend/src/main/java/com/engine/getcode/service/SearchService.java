@@ -99,8 +99,8 @@ public class SearchService {
 
         // get count of results
         long byKeywordCount = searchDataRepository.countByKeyword(keyword);
-        long relateCount = searchDataRepository.countRelateData(keyword);
-        long count = byKeywordCount + relateCount;
+//        long relateCount = searchDataRepository.countRelateData(keyword);
+        long count = byKeywordCount;// + relateCount;
 
         long startTime = System.nanoTime();
 
@@ -112,10 +112,10 @@ public class SearchService {
         List<SearchDataDTO> searchDataDTOList = generateSearchDataDTOList(searchDataList);
 
         // get SearchData list from DB by keyword
-        List<SearchData> relateSearchDataList = findRelateSearchData(keyword, currentPage, (int) byKeywordCount);
-        // generate SearchDataDTO list
-        List<SearchDataDTO> relateSearchDataDTOList = generateSearchDataDTOList(relateSearchDataList);
-        searchDataDTOList.addAll(relateSearchDataDTOList);
+//        List<SearchData> relateSearchDataList = findRelateSearchData(keyword, currentPage, (int) byKeywordCount);
+//        // generate SearchDataDTO list
+//        List<SearchDataDTO> relateSearchDataDTOList = generateSearchDataDTOList(relateSearchDataList);
+//        searchDataDTOList.addAll(relateSearchDataDTOList);
 
         // get SearchData from external search engine
 //        List<Map<String, Object>> paramList = getExternalRequestParams(currentPage, (int) count);
