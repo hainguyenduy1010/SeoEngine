@@ -98,9 +98,7 @@ public class SearchService {
         Integer currentPage = searchRequestDTO.getCurrentPage() == null ? 1 : searchRequestDTO.getCurrentPage();
 
         // get count of results
-        long byKeywordCount = searchDataRepository.countByKeyword(keyword);
-//        long relateCount = searchDataRepository.countRelateData(keyword);
-        long count = byKeywordCount;// + relateCount;
+        long count = searchDataRepository.countByKeyword(keyword);
 
         long startTime = System.nanoTime();
 
@@ -110,12 +108,6 @@ public class SearchService {
         List<SearchData> searchDataList = findSearchData(keyword, currentPage);
         // generate SearchDataDTO list
         List<SearchDataDTO> searchDataDTOList = generateSearchDataDTOList(searchDataList);
-
-        // get SearchData list from DB by keyword
-//        List<SearchData> relateSearchDataList = findRelateSearchData(keyword, currentPage, (int) byKeywordCount);
-//        // generate SearchDataDTO list
-//        List<SearchDataDTO> relateSearchDataDTOList = generateSearchDataDTOList(relateSearchDataList);
-//        searchDataDTOList.addAll(relateSearchDataDTOList);
 
         // get SearchData from external search engine
 //        List<Map<String, Object>> paramList = getExternalRequestParams(currentPage, (int) count);
@@ -164,34 +156,6 @@ public class SearchService {
         Pageable pageable = PageRequest.of(currentPage - 1, numberResultsPerPage, Sort.by("order").ascending());
 
         return searchDataRepository.findByLikeKeyword(keyword, pageable);
-    }
-
-    private List<SearchData> findRelateSearchData(String keywordSearch, Integer currentPage, int byKeywordCount) {
-
-        List <SearchData> relateSearchDataList = new ArrayList<>();
-
-        int firstResult;
-        int maxResults;
-        int countInLastPage = byKeywordCount % numberResultsPerPage;
-        int maxPage = byKeywordCount / numberResultsPerPage;
-        maxPage = countInLastPage != 0 ? maxPage + 1 : maxPage;
-
-        if (countInLastPage != 0 && currentPage == maxPage) {
-            firstResult = 0;
-            maxResults = numberResultsPerPage - countInLastPage;
-        } else if (countInLastPage != 0 && currentPage > maxPage) {
-            firstResult = (numberResultsPerPage - countInLastPage) + (numberResultsPerPage * (currentPage - maxPage - 1));
-            maxResults = numberResultsPerPage;
-        } else {
-            firstResult = numberResultsPerPage * (currentPage - maxPage - 1);
-            maxResults = numberResultsPerPage;
-        }
-
-        if (currentPage > maxPage || (currentPage == maxPage && countInLastPage != 0)) {
-            relateSearchDataList = searchDataRepository.findRelateData(keywordSearch, firstResult, maxResults);
-        }
-
-        return relateSearchDataList;
     }
 
     private long getCountFake(long count) {
