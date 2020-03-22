@@ -6,8 +6,10 @@ import com.engine.getcode.dto.SearchResultDataDTO;
 import com.engine.getcode.dto.SuggestionDTO;
 import com.engine.getcode.model.KeywordData;
 import com.engine.getcode.model.SearchData;
+import com.engine.getcode.model.SearchedKeyword;
 import com.engine.getcode.repository.KeywordDataRepository;
 import com.engine.getcode.repository.SearchDataRepository;
+import com.engine.getcode.repository.SearchedKeywordRepository;
 import com.engine.getcode.utils.Utils;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Connection;
@@ -26,13 +28,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.math.BigInteger;
 import java.text.MessageFormat;
 import java.time.LocalDate;
 import java.time.format.TextStyle;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
@@ -58,6 +58,9 @@ public class SearchService {
 
     @Autowired
     private SearchDataRepository searchDataRepository;
+
+    @Autowired
+    private SearchedKeywordRepository searchedKeywordRepository;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -135,6 +138,9 @@ public class SearchService {
         if (StringUtils.isEmpty(description)) {
             description = MessageFormat.format(defaultDescription, keyword, date);
         }
+
+        // save searched keyword
+        saveSearchedKeyword(keyword);
 
         searchResultDataDTO.setCount(setResponseCount(keyword, count));
         searchResultDataDTO.setCountFake(getCountFake(count));
@@ -279,7 +285,7 @@ public class SearchService {
         SuggestionDTO suggestionDTO;
         String relateKeywordBold;
 
-        List<String> relateKeywordList = searchDataRepository.findRelateKeyword(keywordSearch);
+        List<String> relateKeywordList = searchedKeywordRepository.findRelateKeyword(keywordSearch);
         for (String relateKeyword : relateKeywordList) {
             suggestionDTO = new SuggestionDTO();
 
@@ -443,6 +449,23 @@ public class SearchService {
         }
 
         return (int) count;
+    }
+
+    private void saveSearchedKeyword(String keyword) {
+
+        SearchedKeyword searchedKeyword = searchedKeywordRepository.findByKeyword(keyword);
+
+        if (searchedKeyword == null) {
+            searchedKeyword = new SearchedKeyword();
+            searchedKeyword.setSearchCount(BigInteger.ONE);
+            searchedKeyword.setKeyword(keyword);
+            searchedKeyword.setInitDate(new Date());
+        } else {
+            searchedKeyword.setSearchCount(searchedKeyword.getSearchCount().add(BigInteger.ONE));
+        }
+
+        searchedKeyword.setLastDate(new Date());
+        searchedKeywordRepository.save(searchedKeyword);
     }
 
 //    private List<SearchDataDTO> getExternalSource(String keyword, List<Map<String, Object>> paramList) {

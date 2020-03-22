@@ -12,6 +12,4 @@ public interface SearchDataRepositoryCustom {
     long countRelateData(String keyword);
 
     List<SearchData> findRelateData(String keyword, int firstResult, int maxResults);
-
-    List<String> findRelateKeyword(String keyword);
 }
