@@ -2,6 +2,7 @@ package com.engine.getcode.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.modelmapper.internal.Pair;
 
 import java.io.Serializable;
 import java.util.List;
@@ -40,6 +41,9 @@ public class SearchResultDataDTO implements Serializable {
 
     @JsonProperty("number_results_per_page")
     private int numberResultsPerPage;
+
+    @JsonProperty("external_param")
+    private ExternalParameterDTO externalParam;
 
     public String getTitle() {
         return title;
@@ -113,6 +117,14 @@ public class SearchResultDataDTO implements Serializable {
         this.numberResultsPerPage = numberResultsPerPage;
     }
 
+    public ExternalParameterDTO getExternalParam() {
+        return externalParam;
+    }
+
+    public void setExternalParam(ExternalParameterDTO externalParam) {
+        this.externalParam = externalParam;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -126,7 +138,8 @@ public class SearchResultDataDTO implements Serializable {
                 .append("searchDataDTOList = ").append(searchDataList).append("; ")
                 .append("suggestionDTOList = ").append(suggestionList).append("; ")
                 .append("currentPage = ").append(currentPage).append("; ")
-                .append("numberResultsPerPage = ").append(numberResultsPerPage).append("]");
+                .append("numberResultsPerPage = ").append(numberResultsPerPage).append("; ")
+                .append("externalParam = ").append(externalParam).append("]");
 
         return sb.toString();
     }

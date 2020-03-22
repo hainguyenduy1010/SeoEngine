@@ -21,8 +21,6 @@ public interface SearchDataRepository extends JpaRepository<SearchData, BigInteg
 
     long countByKeyword(String keyword);
 
-    List<SearchData> findIdByKeyword(String keyword);
-
     @Query("SELECT COUNT(data) FROM SearchData data WHERE data.keyword = ?1 AND data.url LIKE %?2%")
     long countLikeUrl(String keyword, String filter);
 

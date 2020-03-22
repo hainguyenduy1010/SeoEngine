@@ -50,7 +50,7 @@
 					<div class="search-result-wrapper">
 						<div class="search-result-list">
 							<!-- loop through result list -->
-							<div class="search-result" v-for="(search_data, index) in search_result.search_data_list" v-bind:key="index">
+							<div class="search-result" v-for="(search_data, index) in data_list" v-bind:key="index">
 								<div v-if="search_data !== null">
 									<h3>
 										<a target="_blank" v-bind:href="search_data.url">
