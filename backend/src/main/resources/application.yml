@@ -18,7 +18,8 @@ search:
     number_of_suggestion: 12
     default_title: "{0}: Find the best {1} Coupon Codes and Deals"
     default_description: "Find the best {0} and promo code from the most popular stores for discounts during {1}"
-    external_source_url: https://www.googleapis.com/customsearch/v1?
+    external_source_url: https://coccoc.com/search?query=
+#    external_source_url: https://www.googleapis.com/customsearch/v1?
     external_key: AIzaSyDcx3I1F8rTmY2unhLSycObGjFZNvj3Bb8
     external_cx: 016942156847684413346:xiuug0qgt00
   user_agent: "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.21 (KHTML, like Gecko) Chrome/19.0.1042.0 Safari/535.21"

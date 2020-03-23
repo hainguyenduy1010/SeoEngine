@@ -26,6 +26,9 @@ public class ExternalParameterDTO implements Serializable {
     @JsonProperty("limit")
     private int limit;
 
+    @JsonProperty("page")
+    private int page;
+
     public String getUrl() {
         return url;
     }
@@ -64,5 +67,13 @@ public class ExternalParameterDTO implements Serializable {
 
     public void setLimit(int limit) {
         this.limit = limit;
+    }
+
+    public int getPage() {
+        return page;
+    }
+
+    public void setPage(int page) {
+        this.page = page;
     }
 }

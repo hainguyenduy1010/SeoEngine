@@ -67,7 +67,7 @@ export default {
 			this.current_page = response.current_page;
 			this.result_count_fake = response.count_fake.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 			this.number_of_pages = Math.ceil(parseInt(response.count) / parseInt(response.number_results_per_page));
-			this.getExternalResults(this.data_list, response.external_param);
+			// this.getExternalResults(this.data_list, response.external_param);
 		},
 		linkGen(pageNumber) {
 			return `/search?k=` + this.keyword + `&p=${pageNumber}`

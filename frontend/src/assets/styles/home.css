@@ -43,6 +43,9 @@ select:-webkit-autofill:focus {
   height: 100vh !important;
   background-color: #555;
   background-image: url('https://source.unsplash.com/1600x900/daily?nature&query=sky');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
 .container {
