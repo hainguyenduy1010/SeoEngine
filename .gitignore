@@ -34,3 +34,4 @@ build/
 /backend/logs/
 /logs/
 /backend/backend/
+/backend/src/main/resources/public/
