@@ -14,6 +14,9 @@ public class ExternalParameterDTO implements Serializable {
     @JsonProperty("url")
     private String url;
 
+    @JsonProperty("g_url")
+    private String gUrl;
+
     @JsonProperty("key")
     private String key;
 
@@ -35,6 +38,14 @@ public class ExternalParameterDTO implements Serializable {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public String getgUrl() {
+        return gUrl;
+    }
+
+    public void setgUrl(String gUrl) {
+        this.gUrl = gUrl;
     }
 
     public String getKey() {

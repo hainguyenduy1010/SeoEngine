@@ -67,16 +67,19 @@ export default {
 			this.current_page = response.current_page;
 			this.result_count_fake = response.count_fake.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 			this.number_of_pages = Math.ceil(parseInt(response.count) / parseInt(response.number_results_per_page));
-			// this.getExternalResults(this.data_list, response.external_param);
+			this.getExternalResults(this.data_list, response.external_param);
 		},
 		linkGen(pageNumber) {
 			return `/search?k=` + this.keyword + `&p=${pageNumber}`
 		},
 		getExternalResults(data_list, external_param) {
+			console.log(external_param)
+
+			if (!external_param.g_url) return;
 
 			var start = external_param.start;
 			var limit = external_param.limit;
-			var url = external_param.url;
+			var url = external_param.g_url;
 			var param = new URLSearchParams({
 					key: external_param.key,
 					cx: external_param.cx,
@@ -119,7 +122,7 @@ export default {
 	
 							data_list.push(result);
 						});
-console.log(parseInt(data.searchInformation.searchTime))
+
 						this.search_result.total_time = parseInt(this.search_result.total_time) + parseInt(data.searchInformation.searchTime) * 1000;
 					})
 					.fail(function(error) {
@@ -130,27 +133,6 @@ console.log(parseInt(data.searchInformation.searchTime))
 					limit = limit - 10;
 				}				
 			}
-
-			// if (limit > 0) {
-			// 	$.getJSON(url, function(data) {
-			// 		data.items.forEach(item => {
-			// 			var result = {};
-			// 			result.title = item.htmlTitle;
-			// 			result.url = item.link
-			// 			result.description = item.htmlSnippet
-
-			// 			data_list.push(result);
-			// 		});
-
-			// 		if (data.items && limit > 10) {
-			// 			var recursionParam = external_param;
-			// 			recursionParam.start = start + 10;
-			// 			recursionParam.limit = limit - 10;
-
-			// 			var recursionResults = this.getExternalResults(recursionParam);
-			// 		}
-			// 	}, error => console.log(error));
-			// }
 		},
 	},
 

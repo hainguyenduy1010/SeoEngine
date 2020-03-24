@@ -78,6 +78,9 @@ public class SearchService {
     @Value("${search.result.external_source_url}")
     private String externalSourceUrl;
 
+    @Value("${search.result.external_google_url}")
+    private String googleUrl;
+
     @Value("${search.result.external_key}")
     private String externalKey;
 
@@ -112,9 +115,12 @@ public class SearchService {
 
         // get SearchData from external search engine
 //        List<Map<String, Object>> paramList = getExternalRequestParams(currentPage, (int) count);
-        ExternalParameterDTO externalParameterDTOList = getExternalRequestParams(currentPage, (int) count);
-        List<SearchDataDTO> externalSearchDataDTOList = getExternalResults(keyword, currentPage, (int) count, externalParameterDTOList);
+        ExternalParameterDTO externalParameterDTO = getExternalRequestParams(currentPage, (int) count);
+        List<SearchDataDTO> externalSearchDataDTOList = getExternalResults(keyword, currentPage, (int) count, externalParameterDTO);
         searchDataDTOList.addAll(externalSearchDataDTOList);
+        if (externalSearchDataDTOList.isEmpty()) {
+            externalParameterDTO = getGoogleRequestParams(currentPage, (int) count);
+        }
 
         long endTime = System.nanoTime();
 
@@ -149,7 +155,7 @@ public class SearchService {
         searchResultDataDTO.setNumberResultsPerPage(numberResultsPerPage);
         searchResultDataDTO.setTitle(title);
         searchResultDataDTO.setDescription(description);
-//        searchResultDataDTO.setExternalParam(externalParameterDTO);
+        searchResultDataDTO.setExternalParam(externalParameterDTO);
 
         LOGGER.debug("search:out(searchResultDataDTO.size = {})", searchResultDataDTO);
 
@@ -315,7 +321,7 @@ public class SearchService {
             }
         }
 
-        externalParameterDTO.setUrl(externalSourceUrl);
+        externalParameterDTO.setgUrl(googleUrl);
         externalParameterDTO.setKey(externalKey);
         externalParameterDTO.setCx(externalCx);
         externalParameterDTO.setStart(start);
@@ -436,7 +442,7 @@ public class SearchService {
                     String scriptResponse = document.getElementById("composerResponse").data();
                     String jsonResponse = scriptResponse.substring(scriptResponse.indexOf('=') + 1, scriptResponse.length() - 1);
                     JSONObject jsonObject = new JSONObject(jsonResponse);
-                    if (jsonObject.has("search")) {
+                    if (!jsonObject.has("search")) {
                         JSONObject search = jsonObject.getJSONObject("search");
                         JSONArray searchResults = search.getJSONArray("search_results");
 
@@ -482,8 +488,6 @@ public class SearchService {
                             param.setLimit(param.getLimit() - externalSearchDataList.size());
                             externalSearchDataList.addAll(getExternalResults(keyword, currentPage, count, param));
                         }
-                    } else {
-                        externalSearchDataList.addAll(getExternalSource(keyword, getGoogleRequestParams(currentPage, count)));
                     }
                 } else {
                     LOGGER.error("ERROR: Cannot get external source with HTTP status = {}, URL = {}", response.statusCode(), url);
