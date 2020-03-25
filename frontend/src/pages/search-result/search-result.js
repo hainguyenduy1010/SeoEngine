@@ -73,7 +73,6 @@ export default {
 			return `/search?k=` + this.keyword + `&p=${pageNumber}`
 		},
 		getExternalResults(data_list, external_param) {
-			console.log(external_param)
 
 			if (!external_param.g_url) return;
 
