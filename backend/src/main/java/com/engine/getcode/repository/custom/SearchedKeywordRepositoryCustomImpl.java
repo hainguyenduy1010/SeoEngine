@@ -18,16 +18,13 @@ public class SearchedKeywordRepositoryCustomImpl implements SearchedKeywordRepos
     @PersistenceContext
     private EntityManager entityManager;
 
-    @Value("${search.result.number_of_suggestion}")
-    private int numberOfSuggestion;
-
     @Override
-    public List<String> findRelateKeyword(String keyword) {
+    public List<String> findRelateKeyword(String keyword, int count) {
 
         String queryStr = createQuery(keyword);
 
         TypedQuery<String> query = entityManager.createQuery(queryStr, String.class);
-        query.setMaxResults(numberOfSuggestion);
+        query.setMaxResults(count);
 
         return query.getResultList();
     }
@@ -38,7 +35,8 @@ public class SearchedKeywordRepositoryCustomImpl implements SearchedKeywordRepos
         String query;
         StringBuilder querySb = new StringBuilder();
 
-        querySb.append("SELECT DISTINCT data.keyword FROM SearchedKeyword data WHERE keyword <> '").append(keyword).append("' AND (");
+        querySb.append("SELECT DISTINCT data.keyword FROM SearchedKeyword data WHERE keyword <> '").append(keyword)
+                .append("' AND keyword NOT LIKE '%").append(keyword).append("%' AND (");
 
         for (String singleKeyword : singleKeywordList) {
             querySb.append("LOCATE('").append(singleKeyword).append("', data.keyword) > 0");

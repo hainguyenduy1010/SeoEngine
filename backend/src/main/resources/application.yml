@@ -15,6 +15,7 @@ search:
         min: 1000000
         max: 2000000
     result_per_page: 20
+    max_page: 20
     number_of_suggestion: 12
     default_title: "{0}: Find the best {1} Coupon Codes and Deals"
     default_description: "Find the best {0} and promo code from the most popular stores for discounts during {1}"

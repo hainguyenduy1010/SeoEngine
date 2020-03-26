@@ -52,7 +52,8 @@ export default {
 			keyword: this.$route.query.k,
 			result_count_fake: null,
 			number_of_pages: null,
-			current_page: 0
+			current_page: 0,
+			total_time: 0
 		}
 	},
 	methods: {
@@ -67,12 +68,13 @@ export default {
 			this.current_page = response.current_page;
 			this.result_count_fake = response.count_fake.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 			this.number_of_pages = Math.ceil(parseInt(response.count) / parseInt(response.number_results_per_page));
-			this.getExternalResults(this.data_list, response.external_param);
+			this.total_time = response.total_time;
+			this.getExternalResults(this.data_list, this.total_time, response.external_param);
 		},
 		linkGen(pageNumber) {
 			return `/search?k=` + this.keyword + `&p=${pageNumber}`
 		},
-		getExternalResults(data_list, external_param) {
+		getExternalResults(data_list, total_time, external_param) {
 
 			if (!external_param.g_url) return;
 
@@ -100,7 +102,7 @@ export default {
 						data_list.push(result);
 					});
 
-					this.search_result.total_time = parseInt(this.search_result.total_time) + parseInt(data.searchInformation.searchTime) * 1000;
+					total_time = parseInt(total_time) + parseInt(data.searchInformation.searchTime * 1000);
 				})
 				.fail(function(error) {
 					console.log(error);
@@ -111,7 +113,6 @@ export default {
 					param.set('limit', limit > 10 ? 10 : limit);
 
 					$.getJSON(url + param.toString(), function(data) {
-						console.log(data.items)
 						data.items.forEach(item => {
 							var result = {};
 	
@@ -122,16 +123,18 @@ export default {
 							data_list.push(result);
 						});
 
-						this.search_result.total_time = parseInt(this.search_result.total_time) + parseInt(data.searchInformation.searchTime) * 1000;
+						total_time = parseInt(total_time) + parseInt(data.searchInformation.searchTime * 1000);
 					})
 					.fail(function(error) {
-						console.log(error);
+						console.log(error.responseText);
 					})
 
 					start = start + 10;
 					limit = limit - 10;
-				}				
+				}
 			}
+
+			this.total_time = total_time;
 		},
 	},
 

@@ -19,7 +19,7 @@ import java.util.Set;
 @Repository
 public interface SearchDataRepository extends JpaRepository<SearchData, BigInteger>, SearchDataRepositoryCustom {
 
-    long countByKeyword(String keyword);
+    int countByKeyword(String keyword);
 
     @Query("SELECT COUNT(data) FROM SearchData data WHERE data.keyword = ?1 AND data.url LIKE %?2%")
     long countLikeUrl(String keyword, String filter);

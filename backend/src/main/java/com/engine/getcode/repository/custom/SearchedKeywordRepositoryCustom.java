@@ -7,5 +7,5 @@ import java.util.List;
  */
 public interface SearchedKeywordRepositoryCustom {
 
-    List<String> findRelateKeyword(String keyword);
+    List<String> findRelateKeyword(String keyword, int count);
 }

@@ -40,7 +40,7 @@
 							<span>About </span>
 							<span><b>{{result_count_fake}}</b></span>
 							<span> results </span>
-							<span class="total-time"> ({{search_result.total_time}} milliseconds) </span>
+							<span class="total-time"> ({{total_time}} milliseconds) </span>
 						</div>
 						<div class="filter-content">
 
