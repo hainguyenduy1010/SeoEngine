@@ -64,16 +64,6 @@
 								</div>
 							</div>
 							<!-- end loop -->
-
-							<div class="page-navbar">
-								<b-pagination-nav
-									:v-model="current_page"
-									:number-of-pages="number_of_pages"
-									limit="10"
-									align="center"
-									:link-gen="linkGen">
-								</b-pagination-nav>
-							</div>
 						</div>
 
 						<div class="suggestion-search">
@@ -88,11 +78,22 @@
 								</ul>
 							</div>
 						</div>
+						
+
+						<div class="page-navbar">
+							<b-pagination-nav
+								:v-model="current_page"
+								:number-of-pages="number_of_pages"
+								limit="10"
+								align="center"
+								:link-gen="linkGen">
+							</b-pagination-nav>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-		<Footer style="position: unset;"></Footer>
+		<Footer style="position: relative;"></Footer>
 	</div>
 </template>
 
