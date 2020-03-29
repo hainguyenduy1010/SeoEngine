@@ -34,4 +34,9 @@ build/
 /backend/logs/
 /logs/
 /backend/backend/
-/backend/src/main/resources/public/
+/backend/src/main/resources/public/static/
+/backend/src/main/resources/public/admin.html
+/backend/src/main/resources/public/favicon.ico
+/backend/src/main/resources/public/index.html
+/backend/src/main/resources/public/information.html
+/backend/src/main/resources/public/search.html

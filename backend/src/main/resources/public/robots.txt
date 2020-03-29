@@ -1,0 +1,6 @@
+# robots.txt for http://www.get-code.com/
+
+User-agent: *
+Disallow: /admin/
+
+Sitemap: http://www.get-code.com/sitemap.xml
