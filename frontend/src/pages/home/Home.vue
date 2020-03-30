@@ -33,67 +33,67 @@
           <ul>
             <li>
               <a href="https://mail.google.com" class="toolbar" target="_blank" data-toolbar-id="29">
-                <img src="@/assets/images/toolbar/gmail.png" style="max-height: 44px; max-width: 100px;">
+                <img src="@/assets/images/toolbar/gmail.png">
               </a>
             </li>
             <li>
               <a href="https://www.yahoo.com/" class="toolbar" target="_blank" data-toolbar-id="28">
-                <img src="@/assets/images/toolbar/yahoo.png" style="max-height: 44px; max-width: 100px;">
+                <img src="@/assets/images/toolbar/yahoo.png">
               </a>
             </li>
             <li>
               <a href="https://www.facebook.com/" class="toolbar" target="_blank" data-toolbar-id="27">
-                <img src="@/assets/images/toolbar/facebook.png" style="max-height: 44px; max-width: 100px;">
+                <img src="@/assets/images/toolbar/facebook.png">
               </a>
             </li>
             <li>
               <a href="https://www.youtube.com/" class="toolbar" target="_blank" data-toolbar-id="26">
-                <img src="@/assets/images/toolbar/youtube.png" style="max-height: 44px; max-width: 100px;">
+                <img src="@/assets/images/toolbar/youtube.png">
               </a>
           </li>
             <li>
               <a href="https://www.amazon.com/" class="toolbar" target="_blank" data-toolbar-id="25">
-                <img src="@/assets/images/toolbar/amazon.png" style="max-height: 44px; max-width: 100px;">
+                <img src="@/assets/images/toolbar/amazon.png">
               </a>
           </li>
             <li>
               <a href="https://www.trivago.com" class="toolbar" target="_blank" data-toolbar-id="18">
-                <img src="@/assets/images/toolbar/chiclet_trivago.png" style="max-height: 44px; max-width: 100px;">
+                <img src="@/assets/images/toolbar/chiclet_trivago.png">
               </a>
           </li>
             <li>
               <a href="https://www.booking.com/" class="toolbar" target="_blank" data-toolbar-id="19">
-                <img src="@/assets/images/toolbar/chiclet_booking.png" style="max-height: 44px; max-width: 100px;">
+                <img src="@/assets/images/toolbar/chiclet_booking.png">
               </a>
           </li>
             <li>
               <a href="https://www.priceline.com/" class="toolbar" target="_blank" data-toolbar-id="20">
-                <img src="@/assets/images/toolbar/chiclet_priceline.png" style="max-height: 44px; max-width: 100px;">
+                <img src="@/assets/images/toolbar/chiclet_priceline.png">
               </a>
           </li>
             <li>
               <a href="http://www.macys.com/" class="toolbar" target="_blank" data-toolbar-id="21">
-                <img src="@/assets/images/toolbar/macys.png" style="max-height: 44px; max-width: 100px;">
+                <img src="@/assets/images/toolbar/macys.png">
               </a>
           </li>
             <li>
               <a href="https://www.target.com/" class="toolbar" target="_blank" data-toolbar-id="22">
-                <img src="@/assets/images/toolbar/target.png" style="max-height: 44px; max-width: 100px;">
+                <img src="@/assets/images/toolbar/target.png">
               </a>
           </li>
             <li>
               <a href="https://www.tripadvisor.com/" class="toolbar" target="_blank" data-toolbar-id="23">
-                <img src="@/assets/images/toolbar/tripadvisor.png" style="max-height: 44px; max-width: 100px;">
+                <img src="@/assets/images/toolbar/tripadvisor.png">
               </a>
           </li>
             <li>
               <a href="https://www.walmart.com/" class="toolbar" target="_blank" data-toolbar-id="24">
-                <img src="@/assets/images/toolbar/walmart.png" style="max-height: 44px; max-width: 100px;">
+                <img src="@/assets/images/toolbar/walmart.png">
               </a>
           </li>
             <li>
               <a href="https://www.retailmenot.com/" class="toolbar" target="_blank" data-toolbar-id="30">
-                <img src="@/assets/images/toolbar/retailmenot.jpg" style="max-height: 44px; max-width: 100px;">
+                <img src="@/assets/images/toolbar/retailmenot.jpg">
               </a>
           </li>
                 

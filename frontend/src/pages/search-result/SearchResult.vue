@@ -40,7 +40,7 @@
 							<span>About </span>
 							<span><b>{{result_count_fake}}</b></span>
 							<span> results </span>
-							<span class="total-time"> ({{search_result.total_time}} milliseconds) </span>
+							<span class="total-time"> ({{total_time}} milliseconds) </span>
 						</div>
 						<div class="filter-content">
 
@@ -50,7 +50,7 @@
 					<div class="search-result-wrapper">
 						<div class="search-result-list">
 							<!-- loop through result list -->
-							<div class="search-result" v-for="(search_data, index) in search_result.search_data_list" v-bind:key="index">
+							<div class="search-result" v-for="(search_data, index) in data_list" v-bind:key="index">
 								<div v-if="search_data !== null">
 									<h3>
 										<a target="_blank" v-bind:href="search_data.url">
@@ -64,16 +64,6 @@
 								</div>
 							</div>
 							<!-- end loop -->
-
-							<div class="page-navbar">
-								<b-pagination-nav
-									:v-model="current_page"
-									:number-of-pages="number_of_pages"
-									limit="10"
-									align="center"
-									:link-gen="linkGen">
-								</b-pagination-nav>
-							</div>
 						</div>
 
 						<div class="suggestion-search">
@@ -88,11 +78,22 @@
 								</ul>
 							</div>
 						</div>
+						
+
+						<div class="page-navbar">
+							<b-pagination-nav
+								:v-model="current_page"
+								:number-of-pages="number_of_pages"
+								limit="10"
+								align="center"
+								:link-gen="linkGen">
+							</b-pagination-nav>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-		<Footer style="position: unset;"></Footer>
+		<Footer style="position: relative;"></Footer>
 	</div>
 </template>
 

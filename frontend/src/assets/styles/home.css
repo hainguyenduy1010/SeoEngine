@@ -42,12 +42,15 @@ select:-webkit-autofill:focus {
 .container-home {
   height: 100vh !important;
   background-color: #555;
-  background-image: url('https://source.unsplash.com/1600x900/daily?nature,water');
+  background-image: url('https://source.unsplash.com/1600x900/daily?nature&query=sky');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
 .container {
   position: relative;
-  top: 40%;
+  top: 45%;
   -webkit-transform: translateY(-50%);
   -ms-transform: translateY(-50%);
   transform: translateY(-50%);
@@ -59,12 +62,13 @@ select:-webkit-autofill:focus {
 
 .home-logo img {
     width: 300px;
+    max-width: 80%;
 }
 
 #search-box {
   min-height: 40px;
   margin: 30px auto;
-  width: 640px;
+  /* width: 640px; */
   top: 0;
   left: 0;
   border: 1px solid #ccc;
@@ -126,6 +130,9 @@ select:-webkit-autofill:focus {
 }
 
 .toolbars img {
+  max-height: 44px; 
+  max-width: 100px;
+  margin-bottom: 24px;
   vertical-align: middle;
 }
 

@@ -2,7 +2,6 @@ package com.engine.getcode.repository.custom;
 
 import com.engine.getcode.model.SearchData;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Value;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -18,9 +17,6 @@ public class SearchDataRepositoryCustomImpl implements SearchDataRepositoryCusto
 
     @PersistenceContext
     private EntityManager entityManager;
-
-    @Value("${search.result.number_of_suggestion}")
-    private int numberOfSuggestion;
 
     @Override
     public long countRelateData(String keyword) {
@@ -42,18 +38,6 @@ public class SearchDataRepositoryCustomImpl implements SearchDataRepositoryCusto
         TypedQuery<SearchData> query = entityManager.createQuery(queryStr, SearchData.class);
         query.setFirstResult(firstResult);
         query.setMaxResults(maxResults);
-
-        return query.getResultList();
-    }
-
-    @Override
-    public List<String> findRelateKeyword(String keyword) {
-
-        String[] singleKeywordList = StringUtils.split(keyword, SPACE_STR);
-        String queryStr = createQuery(keyword, singleKeywordList, "DISTINCT data.keyword");
-
-        TypedQuery<String> query = entityManager.createQuery(queryStr, String.class);
-        query.setMaxResults(numberOfSuggestion);
 
         return query.getResultList();
     }

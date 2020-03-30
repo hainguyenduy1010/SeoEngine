@@ -1,18 +1,17 @@
-.page-result {
+/* .page-result {
     height: 100vh;
-}
+} */
 
 .body {
     display: block;
-    height: 100%;
+    /* height: 100%; */
     width: 100%;
     position: relative;
 }
 
 .header-container {
     width: 1170px;
-    padding-right: 15px;
-    padding-left: 15px;
+    max-width: 90%;
     margin-right: auto;
     margin-left: auto;
 }
@@ -28,7 +27,8 @@
 
 .page-result .logo {
     float: left;
-    width: 150px;
+    width: 25%;
+    max-width: 200px;
     height: 56px;
     text-align: center;
     position: relative;
@@ -36,6 +36,7 @@
 
 .search-header img {
     width: 100%;
+    padding-right: 10px;
     position: absolute;
     top: 0;
     bottom: 0;
@@ -54,8 +55,8 @@
 
 .page-result #search-box {
     min-height: 34px;
-    margin: 10px;
-    width: 933px;
+    margin: 10px 0;
+    width: 75%;
     float: left;
 }
 
@@ -78,9 +79,16 @@
     width: 66%;
     float: left;
 }
+@media screen and (max-width: 768px) {
+    .search-result-list {
+        width: 100%;
+        float: left;
+    }
+}
 
 .result-container {
     width: 1170px;
+    max-width: 90%;
     margin-right: auto;
     margin-left: auto;
 }
@@ -127,9 +135,20 @@
     width: 34%;
     float: right;
 }
+@media screen and (max-width: 768px) {
+    .suggestion-search {
+        width: 100%;
+        float: right;
+    }
+}
 
 .suggestion-content {
     margin-left: 45px;
+}
+@media screen and (max-width: 768px) {
+    .suggestion-content {
+        margin-left: 0px;
+    }
 }
 
 .suggestion-key {
@@ -143,6 +162,13 @@
 
 .page-navbar {
     clear: both;
+    width: 66%;
+}
+@media screen and (max-width: 768px) {
+    .page-navbar {
+        clear: both;
+        width: 100%;
+    }
 }
 
 em {

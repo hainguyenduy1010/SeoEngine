@@ -6,6 +6,7 @@ import Footer from '@/components/Footer.vue'
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
+import $ from 'jquery'
 
 Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
@@ -47,10 +48,12 @@ export default {
 		return {
 			logo: require('@/assets/search-logo.png'),
 			search_result: {},
+			data_list: [],
 			keyword: this.$route.query.k,
 			result_count_fake: null,
 			number_of_pages: null,
-			current_page: 0
+			current_page: 0,
+			total_time: 0
 		}
 	},
 	methods: {
@@ -61,13 +64,78 @@ export default {
 		},
 		setData(response) {
 			this.search_result = response;
+			this.data_list = response.search_data_list;
 			this.current_page = response.current_page;
 			this.result_count_fake = response.count_fake.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 			this.number_of_pages = Math.ceil(parseInt(response.count) / parseInt(response.number_results_per_page));
+			this.total_time = response.total_time;
+			this.getExternalResults(this.data_list, this.total_time, response.external_param);
 		},
 		linkGen(pageNumber) {
 			return `/search?k=` + this.keyword + `&p=${pageNumber}`
-		}
+		},
+		getExternalResults(data_list, total_time, external_param) {
+
+			if (!external_param.g_url) return;
+
+			var start = external_param.start;
+			var limit = external_param.limit;
+			var url = external_param.g_url;
+			var param = new URLSearchParams({
+					key: external_param.key,
+					cx: external_param.cx,
+					q: this.keyword
+				});
+			
+			if (limit <= 10 && limit > 0) {
+				param.set('start', start);
+				param.set('limit', limit);
+
+				$.getJSON(url + param.toString(), function(data) {
+					data.items.forEach(item => {
+						var result = {};
+
+						result.title = item.htmlTitle;
+						result.url = item.link
+						result.description = item.htmlSnippet
+
+						data_list.push(result);
+					});
+
+					total_time = parseInt(total_time) + parseInt(data.searchInformation.searchTime * 1000);
+				})
+				.fail(function(error) {
+					console.log(error);
+				})
+			} else if (limit > 10) {
+				while (limit > 0) {
+					param.set('start', start);
+					param.set('limit', limit > 10 ? 10 : limit);
+
+					$.getJSON(url + param.toString(), function(data) {
+						data.items.forEach(item => {
+							var result = {};
+	
+							result.title = item.htmlTitle;
+							result.url = item.link
+							result.description = item.htmlSnippet
+	
+							data_list.push(result);
+						});
+
+						total_time = parseInt(total_time) + parseInt(data.searchInformation.searchTime * 1000);
+					})
+					.fail(function(error) {
+						console.log(error.responseText);
+					})
+
+					start = start + 10;
+					limit = limit - 10;
+				}
+			}
+
+			this.total_time = total_time;
+		},
 	},
 
 	components: {
