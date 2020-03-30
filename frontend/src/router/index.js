@@ -10,6 +10,7 @@ import Update from '../pages/admin/update/Update.vue'
 import Infor from '../pages/infor/Infor.vue'
 
 import store from '@/pages/admin/store'
+import qs from 'qs';
 
 Vue.use(VueRouter)
 
@@ -88,6 +89,10 @@ const routes = [
 
 const router = new VueRouter({
   mode: 'history',
+  stringifyQuery  : query => {
+    let result = qs.stringify(query, { format: 'RFC1738' })
+    return result ? ('?' + result) : ''
+  },
   routes
 })
 

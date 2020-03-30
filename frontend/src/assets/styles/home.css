@@ -68,13 +68,18 @@ select:-webkit-autofill:focus {
 #search-box {
   min-height: 40px;
   margin: 30px auto;
-  /* width: 640px; */
+  width: 640px;
   top: 0;
   left: 0;
   border: 1px solid #ccc;
   border-radius: 8px;
   background:#fff;
   position: sticky;
+}
+@media screen and (max-width: 768px) {
+  #search-box {
+    width: unset
+  }
 }
 
 #search-input {
