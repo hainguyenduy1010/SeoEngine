@@ -58,7 +58,7 @@ export default {
 	methods: {
 		searchSubmit() {
 			if (this.keyword) {
-				window.location.href = '/search?k=' + this.keyword;
+				window.location.href = '/search?' + new URLSearchParams({k: this.keyword});
 			}
 		},
 		setData(response) {

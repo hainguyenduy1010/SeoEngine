@@ -29,6 +29,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.math.BigInteger;
+import java.net.URLEncoder;
 import java.text.MessageFormat;
 import java.time.LocalDate;
 import java.time.format.TextStyle;
@@ -357,11 +358,13 @@ public class SearchService {
 
             int start = param.getStart();
             int limit = Math.min(param.getLimit(), 10);
-            String url = googleUrl.concat("key=").concat(param.getKey()).concat("&cx=").concat(param.getCx())
-                    .concat("&q=").concat(keyword).concat("&start=" + start).concat("&num=").concat(String.valueOf(limit));
-            LOGGER.debug("Get google results with URL = {}", url);
 
+            String url = null;
             try {
+                url = googleUrl.concat("key=").concat(param.getKey()).concat("&cx=").concat(param.getCx())
+                        .concat("&q=").concat(URLEncoder.encode(keyword, "UTF-8")).concat("&start=" + start).concat("&num=").concat(String.valueOf(limit));
+                LOGGER.debug("Get google results with URL = {}", url);
+
                 RestTemplate restTemplate = new RestTemplate();
                 HttpHeaders headers = new HttpHeaders();
                 headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
@@ -401,9 +404,10 @@ public class SearchService {
     }
 
     private void setResponseCount(String keyword) {
-        String url = "https://www.google.com/search?q=".concat(keyword).concat("&oq=").concat(keyword).concat("&start=990");
 
+        String url = null;
         try {
+            url = "https://www.google.com/search?q=".concat(URLEncoder.encode(keyword, "UTF-8")).concat("&oq=").concat(keyword).concat("&start=990");
             Connection connection = Jsoup.connect(url)
                     .userAgent(userAgent)
                     .ignoreHttpErrors(true)
@@ -463,10 +467,10 @@ public class SearchService {
         if (param.getLimit() > 0) {
 
             int page = param.getPage();
-            String url = externalSourceUrl.concat(keyword).concat("&page=").concat(String.valueOf(page));
-            LOGGER.debug("Get external results with URL = {}", url);
-
+            String url = null;
             try {
+                url = externalSourceUrl.concat(URLEncoder.encode(keyword, "UTF-8")).concat("&page=").concat(String.valueOf(page));
+                LOGGER.debug("Get external results with URL = {}", url);
                 Connection connection = Jsoup.connect(url)
                         .userAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.21 (KHTML, like Gecko) Chrome/19.0.1042.0 Safari/535.21")
                         .ignoreHttpErrors(true)
