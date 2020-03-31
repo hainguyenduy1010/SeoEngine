@@ -24,7 +24,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.math.BigInteger;
 import java.text.MessageFormat;
@@ -96,13 +98,14 @@ public class SearchService {
     @Value("${search.user_agent}")
     private String userAgent;
 
-    private int count;
+    private int externalCount;
 
     public SearchResultDataDTO search(SearchRequestDTO searchRequestDTO) throws ExecutionException, InterruptedException {
         LOGGER.debug("search:in(searchRequestDTO = {})", searchRequestDTO);
 
         // init
         SearchResultDataDTO searchResultDataDTO = new SearchResultDataDTO();
+        externalCount = 0;
 
         // get request
         String keyword = searchRequestDTO.getKeyword();
@@ -110,7 +113,7 @@ public class SearchService {
         Integer currentPage = searchRequestDTO.getCurrentPage() == null ? 1 : searchRequestDTO.getCurrentPage();
 
         // get count of results
-        count = searchDataRepository.countByKeyword(keyword);
+        int count = searchDataRepository.countByKeyword(keyword);
 
         long startTime = System.nanoTime();
 
@@ -122,13 +125,15 @@ public class SearchService {
         List<SearchDataDTO> searchDataDTOList = generateSearchDataDTOList(searchDataList);
 
         // get SearchData from external search engine
-//        List<Map<String, Object>> paramList = getExternalRequestParams(currentPage, (int) count);
-        ExternalParameterDTO externalParameterDTO = getExternalRequestParams(currentPage, count);
-        List<SearchDataDTO> externalSearchDataDTOList = getExternalResults(keyword, externalParameterDTO);
-        searchDataDTOList.addAll(externalSearchDataDTOList);
-        if (externalSearchDataDTOList.isEmpty()) {
-            externalParameterDTO = getGoogleRequestParams(currentPage, count);
+        ExternalParameterDTO externalParameterDTO = getGoogleRequestParams(currentPage, count);
+        List<SearchDataDTO> externalSearchDataDTOList = getExternalSource(keyword, externalParameterDTO);
+        if (externalParameterDTO.getLimit() > 0 && externalSearchDataDTOList.isEmpty()) {
+            externalParameterDTO = getExternalRequestParams(currentPage, count);
+            externalSearchDataDTOList = getExternalResults(keyword, externalParameterDTO);
+        } else if (externalParameterDTO.getLimit() > 0 && !externalSearchDataDTOList.isEmpty()){
+            setResponseCount(keyword);
         }
+        searchDataDTOList.addAll(externalSearchDataDTOList);
 
         long endTime = System.nanoTime();
 
@@ -154,7 +159,7 @@ public class SearchService {
         // save searched keyword
         saveSearchedKeyword(keyword);
 
-        searchResultDataDTO.setCount(setResponseCount());
+        searchResultDataDTO.setCount(setResponseCount(count));
         searchResultDataDTO.setCountFake(getCountFake(count));
         searchResultDataDTO.setTotalTime((endTime - startTime) / 1000000);
         searchResultDataDTO.setSearchDataList(searchDataDTOList);
@@ -163,7 +168,6 @@ public class SearchService {
         searchResultDataDTO.setNumberResultsPerPage(numberResultsPerPage);
         searchResultDataDTO.setTitle(title);
         searchResultDataDTO.setDescription(description);
-        searchResultDataDTO.setExternalParam(externalParameterDTO);
 
         LOGGER.debug("search:out(searchResultDataDTO.size = {})", searchResultDataDTO);
 
@@ -176,13 +180,13 @@ public class SearchService {
         return searchDataRepository.findByKeyword(keyword, pageable);
     }
 
-    private long getCountFake(long count) {
+    private long getCountFake(int count) {
 
         if (isCountRandom) {
             return randomCount();
         }
 
-        return count;
+        return setResponseCount(count);
     }
 
     private List<SearchDataDTO> generateSearchDataDTOList(List<SearchData> searchDataList) throws ExecutionException, InterruptedException {
@@ -328,7 +332,7 @@ public class SearchService {
 
         int start = 0;
         int limit = 0;
-        if (countInLastPage != 0 || count == 0) {
+        if (countInLastPage != 0 || count == 0 || extraPages > 0) {
             if (extraPages == 1) {
                 limit = countExtraInLastPage;
             } else if (extraPages > 1) {
@@ -347,55 +351,46 @@ public class SearchService {
     }
 
     private List<SearchDataDTO> getExternalSource(String keyword, ExternalParameterDTO param) {
-        List<SearchDataDTO> externalSearchDataList = new ArrayList<>();
+        List<SearchDataDTO> externalSearchDataList = new LinkedList<>();
 
-        if (param != null) {
-
-            SearchDataDTO externalSearchData;
+        if (param.getLimit() > 0) {
 
             int start = param.getStart();
-            int limit = param.getLimit();
-            String url = "https://www.google.com/search?q=".concat(keyword).concat("&oq=").concat(keyword).concat("&start=" + start);
+            int limit = Math.min(param.getLimit(), 10);
+            String url = googleUrl.concat("key=").concat(param.getKey()).concat("&cx=").concat(param.getCx())
+                    .concat("&q=").concat(keyword).concat("&start=" + start).concat("&num=").concat(String.valueOf(limit));
             LOGGER.debug("Get google results with URL = {}", url);
+
             try {
-                Connection connection = Jsoup.connect(url)
-                        .userAgent(userAgent)
-                        .ignoreHttpErrors(true)
-                        .followRedirects(true)
-                        .timeout(20000);
+                RestTemplate restTemplate = new RestTemplate();
+                HttpHeaders headers = new HttpHeaders();
+                headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+                HttpEntity<?> requestEntity = new HttpEntity<>(headers);
+                ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntity, String.class);
 
-                Connection.Response response = connection.execute();
+                String responseStr = responseEntity.getBody();
 
-                if (response.statusCode() == 200) {
-                    Document document = connection.get();
+                JSONObject jsonObject = new JSONObject(responseStr);
+                if (jsonObject.has("items")) {
+                    JSONArray searchResults = jsonObject.getJSONArray("items");
 
-                    // get url title
-                    Elements resultList = document.select(".rc");
+                    SearchDataDTO externalSearchData;
+                    for (int i = 0; i < searchResults.length(); i++) {
+                        JSONObject result = (JSONObject) searchResults.get(i);
 
-                    for (int i = 0; i < limit && i < resultList.size(); i++) {
-                        Element result = resultList.get(i);
                         externalSearchData = new SearchDataDTO();
-
-                        String resultTitle = result.getElementsByTag("h3").first().html();
-                        String resultUrl = result.getElementsByTag("a").first().attr("href");
-                        String resultDescription = result.getElementsByClass("st").first().html();
-
-                        externalSearchData.setTitle(resultTitle);
-                        externalSearchData.setUrl(resultUrl);
-                        externalSearchData.setDescription(resultDescription);
+                        externalSearchData.setTitle(result.getString("htmlTitle"));
+                        externalSearchData.setUrl(result.getString("link"));
+                        externalSearchData.setDescription(result.getString("htmlSnippet"));
 
                         externalSearchDataList.add(externalSearchData);
                     }
 
-                    if (!resultList.isEmpty()) {
-                        if (limit - 10 > 0) {
-                            param.setStart(start + 10);
-                            param.setLimit(limit - 10);
-                            externalSearchDataList.addAll(getExternalSource(keyword, param));
-                        }
+                    if (param.getLimit() > searchResults.length()) {
+                        param.setStart(start + searchResults.length());
+                        param.setLimit(param.getLimit() - searchResults.length());
+                        externalSearchDataList.addAll(getExternalSource(keyword, param));
                     }
-                } else {
-                    LOGGER.error("ERROR: Cannot get external source with HTTP status = {}, URL = {}", response.statusCode(), url);
                 }
             } catch (Exception e) {
                 LOGGER.error("ERROR: Get external source with  HTTP URL = {}", url, e);
@@ -403,6 +398,35 @@ public class SearchService {
         }
 
         return externalSearchDataList;
+    }
+
+    private void setResponseCount(String keyword) {
+        String url = "https://www.google.com/search?q=".concat(keyword).concat("&oq=").concat(keyword).concat("&start=990");
+
+        try {
+            Connection connection = Jsoup.connect(url)
+                    .userAgent(userAgent)
+                    .ignoreHttpErrors(true)
+                    .followRedirects(true)
+                    .timeout(5000);
+
+            Connection.Response response = connection.execute();
+
+            if (response.statusCode() == 200) {
+                Document document = connection.get();
+
+                // get url title
+                Element lastPageElement = document.select(".fl").last();
+                String lastPage = lastPageElement.text();
+
+                externalCount = (Integer.parseInt(lastPage) * numberResultsPerPage ) / 2;
+            } else {
+                externalCount = 10 * numberResultsPerPage;
+                LOGGER.error("ERROR: Cannot get external source with HTTP status = {}, URL = {}", response.statusCode(), url);
+            }
+        } catch (Exception e) {
+            LOGGER.error("ERROR: Get external source with  HTTP URL = {}", url, e);
+        }
     }
 
     private ExternalParameterDTO getExternalRequestParams(int currentPage, int count) {
@@ -459,7 +483,7 @@ public class SearchService {
                     JSONObject jsonObject = new JSONObject(jsonResponse);
                     if (jsonObject.has("search")) {
                         JSONObject search = jsonObject.getJSONObject("search");
-                        count = count + search.getInt("real_size");
+                        externalCount = search.getInt("real_size");
 
                         JSONArray searchResults = search.getJSONArray("search_results");
 
@@ -495,6 +519,7 @@ public class SearchService {
 
                             externalSearchDataList.add(externalSearchData);
 
+                            elementCount ++;
                             if (elementCount == limit) break;
                         }
 
@@ -502,6 +527,7 @@ public class SearchService {
                             param.setPage(page + 1);
                             param.setStart(0);
                             param.setLimit(param.getLimit() - externalSearchDataList.size());
+                            externalSearchDataList.addAll(getExternalResults(keyword, param));
                         }
                     }
                 } else {
@@ -515,12 +541,14 @@ public class SearchService {
         return externalSearchDataList;
     }
 
-    private int setResponseCount() {
+    private int setResponseCount(int count) {
 
-        if (count > maxPage * numberResultsPerPage) {
+        int res = count + externalCount;
+
+        if (res > maxPage * numberResultsPerPage) {
             return maxPage * numberResultsPerPage;
         } else {
-            return count;
+            return res;
         }
     }
 
