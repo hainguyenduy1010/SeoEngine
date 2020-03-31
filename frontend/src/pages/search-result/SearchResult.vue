@@ -10,8 +10,8 @@
 					</div>
 
 					<div id="search-box">
-						<form @submit.prevent="searchSubmit">
-							<input type="text" id="search-input" class="form-control" placeholder="Search thousands of coupons and stores" v-model="keyword" autocorrect="off" spellcheck="false">
+						<form action="/search">
+							<input type="text" id="search-input" name="k" class="form-control" placeholder="Search thousands of coupons and stores" v-model="keyword" autocorrect="off" spellcheck="false">
 							<!-- <router-link :to="{name: 'search', params: {keyword}}"> -->
 								<!-- <a v-bind:href="'/search?k=' + keyword"> -->
 									<button class="btn-search" type="submit" title="Searching...">
