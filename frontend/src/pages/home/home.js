@@ -22,12 +22,5 @@ export default {
 			logo: require('@/assets/search-logo.png'),
 			keyword: ''
 		}
-	},
-	methods: {
-		searchSubmit() {
-			if (this.keyword) {
-				window.location.href = '/search?' + new URLSearchParams({k: this.keyword});
-			}
-		}
 	}
 }
